@@ -1,0 +1,792 @@
+/* 全局样式 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Noto Sans SC', 'ZCOOL XiaoWei', sans-serif;
+    background-color: #0a0a0f;
+    color: #e9e9ff;
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+}
+
+/* 太空背景效果 */
+.stars, .twinkling, .clouds {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.stars {
+    background: #0a0a0f;
+    z-index: -3;
+}
+
+/* CSS生成的星星样式 */
+.star {
+    position: absolute;
+    background-color: #ffffff;
+    border-radius: 50%;
+    box-shadow: 0 0 2px #ffffff, 0 0 4px #ffffff;
+    animation: twinkle 5s infinite ease-in-out;
+}
+
+@keyframes twinkle {
+    0%, 100% {
+        opacity: 0.7;
+        box-shadow: 0 0 2px #ffffff, 0 0 4px #ffffff;
+    }
+    50% {
+        opacity: 1;
+        box-shadow: 0 0 8px #ffffff, 0 0 12px #7c9aff;
+    }
+}
+
+.twinkling {
+    background: transparent;
+    background-image: 
+        radial-gradient(1px 1px at 25% 25%, white, rgba(0,0,0,0)),
+        radial-gradient(1px 1px at 50% 50%, white, rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 75% 75%, white, rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 100% 100%, white, rgba(0,0,0,0));
+    background-size: 200% 200%;
+    z-index: -2;
+    animation: move-twinkle 200s linear infinite;
+}
+
+.clouds {
+    background: transparent;
+    background-image: 
+        radial-gradient(circle at 30% 30%, rgba(103, 133, 255, 0.1), transparent 50%),
+        radial-gradient(circle at 70% 60%, rgba(103, 133, 255, 0.1), transparent 50%),
+        linear-gradient(to right, rgba(30, 30, 70, 0.2), transparent);
+    background-size: 200% 200%, 150% 150%, 100% 100%;
+    z-index: -1;
+    opacity: 0.4;
+    animation: move-clouds 150s linear infinite;
+}
+
+@keyframes move-twinkle {
+    from { background-position: 0 0; }
+    to { background-position: -200% 200%; }
+}
+
+@keyframes move-clouds {
+    from { background-position: 0 0, 0 0, 0 0; }
+    to { background-position: 200% 0, -150% 0, 100% 0; }
+}
+
+/* 页面容器 */
+.radio-container {
+    max-width: 1000px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: rgba(14, 14, 28, 0.8);
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 0 20px rgba(95, 129, 255, 0.3), 
+                0 0 60px rgba(95, 129, 255, 0.1);
+    border: 1px solid rgba(103, 133, 255, 0.3);
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+}
+
+.radio-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(103, 133, 255, 0.1), transparent);
+    z-index: -1;
+}
+
+/* 标题样式 */
+.radio-header {
+    text-align: center;
+    margin-bottom: 2rem;
+    position: relative;
+}
+
+.main-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    text-shadow: 0 0 10px rgba(95, 129, 255, 0.8),
+                 0 0 20px rgba(95, 129, 255, 0.4),
+                 0 0 30px rgba(95, 129, 255, 0.2);
+    letter-spacing: 2px;
+    color: #ffffff;
+    position: relative;
+    display: inline-block;
+}
+
+.main-title::after {
+    content: '';
+    display: block;
+    width: 80%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #7c9aff, transparent);
+    margin: 0.5rem auto;
+}
+
+.subtitle {
+    font-size: 1.1rem;
+    font-weight: 300;
+    color: #b4c5ff;
+    position: relative;
+}
+
+/* 播放器容器 */
+.player-container {
+    margin: 2rem auto;
+    background: rgba(10, 10, 18, 0.7);
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid rgba(103, 133, 255, 0.2);
+    box-shadow: 0 0 15px rgba(95, 129, 255, 0.15);
+}
+
+.player-frame {
+    position: relative;
+    width: 100%;
+    padding-top: 56.25%; /* 16:9 比例 */
+    overflow: hidden;
+}
+
+.player-frame iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+/* 控制按钮 */
+.player-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    background: rgba(20, 20, 35, 0.9);
+    border-top: 1px solid rgba(103, 133, 255, 0.2);
+}
+
+.control-button {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 1rem;
+    background: rgba(40, 40, 70, 0.8);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(103, 133, 255, 0.3);
+    color: #b4c5ff;
+    box-shadow: 0 0 10px rgba(95, 129, 255, 0.2);
+}
+
+.control-button:hover {
+    background: rgba(60, 60, 100, 0.8);
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(95, 129, 255, 0.4);
+}
+
+.control-button.active {
+    background: rgba(95, 129, 255, 0.3);
+    color: #ffffff;
+    box-shadow: 0 0 15px rgba(95, 129, 255, 0.6);
+}
+
+.control-button i {
+    font-size: 1.3rem;
+}
+
+/* 电台信息 */
+.radio-info {
+    display: flex;
+    justify-content: space-around;
+    margin: 2rem 0;
+    padding: 1rem;
+    background: rgba(20, 20, 35, 0.6);
+    border-radius: 10px;
+    border: 1px solid rgba(103, 133, 255, 0.2);
+}
+
+.info-section {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+}
+
+.info-icon {
+    margin-right: 0.8rem;
+    color: #7c9aff;
+    font-size: 1.2rem;
+}
+
+.frequency, .signal-strength, .listeners {
+    font-size: 0.95rem;
+    color: #d1daff;
+}
+
+/* 环境对象 */
+.ambient-objects {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 0;
+}
+
+.satellite {
+    position: absolute;
+    top: 15%;
+    right: 10%;
+    width: 80px;
+    height: 50px;
+    background: linear-gradient(45deg, rgba(103, 133, 255, 0.7), rgba(30, 30, 70, 0.9));
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(95, 129, 255, 0.5);
+    animation: orbit 60s linear infinite;
+    /* 卫星形状 */
+    position: relative;
+}
+
+.satellite::before {
+    content: '';
+    position: absolute;
+    width: 120px;
+    height: 20px;
+    background: linear-gradient(90deg, rgba(103, 133, 255, 0.3), rgba(30, 30, 70, 0.6));
+    border-radius: 20px;
+    left: -20px;
+    top: 15px;
+    transform: rotate(-15deg);
+}
+
+.satellite::after {
+    content: '';
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 50%;
+    right: 10px;
+    top: 10px;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+}
+
+.shooting-star {
+    position: absolute;
+    top: 20%;
+    left: -100px;
+    width: 100px;
+    height: 2px;
+    background: linear-gradient(to right, transparent, #ffffff, transparent);
+    animation: shooting 10s linear infinite;
+    animation-delay: 5s;
+    transform-origin: right center;
+    transform: rotate(45deg);
+}
+
+.shooting-star::after {
+    content: '';
+    position: absolute;
+    top: -1px;
+    right: 0;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: #ffffff;
+    box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.8);
+}
+
+.planet {
+    position: absolute;
+    bottom: 15%;
+    left: 10%;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, #6b78ff, #1d2057);
+    box-shadow: 0 0 20px rgba(95, 129, 255, 0.5);
+    animation: pulse 10s ease-in-out infinite;
+}
+
+.planet::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 15px;
+    background: rgba(103, 133, 255, 0.2);
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-20deg);
+}
+
+.planet::after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    top: 20%;
+    left: 30%;
+    filter: blur(2px);
+}
+
+.astronaut {
+    position: absolute;
+    top: 60%;
+    right: 15%;
+    width: 60px;
+    height: 80px;
+    animation: float 15s ease-in-out infinite;
+    /* CSS 生成的宇航员 */
+    position: relative;
+}
+
+.astronaut::before {
+    content: '';
+    position: absolute;
+    width: 35px;
+    height: 35px;
+    background: rgba(240, 240, 255, 0.9);
+    border-radius: 50%;
+    top: 0;
+    left: 10px;
+    box-shadow: inset -5px -5px 0 rgba(103, 133, 255, 0.5),
+                0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+.astronaut::after {
+    content: '';
+    position: absolute;
+    width: 45px;
+    height: 55px;
+    background: linear-gradient(to bottom, rgba(240, 240, 255, 0.9), rgba(150, 173, 255, 0.7));
+    border-radius: 25px;
+    top: 25px;
+    left: 5px;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+.radio-waves {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    border: 1px solid rgba(103, 133, 255, 0.2);
+    animation: radio-expand 5s linear infinite;
+    opacity: 0;
+}
+
+.radio-waves::before,
+.radio-waves::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    border: 1px solid rgba(103, 133, 255, 0.15);
+    animation: radio-expand 5s linear infinite;
+    animation-delay: 1s;
+}
+
+.radio-waves::after {
+    width: 100px;
+    height: 100px;
+    animation-delay: 2s;
+}
+
+@keyframes orbit {
+    0% {
+        transform: rotate(0deg) translateX(20px) rotate(0deg) scale(1);
+    }
+    50% {
+        transform: rotate(180deg) translateX(20px) rotate(-180deg) scale(0.8);
+    }
+    100% {
+        transform: rotate(360deg) translateX(20px) rotate(-360deg) scale(1);
+    }
+}
+
+@keyframes shooting {
+    0% {
+        transform: translateX(0) translateY(0) rotate(-45deg);
+        opacity: 0;
+    }
+    5% {
+        opacity: 1;
+    }
+    10% {
+        transform: translateX(calc(100vw + 200px)) translateY(calc(100vw + 200px)) rotate(-45deg);
+        opacity: 0;
+    }
+    100% {
+        transform: translateX(calc(100vw + 200px)) translateY(calc(100vw + 200px)) rotate(-45deg);
+        opacity: 0;
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 0 20px rgba(95, 129, 255, 0.5);
+    }
+    50% {
+        transform: scale(1.05);
+        box-shadow: 0 0 30px rgba(95, 129, 255, 0.7);
+    }
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-20px) rotate(5deg);
+    }
+}
+
+@keyframes radio-expand {
+    0% {
+        transform: translate(-50%, -50%) scale(0.5);
+        opacity: 0.8;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(2);
+        opacity: 0;
+    }
+}
+
+/* 控制台 */
+.console {
+    max-width: 800px;
+    margin: 3rem auto;
+    background: rgba(10, 10, 18, 0.9);
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid rgba(103, 133, 255, 0.3);
+    box-shadow: 0 0 15px rgba(95, 129, 255, 0.2);
+}
+
+.console-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.7rem 1rem;
+    background: rgba(30, 30, 50, 0.9);
+    border-bottom: 1px solid rgba(103, 133, 255, 0.2);
+}
+
+.console-title {
+    font-size: 0.9rem;
+    color: #b4c5ff;
+}
+
+.console-buttons {
+    display: flex;
+}
+
+.console-button {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-left: 8px;
+    background: #555;
+}
+
+.console-button:nth-child(1) {
+    background: #ff595e;
+}
+
+.console-button:nth-child(2) {
+    background: #ffca3a;
+}
+
+.console-button:nth-child(3) {
+    background: #8ac926;
+}
+
+.console-screen {
+    padding: 1.5rem;
+    font-family: monospace;
+    color: #b4c5ff;
+    font-size: 0.9rem;
+    height: 150px;
+    overflow-y: auto;
+    background: rgba(15, 15, 25, 0.9);
+}
+
+.console-line {
+    margin-bottom: 0.7rem;
+    position: relative;
+    padding-left: 1.5rem;
+}
+
+.console-line::before {
+    content: '>';
+    position: absolute;
+    left: 0;
+    color: #7c9aff;
+}
+
+.console-line.typing::after {
+    content: '|';
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+    }
+}
+
+/* 页脚 */
+footer {
+    text-align: center;
+    padding: 2rem;
+    font-size: 0.9rem;
+    color: #9aabff;
+    background: rgba(14, 14, 28, 0.7);
+    margin-top: 2rem;
+    position: relative;
+    z-index: 1;
+}
+
+footer p {
+    margin-bottom: 0.5rem;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .radio-container {
+        padding: 1.5rem;
+        margin: 1rem;
+    }
+    
+    .main-title {
+        font-size: 2rem;
+    }
+    
+    .radio-info {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .info-section {
+        margin-bottom: 1rem;
+    }
+    
+    .control-button {
+        width: 40px;
+        height: 40px;
+        margin: 0 0.7rem;
+    }
+}
+
+/* 主题选择器样式 */
+.theme-selector {
+    margin-top: 1.5rem;
+}
+
+.theme-dropdown {
+    background: rgba(20, 20, 40, 0.8);
+    color: #b4c5ff;
+    padding: 8px 15px;
+    border-radius: 20px;
+    border: 1px solid rgba(103, 133, 255, 0.3);
+    font-family: inherit;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 10px rgba(95, 129, 255, 0.2);
+    outline: none;
+    min-width: 250px;
+}
+
+.theme-dropdown:hover {
+    border-color: rgba(103, 133, 255, 0.6);
+    box-shadow: 0 0 15px rgba(95, 129, 255, 0.4);
+}
+
+/* 主题样式 */
+/* 默认的太空主题已经在现有CSS中定义 */
+
+/* 夜间巴士主题 */
+body.night-bus-theme {
+    background-color: #0f1222;
+}
+
+body.night-bus-theme .stars {
+    background: #0f1222;
+}
+
+body.night-bus-theme .twinkling {
+    background-image: 
+        radial-gradient(1px 1px at 25% 25%, #ffeb3b, rgba(0,0,0,0)),
+        radial-gradient(1px 1px at 50% 50%, #ffc107, rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 75% 75%, #ff9800, rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 100% 100%, #ff5722, rgba(0,0,0,0));
+    opacity: 0.4;
+}
+
+body.night-bus-theme .clouds {
+    background-image: 
+        radial-gradient(circle at 30% 30%, rgba(41, 79, 109, 0.2), transparent 50%),
+        radial-gradient(circle at 70% 60%, rgba(41, 79, 109, 0.2), transparent 50%),
+        linear-gradient(to right, rgba(41, 79, 109, 0.3), transparent);
+}
+
+body.night-bus-theme .radio-container {
+    background: rgba(23, 32, 56, 0.8);
+    box-shadow: 0 0 20px rgba(60, 85, 120, 0.3), 
+                0 0 60px rgba(60, 85, 120, 0.1);
+    border: 1px solid rgba(60, 85, 120, 0.3);
+}
+
+body.night-bus-theme .control-button {
+    background: rgba(34, 48, 77, 0.8);
+    border: 1px solid rgba(60, 85, 120, 0.3);
+    color: #a0c0e0;
+}
+
+body.night-bus-theme .main-title {
+    text-shadow: 0 0 10px rgba(60, 85, 120, 0.8),
+                 0 0 20px rgba(60, 85, 120, 0.4),
+                 0 0 30px rgba(60, 85, 120, 0.2);
+}
+
+body.night-bus-theme .subtitle {
+    color: #a0c0e0;
+}
+
+body.night-bus-theme .main-title::after {
+    background: linear-gradient(90deg, transparent, #6089b4, transparent);
+}
+
+body.night-bus-theme .shooting-star {
+    background: linear-gradient(to right, transparent, #ffe680, transparent);
+}
+
+body.night-bus-theme .shooting-star::after {
+    background: #ffe680;
+    box-shadow: 0 0 10px 2px rgba(255, 230, 128, 0.8);
+}
+
+body.night-bus-theme .radio-waves {
+    border-color: rgba(60, 85, 120, 0.2);
+}
+
+body.night-bus-theme .radio-waves::before,
+body.night-bus-theme .radio-waves::after {
+    border-color: rgba(60, 85, 120, 0.15);
+}
+
+body.night-bus-theme .planet {
+    background: radial-gradient(circle at 30% 30%, #4d79a8, #1c354d);
+    box-shadow: 0 0 20px rgba(60, 85, 120, 0.5);
+}
+
+/* 酒吧主题 */
+body.bar-theme {
+    background-color: #221111;
+}
+
+body.bar-theme .stars {
+    background: #221111;
+}
+
+body.bar-theme .twinkling {
+    background-image: 
+        radial-gradient(1px 1px at 25% 25%, #ffe0a6, rgba(0,0,0,0)),
+        radial-gradient(1px 1px at 50% 50%, #ffb57a, rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 75% 75%, #ff9551, rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 100% 100%, #ff6d33, rgba(0,0,0,0));
+    opacity: 0.4;
+}
+
+body.bar-theme .clouds {
+    background-image: 
+        radial-gradient(circle at 30% 30%, rgba(130, 60, 20, 0.1), transparent 50%),
+        radial-gradient(circle at 70% 60%, rgba(130, 60, 20, 0.1), transparent 50%),
+        linear-gradient(to right, rgba(90, 30, 10, 0.2), transparent);
+}
+
+body.bar-theme .radio-container {
+    background: rgba(50, 25, 15, 0.8);
+    box-shadow: 0 0 20px rgba(180, 90, 40, 0.3), 
+                0 0 60px rgba(180, 90, 40, 0.1);
+    border: 1px solid rgba(150, 70, 30, 0.3);
+}
+
+body.bar-theme .control-button {
+    background: rgba(70, 35, 20, 0.8);
+    border: 1px solid rgba(150, 70, 30, 0.3);
+    color: #ffc59a;
+}
+
+body.bar-theme .main-title {
+    text-shadow: 0 0 10px rgba(200, 100, 50, 0.8),
+                 0 0 20px rgba(200, 100, 50, 0.4),
+                 0 0 30px rgba(200, 100, 50, 0.2);
+}
+
+body.bar-theme .subtitle {
+    color: #ffbb9d;
+}
+
+body.bar-theme .main-title::after {
+    background: linear-gradient(90deg, transparent, #c86432, transparent);
+}
+
+body.bar-theme .shooting-star {
+    background: linear-gradient(to right, transparent, #ffbb9d, transparent);
+}
+
+body.bar-theme .shooting-star::after {
+    background: #ffbb9d;
+    box-shadow: 0 0 10px 2px rgba(255, 187, 157, 0.8);
+}
+
+body.bar-theme .radio-waves {
+    border-color: rgba(150, 70, 30, 0.2);
+}
+
+body.bar-theme .radio-waves::before,
+body.bar-theme .radio-waves::after {
+    border-color: rgba(150, 70, 30, 0.15);
+}
+
+body.bar-theme .planet {
+    background: radial-gradient(circle at 30% 30%, #c86432, #5c2b17);
+    box-shadow: 0 0 20px rgba(180, 90, 40, 0.5);
+}
