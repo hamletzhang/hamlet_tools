@@ -362,3 +362,4 @@ window.addEventListener('message', function(e) {
         // 忽略无法解析的消息
     }
 });
+
