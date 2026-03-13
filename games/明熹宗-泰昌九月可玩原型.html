@@ -1,0 +1,1115 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>明熹宗：泰昌九月可玩原型</title>
+    <style>
+        :root {
+            color-scheme: dark;
+            --bg: #120d0a;
+            --panel: rgba(37, 25, 20, 0.92);
+            --panel-soft: rgba(56, 39, 31, 0.78);
+            --line: #8f6b47;
+            --gold: #d8b56a;
+            --gold-soft: #f1deab;
+            --text: #f2e6d0;
+            --muted: #c7b59b;
+            --accent: #a83b32;
+            --good: #6ea87f;
+            --bad: #c86b57;
+            --shadow: 0 18px 45px rgba(0, 0, 0, 0.35);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+            background:
+                radial-gradient(circle at top left, rgba(216, 181, 106, 0.12), transparent 34%),
+                radial-gradient(circle at top right, rgba(168, 59, 50, 0.14), transparent 28%),
+                linear-gradient(180deg, #1a120d 0%, #120d0a 55%, #0c0907 100%);
+            color: var(--text);
+            line-height: 1.7;
+            padding: 28px 16px 48px;
+        }
+
+        .shell {
+            max-width: 1180px;
+            margin: 0 auto;
+        }
+
+        .frame {
+            border: 1px solid rgba(216, 181, 106, 0.28);
+            background: linear-gradient(180deg, rgba(31, 21, 17, 0.96), rgba(23, 16, 13, 0.96));
+            border-radius: 24px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            padding: 16px 24px;
+            border-bottom: 1px solid rgba(216, 181, 106, 0.18);
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .topbar-title {
+            font-size: 1.05rem;
+            letter-spacing: 0.08em;
+            color: var(--gold-soft);
+        }
+
+        .topbar-meta {
+            color: var(--muted);
+            font-size: 0.95rem;
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: 320px minmax(0, 1fr);
+            min-height: 760px;
+        }
+
+        .sidebar {
+            border-right: 1px solid rgba(216, 181, 106, 0.12);
+            background: linear-gradient(180deg, rgba(49, 34, 27, 0.92), rgba(24, 17, 14, 0.95));
+            padding: 24px 18px;
+        }
+
+        .content {
+            padding: 28px;
+        }
+
+        .panel {
+            background: var(--panel);
+            border: 1px solid rgba(216, 181, 106, 0.16);
+            border-radius: 18px;
+            padding: 18px;
+            margin-bottom: 18px;
+        }
+
+        .panel h2,
+        .panel h3,
+        .panel h4 {
+            margin-top: 0;
+            color: var(--gold-soft);
+        }
+
+        .panel:last-child {
+            margin-bottom: 0;
+        }
+
+        .tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            border: 1px solid rgba(216, 181, 106, 0.34);
+            background: rgba(216, 181, 106, 0.08);
+            color: var(--gold-soft);
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 0.82rem;
+            margin-right: 8px;
+            margin-bottom: 8px;
+        }
+
+        .progress {
+            margin-bottom: 18px;
+        }
+
+        .progress-track {
+            height: 10px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0;
+            background: linear-gradient(90deg, #c28c4d, #f0cf84);
+            transition: width 0.3s ease;
+        }
+
+        .progress-label {
+            margin-top: 8px;
+            color: var(--muted);
+            font-size: 0.92rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            gap: 12px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: 14px;
+            padding: 12px;
+        }
+
+        .stat-top {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            align-items: baseline;
+            margin-bottom: 8px;
+        }
+
+        .stat-name {
+            color: var(--gold-soft);
+            font-size: 0.95rem;
+        }
+
+        .stat-value {
+            font-size: 0.9rem;
+            color: var(--muted);
+        }
+
+        .stat-bar {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        .stat-bar span {
+            display: block;
+            height: 100%;
+            border-radius: 999px;
+        }
+
+        .bar-good {
+            background: linear-gradient(90deg, #7cb78b, #9fd7ab);
+        }
+
+        .bar-gold {
+            background: linear-gradient(90deg, #bb8d52, #e6c37b);
+        }
+
+        .bar-danger {
+            background: linear-gradient(90deg, #bb5e4b, #d98a74);
+        }
+
+        .sidebar-note {
+            color: var(--muted);
+            font-size: 0.88rem;
+            margin-top: 12px;
+        }
+
+        .history-list {
+            padding-left: 18px;
+            margin: 0;
+            color: var(--muted);
+        }
+
+        .history-list li + li {
+            margin-top: 10px;
+        }
+
+        .eyebrow {
+            color: var(--gold);
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            font-size: 0.78rem;
+            margin-bottom: 10px;
+        }
+
+        .headline {
+            font-family: "KaiTi", "STKaiti", serif;
+            font-size: clamp(2rem, 4vw, 3.2rem);
+            margin: 0 0 10px;
+            color: #f8ecd0;
+            line-height: 1.25;
+        }
+
+        .lead {
+            color: var(--muted);
+            font-size: 1.02rem;
+            margin: 0 0 18px;
+        }
+
+        .quote {
+            padding: 16px 18px;
+            border-left: 4px solid var(--gold);
+            background: rgba(216, 181, 106, 0.08);
+            border-radius: 0 12px 12px 0;
+            color: #efe2c7;
+            margin: 18px 0;
+        }
+
+        .columns {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        .voice-card {
+            background: var(--panel-soft);
+            border: 1px solid rgba(216, 181, 106, 0.12);
+            border-radius: 16px;
+            padding: 14px;
+        }
+
+        .voice-card strong {
+            display: block;
+            color: var(--gold-soft);
+            margin-bottom: 6px;
+        }
+
+        .choice-list {
+            display: grid;
+            gap: 14px;
+            margin-top: 22px;
+        }
+
+        .choice-btn,
+        .action-btn {
+            width: 100%;
+            border: 1px solid rgba(216, 181, 106, 0.26);
+            background: linear-gradient(180deg, rgba(87, 58, 42, 0.95), rgba(61, 41, 31, 0.96));
+            color: var(--text);
+            border-radius: 16px;
+            padding: 16px 18px;
+            text-align: left;
+            cursor: pointer;
+            transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.18);
+        }
+
+        .choice-btn:hover,
+        .action-btn:hover {
+            transform: translateY(-2px);
+            border-color: rgba(240, 207, 132, 0.48);
+            box-shadow: 0 14px 28px rgba(0, 0, 0, 0.22);
+        }
+
+        .choice-title {
+            display: block;
+            color: #f7e7c0;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .choice-desc {
+            display: block;
+            color: var(--muted);
+            font-size: 0.94rem;
+        }
+
+        .action-row {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 24px;
+        }
+
+        .action-btn {
+            width: auto;
+            min-width: 180px;
+            text-align: center;
+        }
+
+        .action-btn.secondary {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .result-grid {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 18px;
+        }
+
+        .effect-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 16px;
+        }
+
+        .effect-pill {
+            border-radius: 999px;
+            padding: 6px 12px;
+            font-size: 0.85rem;
+            border: 1px solid rgba(255, 255, 255, 0.09);
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .effect-pill.good {
+            color: #d7f1dd;
+            background: rgba(110, 168, 127, 0.18);
+        }
+
+        .effect-pill.bad {
+            color: #ffd7cf;
+            background: rgba(200, 107, 87, 0.18);
+        }
+
+        .effect-pill.neutral {
+            color: var(--gold-soft);
+            background: rgba(216, 181, 106, 0.1);
+        }
+
+        .mini-title {
+            color: var(--gold-soft);
+            margin: 0 0 10px;
+            font-size: 1rem;
+        }
+
+        .note-list {
+            margin: 0;
+            padding-left: 20px;
+            color: var(--muted);
+        }
+
+        .note-list li + li {
+            margin-top: 8px;
+        }
+
+        .ending-block {
+            border: 1px solid rgba(216, 181, 106, 0.18);
+            background: linear-gradient(180deg, rgba(48, 33, 25, 0.95), rgba(25, 17, 13, 0.98));
+            border-radius: 22px;
+            padding: 22px;
+        }
+
+        .ending-subtitle {
+            color: var(--gold);
+            margin-top: -2px;
+            margin-bottom: 16px;
+        }
+
+        .footer-note {
+            color: var(--muted);
+            font-size: 0.9rem;
+            margin-top: 20px;
+        }
+
+        .legend {
+            display: grid;
+            gap: 10px;
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+
+        .legend strong {
+            color: var(--gold-soft);
+        }
+
+        @media (max-width: 980px) {
+            .layout {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                border-right: 0;
+                border-bottom: 1px solid rgba(216, 181, 106, 0.12);
+            }
+
+            .result-grid,
+            .columns {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .content {
+                padding: 20px;
+            }
+
+            .topbar {
+                padding: 14px 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="shell">
+        <div class="frame">
+            <div class="topbar">
+                <div class="topbar-title">明熹宗：泰昌九月可玩原型</div>
+                <div class="topbar-meta">你将扮演十六岁的朱由校，处理泰昌元年九月的第一轮危局。</div>
+            </div>
+            <div class="layout">
+                <aside class="sidebar">
+                    <div class="panel progress">
+                        <h3>九月进度</h3>
+                        <div class="progress-track"><div id="progress-fill" class="progress-fill"></div></div>
+                        <div id="progress-label" class="progress-label">尚未开始</div>
+                    </div>
+                    <div class="panel">
+                        <h3>朝局数值</h3>
+                        <div id="stats-panel" class="stats-grid"></div>
+                        <div class="sidebar-note"><code>财政压力</code>、<code>辽东军务压力</code> 越高越险，其余数值越高越有利。</div>
+                    </div>
+                    <div class="panel">
+                        <h3>本月决断</h3>
+                        <ol id="history-panel" class="history-list"></ol>
+                    </div>
+                    <div class="panel">
+                        <h3>原型说明</h3>
+                        <div class="legend">
+                            <div><strong>史实锚点</strong>：事件名称、时间、核心矛盾取自《明熹宗实录》相关分析材料。</div>
+                            <div><strong>戏剧补白</strong>：对话、心境、即时后果做了面向玩法的改写。</div>
+                            <div><strong>分支结果</strong>：允许架空，不等同于真实历史走向。</div>
+                        </div>
+                    </div>
+                </aside>
+                <main class="content">
+                    <div id="app"></div>
+                </main>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const statConfig = {
+            authority: { label: "皇权", kind: "gold" },
+            outerCourtSupport: { label: "外廷支持", kind: "gold" },
+            innerCourtReliance: { label: "内廷依赖", kind: "gold" },
+            treasuryPressure: { label: "财政压力", kind: "danger" },
+            militaryPressure: { label: "辽东军务压力", kind: "danger" },
+            stability: { label: "朝局稳定", kind: "good" }
+        };
+
+        const sourceNotes = [
+            "《明熹宗实录》相关二次分析：泰昌元年九月政务、奏疏、下旨。",
+            "全年材料中的军事、人事分析只用于补足九月决断的后续风险与人物位置。",
+            "原型中的数值、即时反馈与阶段结局均为游戏化设计。"
+        ];
+
+        function createInitialState() {
+            return {
+                phase: "intro",
+                eventIndex: -1,
+                lastResult: null,
+                stats: {
+                    authority: 38,
+                    outerCourtSupport: 56,
+                    innerCourtReliance: 42,
+                    treasuryPressure: 62,
+                    militaryPressure: 66,
+                    stability: 46
+                },
+                flags: {
+                    favorDonglin: 0,
+                    favorInnerCourt: 0,
+                    protectOldRetainers: false,
+                    delayConflict: 0,
+                    defendChiefMinister: 0,
+                    resistOuterPressure: 0,
+                    pragmaticLiaodong: 0
+                },
+                history: []
+            };
+        }
+
+        const events = [
+            {
+                id: "succession",
+                date: "泰昌元年九月初一至初四",
+                title: "即位之初：第一批令旨该怎么发",
+                summary: "泰昌帝暴崩未久，山陵选址、戒严、报丧与登极次序都要立刻定下。礼部、内阁与司礼监都在等你表态：这场过渡，到底是由外廷主笔，还是由内外并办，抑或由你直接抢回节奏？",
+                voices: [
+                    { name: "礼部", text: "名分不能乱，祭告天地、宗庙、社稷之后再即皇帝位，程序一步都不能省。" },
+                    { name: "内阁", text: "朝局先稳最要紧，凡事照旧章快办，别让地方与京师同时猜疑。" },
+                    { name: "司礼监", text: "禁中消息、山陵勘察、宫门戒严都绕不过内廷。若全交外廷，皇上便从第一日失了手。" }
+                ],
+                anchor: [
+                    "下旨材料中有九月初一山陵选址、初二戒严报丧、初四登极准备等条目。",
+                    "史料显示司礼监、内阁、礼部在权力过渡初期同时出现。"
+                ],
+                drama: [
+                    "把数道令旨压缩成一个开局抉择，用来表现朱由校对内廷与外廷关系的第一印象。",
+                    "并非史实中真的只下一道旨，而是把早期姿态整合成一个游戏节点。"
+                ],
+                choices: [
+                    {
+                        label: "命礼部、内阁依旧章先办，诸务仍由外廷牵头。",
+                        desc: "让群臣觉得你尊礼守制，优先求稳。",
+                        effects: { outerCourtSupport: 12, stability: 8, authority: -4, innerCourtReliance: -6 },
+                        flags: { favorDonglin: 1 },
+                        result: "你把最先几道令旨交回熟悉的文官机器。朝臣松了一口气，觉得新君可循旧例；可在宫里看来，你从第一步就把主动交了出去。"
+                    },
+                    {
+                        label: "令内阁与司礼监同办，大小进度都先报御前。",
+                        desc: "不公开翻脸，但把所有线头都拢回自己手里。",
+                        effects: { authority: 8, stability: 4, innerCourtReliance: 6, outerCourtSupport: -2 },
+                        flags: { resistOuterPressure: 1, favorInnerCourt: 1 },
+                        result: "你没有明说要制衡谁，却先让内廷与外廷都明白：往后凡涉禁中与军国之事，都得先过御前。群臣觉得你尚在试探，宫里的人却记住了这层意味。"
+                    },
+                    {
+                        label: "直接以新君名义催办一切，先把节奏抓回手里。",
+                        desc: "让所有人看见你不愿只做一个盖印的少年。",
+                        effects: { authority: 12, outerCourtSupport: -8, stability: -6, innerCourtReliance: 4 },
+                        flags: { resistOuterPressure: 1 },
+                        result: "旨意一下，外廷面上不敢违，却立刻开始重新估量你的脾气。你确实抢回了节奏，但也把许多原本能缓着说的话，逼成了当面较量。"
+                    }
+                ]
+            },
+            {
+                id: "move-palace",
+                date: "泰昌元年九月初二至初五",
+                title: "移宫案：李选侍该不该立刻迁出",
+                summary: "短短数日，东林言官与阁臣连续上奏，逼问李选侍何时移宫。有人说这是宗庙社稷之安，有人说这是宫中私事不宜外扬。你若再拖，外廷会认定你优柔；你若立刻照办，宫中旧人与潜邸近侍就会一起被推上案板。",
+                voices: [
+                    { name: "杨涟等言官", text: "不必再借口择日。今日不移，便是留下后宫干政的口实。" },
+                    { name: "方从哲", text: "宫闱丑闻一旦外泄，朝局与名分都难看，不如缓三日，择吉而行。" },
+                    { name: "宫中旧人", text: "若选侍今日就走，明日被清算的便不只她一个，连皇上的旧线也会被人顺手掐断。" }
+                ],
+                anchor: [
+                    "奏疏材料中记载九月初二至初五六次上奏逼迫移宫，朱由校从“另行商议”到“等选择日期”再到“即日搬迁”。",
+                    "下旨材料中九月二十五日又以公开揭帖方式把移宫案推向更高张力。"
+                ],
+                drama: [
+                    "把初二至初五的多轮逼迫合并成一次核心裁断。",
+                    "选项中的“暗保随从”“拖三日”是基于史料空间做出的玩法化补白。"
+                ],
+                choices: [
+                    {
+                        label: "即日搬迁，先让外廷闭嘴。",
+                        desc: "迅速切断争议，换取朝堂上的第一口气。",
+                        effects: { outerCourtSupport: 10, stability: 6, authority: -6, innerCourtReliance: -10 },
+                        flags: { favorDonglin: 2 },
+                        result: "李选侍被迫仓促离开，外廷立即称颂“社稷得安”。可你清楚，这不是结束，而是他们第一次证明自己能在数日之内逼你改口。"
+                    },
+                    {
+                        label: "仍称择日，再缓三日。",
+                        desc: "不给东林一个现成的胜局，也不给宫里一个彻底的绝望。",
+                        effects: { authority: 6, innerCourtReliance: 6, outerCourtSupport: -8, stability: -4 },
+                        flags: { delayConflict: 1, favorInnerCourt: 1, resistOuterPressure: 1 },
+                        result: "你没有正面拒绝，只是把时间往后挪了一寸。外廷已经看出你在为宫中争缓冲，宫里的人则第一次觉得，你未必肯任人把一切收拾得干干净净。"
+                    },
+                    {
+                        label: "准其移宫，但暗令保全李选侍随从与皇五弟起居。",
+                        desc: "表面顺旨，暗里给自己留下一条人情与消息的细线。",
+                        effects: { authority: 4, innerCourtReliance: 8, outerCourtSupport: -6, stability: -2 },
+                        flags: { protectOldRetainers: true, favorInnerCourt: 1 },
+                        result: "你在表面上给了外廷要的结果，却暗中留下几处不动声色的安排。朝臣会以为自己得手，只有极少数人知道，这次移宫没有把宫里的线全部切断。"
+                    }
+                ]
+            },
+            {
+                id: "red-pill",
+                date: "泰昌元年九月初四至十六",
+                title: "红丸案：要不要顺着言路追到底",
+                summary: "先帝之死余波未平。言官一面追打崔文升，一面轻轻放过引进红丸的来路；人人都说要为先帝讨个明白，可真追下去，牵出的未必是公道，更可能是又一场派系绞杀。你该给一个怎样的口风？",
+                voices: [
+                    { name: "王安舜、郑宗周等", text: "崔文升、李可灼皆当深究。若只轻罚，天下会说朝廷不敢问先帝之死。" },
+                    { name: "方从哲", text: "案子越挖越深，便会牵出票拟、举荐与病中近侍。若一口气全翻开，朝廷先乱。" },
+                    { name: "你自己的判断", text: "真相未必在弹章里，但言路已经准备把它写成下一轮清洗的序幕。" }
+                ],
+                anchor: [
+                    "奏疏材料中记载九月初四至十六东林连劾崔文升、李可灼，朱由校对李可灼仅罚俸、对崔文升以闲住轻处。",
+                    "史料分析认为朱由校倾向于把红丸案视作不愿深究的旧案，而非立即定性为谋害。"
+                ],
+                drama: [
+                    "把多位言官的弹劾与批复浓缩成一次决断。",
+                    "“借案反敲言路”的选项是对朱由校批复“有伤国体”态度的延展演绎。"
+                ],
+                choices: [
+                    {
+                        label: "依言官之请，重惩两案，并追查举荐者。",
+                        desc: "借先帝之名立威，但会把朝堂拖进更深的旧账里。",
+                        effects: { outerCourtSupport: 8, authority: 4, stability: -8, innerCourtReliance: -6 },
+                        flags: { favorDonglin: 1 },
+                        result: "群臣会称你孝与决绝，可随着追查继续，你会发现案中每往前一步，朝堂上就多一个必须得罪的人。你借先帝之名立威，也把自己卷进了无底旧账。"
+                    },
+                    {
+                        label: "轻罚收场，先把案子压住。",
+                        desc: "宁可背一个“偏软”的名声，也不让旧案立刻炸开。",
+                        effects: { authority: 6, outerCourtSupport: -6, stability: 4, militaryPressure: -2 },
+                        flags: { delayConflict: 1 },
+                        result: "你给了案子一个看得见的处置，却不给它继续长成一场大审。外廷会觉得你不够痛快，但至少在九月之内，先帝的死没有立刻变成所有人借刀杀人的场。"
+                    },
+                    {
+                        label: "借案反敲言路：药案可查，借题攻讦辅臣不许。",
+                        desc: "不替任何人洗白，但先把弹章的刀口从政敌身上挪开。",
+                        effects: { authority: 10, outerCourtSupport: -10, stability: -2, innerCourtReliance: 2 },
+                        flags: { defendChiefMinister: 1, resistOuterPressure: 1 },
+                        result: "你没有说谁一定无罪，只是当众提醒群臣，药案不是拿来连坐一切的现成筐。言路一时愕然，也开始真正把你当成了会回嘴的皇帝。"
+                    }
+                ]
+            },
+            {
+                id: "chief-minister",
+                date: "泰昌元年九月十一日",
+                title: "方从哲与旧人案：要不要护住这个首辅",
+                summary: "惠世扬等人把方从哲与刘逊、李进忠绑到一起，给他列出“十大罪状、三条可诛”。方从哲请辞，自称无颜立朝。可你心里很清楚：若连他也立刻倒下，朝中便再少一个能挡在你与东林正面之间的人。",
+                voices: [
+                    { name: "惠世扬", text: "方从哲若不去，便是把祸根继续留在中枢。" },
+                    { name: "方从哲", text: "臣若一身去位，可谢天下。只是朝局会因此更稳，还是更乱，皇上自知。" },
+                    { name: "禁中近侍", text: "方阁老若也被推倒，朝中就再没人肯为皇上挡第一阵。之后他们连说话都不必绕弯子了。" }
+                ],
+                anchor: [
+                    "奏疏材料中有惠世扬对方从哲的集中弹劾，以及朱由校批复“怎能凭借风闻臆测，有伤国体”。",
+                    "下旨材料里也有九月十一日挽留方从哲继续入阁辅理政务。"
+                ],
+                drama: [
+                    "把首辅去留与李进忠、刘逊案合并成一个“是否保住中立缓冲”的节点。",
+                    "暗查旧人下落是基于史料中“潜逃”“失踪”的悬疑感做的玩法化扩写。"
+                ],
+                choices: [
+                    {
+                        label: "驳回弹劾，明斥“风闻臆测，有伤国体”。",
+                        desc: "先护住首辅，再告诉言路不是谁都能一波带走。",
+                        effects: { authority: 8, stability: 6, outerCourtSupport: -8 },
+                        flags: { defendChiefMinister: 2, resistOuterPressure: 1 },
+                        result: "你把话说得很重，群臣一时不敢再把“风闻”当作铁证。方从哲得以留在位上，可这也意味着你第一次公开与东林最擅长的攻讦方式顶了一回。"
+                    },
+                    {
+                        label: "顺势准其请辞，以换一时众口称快。",
+                        desc: "让出一个中枢位置，换来朝堂表面的整肃与安静。",
+                        effects: { outerCourtSupport: 10, stability: 2, authority: -8, innerCourtReliance: -2 },
+                        flags: { favorDonglin: 1 },
+                        result: "朝臣会称你知人去留，不护庸臣。可从这一刻起，许多人也会默认：只要弹章够密，首辅也是能被几天之内赶下去的。"
+                    },
+                    {
+                        label: "暂留其位，同时暗查李进忠、刘逊的真实下落。",
+                        desc: "表面稳住中枢，暗里保住你与旧人之间最后一点消息来源。",
+                        effects: { authority: 6, stability: 4, innerCourtReliance: 6, outerCourtSupport: -4 },
+                        flags: { protectOldRetainers: true, defendChiefMinister: 1, favorInnerCourt: 1 },
+                        result: "你没有替任何旧人公开翻案，却也没有让他们的名字立刻沉到底。方从哲得以留位，宫里的暗线也没有全断，只是你从此更需要习惯在明面与暗面同时说话。"
+                    }
+                ]
+            },
+            {
+                id: "liao-funds",
+                date: "泰昌元年九月初九至二十",
+                title: "辽饷与新饷司：先救边，还是先防失控",
+                summary: "督饷印信接连铸造，新饷司也要立起来。辽东已像一口吞银的深井，不往里投钱，边军就会先乱；只往里投钱，朝廷与地方也会更快逼近失衡。你现在批下去的，不只是新司，而是天启朝第一个无法回避的财政姿态。",
+                voices: [
+                    { name: "户部尚书李汝华", text: "新饷司不立，辽饷便永远是权宜之计，救不了前线。" },
+                    { name: "地方与士绅", text: "再加派就要伤民。江南若被逼急，朝廷后面几年都不得安稳。" },
+                    { name: "你自己的判断", text: "辽东今日缺的是真金白银，可一旦以此开口，后面每一次败报都会有人把手伸回国库。" }
+                ],
+                anchor: [
+                    "政务材料中有督饷印信密集铸造、新饷司设立与辽饷常态化的分析。",
+                    "材料明确指出辽饷压力已达结构性危机程度。"
+                ],
+                drama: [
+                    "把印信铸造与新饷司设立合并为一个财政决断节点。",
+                    "地方与士绅的反应是根据材料中的江南特权、辽饷冲突做出的合理推演。"
+                ],
+                choices: [
+                    {
+                        label: "准设新饷司，督饷印信一体发下，先保辽东。",
+                        desc: "先把最急的洞堵住，代价是财政更紧。",
+                        effects: { militaryPressure: -10, treasuryPressure: 10, stability: 2, outerCourtSupport: 4 },
+                        flags: { pragmaticLiaodong: 1 },
+                        result: "你让朝廷先把银子与制度一并推向辽东。前线会暂时松口气，可九月之后，谁都知道只要边军再开口，新的加派就会落到更多地方头上。"
+                    },
+                    {
+                        label: "准设新饷司，但经手、铸印、督运都要层层记名。",
+                        desc: "先保边务，再给自己留下日后追责的把手。",
+                        effects: { authority: 8, militaryPressure: -6, treasuryPressure: 6, stability: 4 },
+                        flags: { pragmaticLiaodong: 1, resistOuterPressure: 1 },
+                        result: "你没有拦着新司，却把名字一个个摁在账上。辽东未必因此立刻转好，但至少从这一天起，谁再说“都是不得已”，你手里就多了一份可追的名单。"
+                    },
+                    {
+                        label: "暂不大开新司，先追问兵部与经手诸臣的责任。",
+                        desc: "不肯让辽饷立刻成为新的惯例，也把辽东的焦躁继续往前线推。",
+                        effects: { authority: 6, treasuryPressure: -4, militaryPressure: 10, outerCourtSupport: -6, stability: -4 },
+                        flags: { resistOuterPressure: 1 },
+                        result: "你拒绝让银子先于责任落下去。国库缓了一口气，可辽东的坏消息不会因此变慢。等下一封边报送到，你会更难解释这一次的犹疑。"
+                    }
+                ]
+            },
+            {
+                id: "liaodong-blame",
+                date: "泰昌元年九月十三至二十四",
+                title: "辽东主帅：要不要让熊廷弼顶下所有罪名",
+                summary: "弹劾熊廷弼的奏章一封接一封。有人说辽东败局都该算在他头上，有人则提醒你，边疆不是纸上谈兵，换帅比败仗来得更快。你若顺势罢人，外廷会说你明断；你若压住弹章，便等于公开替一个非东林边臣兜下第一层火。",
+                voices: [
+                    { name: "杨涟等言官", text: "弹章既至，再不处置，便是纵容误国。" },
+                    { name: "边镇视角", text: "今日换帅，未必换来胜局，多半先换来前线的心浮气躁。" },
+                    { name: "你自己的顾虑", text: "若顺着这股风走，辽东的人事便从此不在你手里，而在谁最会写弹章的人手里。" }
+                ],
+                anchor: [
+                    "奏疏材料中记载九月十三日至二十四日对熊廷弼的连续弹劾，以及朱由校“交付会议”的拖延处理。",
+                    "全年人事材料指出九月二十一日熊廷弼被罢免，东林由此推进辽东军权更替。"
+                ],
+                drama: [
+                    "把九月中旬至下旬的连劾与后续人事后果提前压缩到结尾节点，让原型形成更完整的政治压力闭环。",
+                    "玩家不会直接见到十月后的结果，但会被提示这一步会如何影响天启初年的辽东走向。"
+                ],
+                choices: [
+                    {
+                        label: "交付会议，暂缓定罪。",
+                        desc: "先不把辽东交给弹章，给自己争一点时间。",
+                        effects: { authority: 6, stability: 4, outerCourtSupport: -2, militaryPressure: 4 },
+                        flags: { delayConflict: 1, pragmaticLiaodong: 1 },
+                        result: "你没有替熊廷弼翻案，也没有立刻顺着众议斩断前线。这一步保住了名义上的回旋，却只把更大的争论推到了下一月。"
+                    },
+                    {
+                        label: "顺势罢熊，换一个更听话的人。",
+                        desc: "先让外廷满意，再赌新主帅能把辽东稳住。",
+                        effects: { outerCourtSupport: 10, stability: 2, authority: -8, militaryPressure: 8 },
+                        flags: { favorDonglin: 1 },
+                        result: "朝堂会称你从善如流，可辽东前线从来不是靠“众口所归”维持的。你换来了一次漂亮的表态，也把未来的败报提前写进了中枢的人事里。"
+                    },
+                    {
+                        label: "当廷压下弹章，先保主帅。",
+                        desc: "公开告诉文官，边帅不是写几篇弹劾就能换掉的。",
+                        effects: { authority: 10, outerCourtSupport: -12, stability: -8, militaryPressure: -4 },
+                        flags: { resistOuterPressure: 1 },
+                        result: "你强行把火压回朝堂本身。前线因此暂得一线喘息，可京师会立刻明白：新君不是只会听人摆布的孩子，你与东林的真正冲突也由此提前了。"
+                    }
+                ]
+            }
+        ];
+
+        let state = createInitialState();
+
+        function clamp(value) {
+            return Math.max(0, Math.min(100, value));
+        }
+
+        function deepReset() {
+            state = createInitialState();
+            updateSidebar();
+            renderIntro();
+        }
+
+        function applyEffects(effects) {
+            Object.entries(effects).forEach(([key, delta]) => {
+                state.stats[key] = clamp(state.stats[key] + delta);
+            });
+        }
+
+        function applyFlags(flags) {
+            Object.entries(flags).forEach(([key, value]) => {
+                if (typeof value === "boolean") {
+                    state.flags[key] = value;
+                } else {
+                    state.flags[key] += value;
+                }
+            });
+        }
+
+        function formatDelta(key, delta) {
+            const label = statConfig[key].label;
+            const sign = delta > 0 ? "+" : "";
+            const kind = delta === 0 ? "neutral" : delta > 0 ? (statConfig[key].kind === "danger" ? "bad" : "good") : (statConfig[key].kind === "danger" ? "good" : "bad");
+            return `<span class="effect-pill ${kind}">${label} ${sign}${delta}</span>`;
+        }
+
+        function updateSidebar() {
+            const progress = state.phase === "intro"
+                ? 0
+                : state.phase === "overview"
+                    ? 5
+                    : state.phase === "ending"
+                        ? 100
+                        : Math.round(((state.eventIndex + 1) / events.length) * 100);
+            document.getElementById("progress-fill").style.width = `${progress}%`;
+
+            let progressText = "尚未开始";
+            if (state.phase === "overview") {
+                progressText = "开局已定，准备进入九月";
+            } else if (state.phase === "event") {
+                progressText = `进行至第 ${state.eventIndex + 1} / ${events.length} 个事件`;
+            } else if (state.phase === "result") {
+                progressText = `已裁断第 ${state.eventIndex + 1} / ${events.length} 个事件`;
+            } else if (state.phase === "ending") {
+                progressText = "九月已结束";
+            }
+            document.getElementById("progress-label").textContent = progressText;
+
+            const statsHtml = Object.entries(statConfig).map(([key, config]) => {
+                const value = state.stats[key];
+                const barClass = config.kind === "danger" ? "bar-danger" : config.kind === "good" ? "bar-good" : "bar-gold";
+                return `
+                    <div class="stat-card">
+                        <div class="stat-top">
+                            <div class="stat-name">${config.label}</div>
+                            <div class="stat-value">${value} / 100</div>
+                        </div>
+                        <div class="stat-bar"><span class="${barClass}" style="width:${value}%"></span></div>
+                    </div>
+                `;
+            }).join("");
+            document.getElementById("stats-panel").innerHTML = statsHtml;
+
+            const historyHtml = state.history.length === 0
+                ? `<li>你还没有做出任何决定。</li>`
+                : state.history.map(item => `<li><strong>${item.title}</strong><br>${item.choice}</li>`).join("");
+            document.getElementById("history-panel").innerHTML = historyHtml;
+        }
+
+        function renderIntro() {
+            state.phase = "intro";
+            updateSidebar();
+            document.getElementById("app").innerHTML = `
+                <div class="panel">
+                    <div class="eyebrow">泰昌元年九月</div>
+                    <h1 class="headline">你是朱由校。<br>先帝方崩，朝局已在别人手里运转。</h1>
+                    <p class="lead">这个原型把泰昌元年九月的关键史实压缩成 6 个决策事件。你不会得到“历史标准答案”，只会在真实矛盾里选一个代价更适合自己的方向。</p>
+                    <div class="quote">你现在拥有的是名分，不是权力；听命的人很多，真正为你站出来的人很少。</div>
+                    <div class="columns">
+                        <div class="voice-card">
+                            <strong>你将面对什么</strong>
+                            <div>移宫案、红丸案、首辅攻讦、辽饷压力、辽东换帅。每一步都能稳局，也都能埋雷。</div>
+                        </div>
+                        <div class="voice-card">
+                            <strong>你要看什么</strong>
+                            <div>并非哪一项数值最高，而是哪一种姿态在九月结束时被你亲手养大：众正盈朝、深宫暗线、勉强持衡，或更糟的危局。</div>
+                        </div>
+                    </div>
+                    <div class="action-row">
+                        <button class="action-btn" onclick="renderOverview()">进入九月</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderOverview() {
+            state.phase = "overview";
+            updateSidebar();
+            document.getElementById("app").innerHTML = `
+                <div class="panel">
+                    <div class="eyebrow">月度总览</div>
+                    <h2>九月局势</h2>
+                    <p class="lead">泰昌帝驾崩不过数日。外廷急于用礼法和弹章稳住朝局，也想趁你尚未站稳时重排朝中位置；宫中的旧人则害怕被一并清洗。辽东与国库都在不断向京师索债，你的每一次批复，都既是眼前的答案，也是往后数年的伏笔。</p>
+                    <div class="columns">
+                        <div class="voice-card">
+                            <strong>本月主要矛盾</strong>
+                            <div>外廷要你先服从程序，宫中要你先保住旧线，辽东要你先给钱，所有人都要求你立刻表态。</div>
+                        </div>
+                        <div class="voice-card">
+                            <strong>本局原型目标</strong>
+                            <div>完成 6 个事件后，系统会根据你的决断与数值变化给出一个九月阶段结局，并说明哪些后果来自史实锚点，哪些属于戏剧化演绎。</div>
+                        </div>
+                    </div>
+                    <div class="tag">事件数：${events.length}</div>
+                    <div class="tag">定位：轻策略 + 强叙事</div>
+                    <div class="tag">玩法：选择后即时看到后果</div>
+                    <div class="action-row">
+                        <button class="action-btn" onclick="startEvents()">开始裁断</button>
+                        <button class="action-btn secondary" onclick="deepReset()">重置原型</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function startEvents() {
+            state.eventIndex = 0;
+            renderEvent();
+        }
+
+        function renderEvent() {
+            state.phase = "event";
+            updateSidebar();
+            const event = events[state.eventIndex];
+            const voicesHtml = event.voices.map(voice => `
+                <div class="voice-card">
+                    <strong>${voice.name}</strong>
+                    <div>${voice.text}</div>
+                </div>
+            `).join("");
+
+            const choicesHtml = event.choices.map((choice, index) => `
+                <button class="choice-btn" onclick="chooseOption(${index})">
+                    <span class="choice-title">${choice.label}</span>
+                    <span class="choice-desc">${choice.desc}</span>
+                </button>
+            `).join("");
+
+            document.getElementById("app").innerHTML = `
+                <div class="panel">
+                    <div class="eyebrow">事件 ${state.eventIndex + 1} / ${events.length}</div>
+                    <h2>${event.title}</h2>
+                    <div class="tag">${event.date}</div>
+                    <p class="lead">${event.summary}</p>
+                    <div class="columns">${voicesHtml}</div>
+                    <div class="choice-list">${choicesHtml}</div>
+                </div>
+            `;
+        }
+
+        function chooseOption(choiceIndex) {
+            const event = events[state.eventIndex];
+            const choice = event.choices[choiceIndex];
+            applyEffects(choice.effects);
+            applyFlags(choice.flags || {});
+
+            state.history.push({
+                title: event.title,
+                choice: choice.label
+            });
+
+            state.lastResult = { event, choice };
+            renderResult();
+        }
+
+        function renderResult() {
+            state.phase = "result";
+            updateSidebar();
+            const { event, choice } = state.lastResult;
+            const effectsHtml = Object.entries(choice.effects).map(([key, delta]) => formatDelta(key, delta)).join("");
+            const buttonLabel = state.eventIndex === events.length - 1 ? "进入九月结算" : "继续下一件事";
+
+            document.getElementById("app").innerHTML = `
+                <div class="panel">
+                    <div class="eyebrow">裁断已下</div>
+                    <h2>${event.title}</h2>
+                    <div class="result-grid">
+                        <div>
+                            <p class="lead"><strong>你的选择：</strong>${choice.label}</p>
+                            <div class="quote">${choice.result}</div>
+                            <h4 class="mini-title">数值变化</h4>
+                            <div class="effect-list">${effectsHtml}</div>
+                        </div>
+                        <div>
+                            <div class="panel" style="margin-bottom:12px;">
+                                <h4 class="mini-title">史实锚点</h4>
+                                <ul class="note-list">${event.anchor.map(item => `<li>${item}</li>`).join("")}</ul>
+                            </div>
+                            <div class="panel" style="margin-bottom:0;">
+                                <h4 class="mini-title">戏剧化处理</h4>
+                                <ul class="note-list">${event.drama.map(item => `<li>${item}</li>`).join("")}</ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="action-row">
+                        <button class="action-btn" onclick="nextStep()">${buttonLabel}</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function nextStep() {
+            if (state.eventIndex >= events.length - 1) {
+                renderEnding();
+                return;
+            }
+            state.eventIndex += 1;
+            renderEvent();
+        }
+
+        function resolveEnding() {
+            const s = state.stats;
+            const f = state.flags;
+
+            if (s.stability <= 28 || (s.treasuryPressure >= 80 && s.militaryPressure >= 80)) {
+                return {
+                    title: "危局四伏",
+                    subtitle: "你在登基首月几乎被所有矛盾同时拖住",
+                    summary: "九月还没过去，你就已经同时欠下外廷、内廷、辽东与国库的债。你没有真正失去皇位，但已经很难说自己还掌握着节奏。接下来的每一次决策，都会在更糟的底盘上展开。",
+                    tags: ["高压财政", "高压边务", "朝局摇晃"]
+                };
+            }
+
+            if (f.favorDonglin >= 3 && s.outerCourtSupport >= 68) {
+                return {
+                    title: "众正盈朝",
+                    subtitle: "你用连续让步换来了一个看似整肃的朝堂",
+                    summary: "外廷会称你知大义、守名分、能纳忠言。可他们也开始把你的让步当作理所当然。九月之后，你固然换来了一时平整，却也把自己摆在了更容易被推动的位置上。",
+                    tags: ["偏向外廷", "短期稳局", "长期受制"]
+                };
+            }
+
+            if (f.protectOldRetainers && s.innerCourtReliance >= 58) {
+                return {
+                    title: "深宫暗线",
+                    subtitle: "你没有公开翻脸，却悄悄把希望押回宫中",
+                    summary: "你保住了几条不肯轻易交出去的线。外廷未必看得清，宫中的旧人与近侍却会记住：你不是完全站在他们对面的皇帝。只是这条路一旦走深，未来与你绑定的，也会是阉寺与禁中消息网。",
+                    tags: ["偏向内廷", "暗中布局", "后患亦深"]
+                };
+            }
+
+            if (s.authority >= 60 && s.stability >= 48) {
+                return {
+                    title: "勉强持衡",
+                    subtitle: "你没有彻底倒向谁，也没有立刻失去局面",
+                    summary: "九月过后，人人都知道你还年轻，却也开始承认你并非只会盖印。你保住了若干回旋空间，没有让任何一方在第一个月就把你吃死。这种均衡极脆，但至少它是你亲手挣来的。",
+                    tags: ["皇权回升", "多方忌惮", "脆弱平衡"]
+                };
+            }
+
+            return {
+                title: "疑心已生",
+                subtitle: "你渡过了九月，也把更深的对立带进了天启朝",
+                summary: "表面上礼法尚在运转，实则每一次批复都在切开新的裂缝。你还没有决定真正依靠谁，但你已经学会：朝堂上所有高声谈大义的人，都可能在下一封奏疏里把刀锋转向你本人。",
+                tags: ["表面平稳", "暗流加深", "未来未定"]
+            };
+        }
+
+        function buildRouteSummary() {
+            const f = state.flags;
+            const routeNotes = [];
+
+            if (f.favorDonglin >= 2) {
+                routeNotes.push("你多次选择顺着外廷的节奏行事，换来了短期朝堂支持。");
+            }
+            if (f.favorInnerCourt >= 2 || f.protectOldRetainers) {
+                routeNotes.push("你在关键节点保住了宫中的旧线，没有让自己彻底失去内廷消息。");
+            }
+            if (f.defendChiefMinister >= 2) {
+                routeNotes.push("你有意识地护住方从哲这样的中间缓冲，不愿让所有中枢位置都被弹章一把推倒。");
+            }
+            if (f.resistOuterPressure >= 3) {
+                routeNotes.push("你已经开始主动反顶东林的逼迫，这会在后续天启朝放大成更直接的正面冲突。");
+            }
+            if (f.pragmaticLiaodong >= 2) {
+                routeNotes.push("你没有回避辽东现实，至少在财政或主帅问题上试着把前线当作真正的军国大事来处理。");
+            }
+            if (f.delayConflict >= 2) {
+                routeNotes.push("你多次把矛盾往后推，成功买到时间，也把更大的爆点留到了未来。");
+            }
+
+            return routeNotes.length === 0
+                ? ["你的九月更多是被局势推着走，尚未形成清晰路线。"]
+                : routeNotes;
+        }
+
+        function renderEnding() {
+            state.phase = "ending";
+            updateSidebar();
+            const ending = resolveEnding();
+            const routeSummary = buildRouteSummary();
+
+            document.getElementById("app").innerHTML = `
+                <div class="ending-block">
+                    <div class="eyebrow">九月结算</div>
+                    <h2 class="headline" style="font-size:2.3rem;margin-bottom:6px;">${ending.title}</h2>
+                    <div class="ending-subtitle">${ending.subtitle}</div>
+                    <p class="lead">${ending.summary}</p>
+                    <div>${ending.tags.map(tag => `<span class="tag">${tag}</span>`).join("")}</div>
+                </div>
+
+                <div class="panel" style="margin-top:18px;">
+                    <h3>你的路线回顾</h3>
+                    <ul class="note-list">${routeSummary.map(item => `<li>${item}</li>`).join("")}</ul>
+                </div>
+
+                <div class="panel">
+                    <h3>本原型如何处理史实与改编</h3>
+                    <ul class="note-list">${sourceNotes.map(item => `<li>${item}</li>`).join("")}</ul>
+                </div>
+
+                <div class="panel">
+                    <h3>已做出的决断</h3>
+                    <ol class="history-list">${state.history.map(item => `<li><strong>${item.title}</strong><br>${item.choice}</li>`).join("")}</ol>
+                    <div class="footer-note">如果继续扩展到十月以后，可以从辽东换帅、东林人事布局、方从哲去留与潜邸近侍蛰伏线继续向前推进。</div>
+                    <div class="action-row">
+                        <button class="action-btn" onclick="deepReset()">重开九月</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        updateSidebar();
+        renderIntro();
+    </script>
+</body>
+</html>
