@@ -12,9 +12,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // 视频链接配置
 const videoLinks = {
-    'space': 'https://player.bilibili.com/player.html?isOutside=true&bvid=BV18u411H7Kj&p=1&autoplay=1&muted=1&high_quality=1&danmaku=0&poster=1&as_wide=1',
-    'night-bus': 'https://player.bilibili.com/player.html?isOutside=true&bvid=BV19JxrehEUH&p=1&autoplay=1&muted=1&high_quality=1&danmaku=0&poster=1&as_wide=1',
-    'bar': 'https://player.bilibili.com/player.html?isOutside=true&bvid=BV1hQ4y1s7XK&p=1&autoplay=1&muted=1&high_quality=1&danmaku=0&poster=1&as_wide=1'
+    'space': 'https://player.bilibili.com/player.html?isOutside=true&bvid=BV18u411H7Kj&p=1&autoplay=1&high_quality=1&danmaku=0&poster=1&as_wide=1',
+    'night-bus': 'https://player.bilibili.com/player.html?isOutside=true&bvid=BV19JxrehEUH&p=1&autoplay=1&high_quality=1&danmaku=0&poster=1&as_wide=1',
+    'bar': 'https://player.bilibili.com/player.html?isOutside=true&bvid=BV1hQ4y1s7XK&p=1&autoplay=1&high_quality=1&danmaku=0&poster=1&as_wide=1'
 };
 
 // 主题对应的标题和副标题
@@ -145,13 +145,6 @@ function initAudioControls() {
         biliPlayer.contentWindow.postMessage(JSON.stringify(message), '*');
     }
     
-    // iframe 加载完成后尝试恢复默认音量（解除静音自动播放的静音状态）
-    biliPlayer.addEventListener('load', function() {
-        setTimeout(() => {
-            postBiliMessage('volume', { value: 0.6 });
-        }, 1200);
-    });
-    
     // 播放/暂停控制
     playPauseButton.addEventListener('click', function() {
         if (playPauseButton.classList.contains('active')) {
@@ -169,9 +162,8 @@ function initAudioControls() {
             playPauseButton.innerHTML = '<i class="fas fa-pause"></i>';
             playPauseButton.classList.add('active');
             
-            // 向bilibili播放器发送播放消息，并恢复默认音量以解除静音
+            // 向bilibili播放器发送播放消息
             postBiliMessage('play');
-            postBiliMessage('volume', { value: 0.6 });
             
             // 更新控制台消息
             addConsoleMessage('音频流传输中...');
