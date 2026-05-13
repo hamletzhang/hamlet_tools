@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>精选网站导航 — hamlet_tools</title>
+    <style>
+        :root {
+            --bg: #0f172a;
+            --surface: rgba(30, 41, 59, 0.6);
+            --border: rgba(148, 163, 184, 0.15);
+            --text: #f1f5f9;
+            --text-muted: #94a3b8;
+            --accent: #38bdf8;
+            --accent-glow: rgba(56, 189, 248, 0.25);
+            --card-hover: rgba(56, 189, 248, 0.08);
+            --tag-bg: rgba(168, 85, 247, 0.15);
+            --tag-text: #c084fc;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans SC", sans-serif;
+            background: radial-gradient(ellipse at top, #1e293b 0%, #0f172a 100%);
+            color: var(--text);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 4rem 1.5rem;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        header h1 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, var(--text) 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            color: var(--text-muted);
+            font-size: 1.125rem;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.875rem;
+            margin-bottom: 1.5rem;
+            transition: color 0.2s;
+        }
+
+        .back-link:hover {
+            color: var(--accent);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.25rem;
+        }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            backdrop-filter: blur(12px);
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(56, 189, 248, 0.35);
+            box-shadow: 0 10px 30px -10px var(--accent-glow);
+            background: var(--card-hover);
+        }
+
+        .card h3 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .card p {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .card .url {
+            font-size: 0.75rem;
+            color: var(--accent);
+            word-break: break-all;
+            margin-top: auto;
+            padding-top: 0.75rem;
+            opacity: 0.8;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 0.15rem 0.5rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            background: var(--tag-bg);
+            color: var(--tag-text);
+            margin-bottom: 0.5rem;
+            width: fit-content;
+        }
+
+        footer {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+        }
+
+        @media (max-width: 640px) {
+            .container {
+                padding: 2rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a class="back-link" href="index.html">← 返回导航中心</a>
+
+        <header>
+            <h1>精选网站导航</h1>
+            <p>常用工具、演示与 AI 学习资源汇总</p>
+        </header>
+
+        <div class="grid">
+            <a class="card" href="https://ye7v7ecnqj6hs.ok.kimi.link" target="_blank" rel="noopener noreferrer">
+                <span class="tag">交互演示</span>
+                <h3>IOU 交互演示网站</h3>
+                <p>IOU（Intersection over Union）相关的交互式演示，帮助直观理解目标检测与分割中的重叠度计算。</p>
+                <div class="url">https://ye7v7ecnqj6hs.ok.kimi.link</div>
+            </a>
+
+            <a class="card" href="https://d5e4pg6yutogg.ok.kimi.link" target="_blank" rel="noopener noreferrer">
+                <span class="tag">知识科普</span>
+                <h3>软件定律介绍网站</h3>
+                <p>系统介绍软件开发中重要的定律与原则，如摩尔定律、布鲁克斯定律、康威定律等。</p>
+                <div class="url">https://d5e4pg6yutogg.ok.kimi.link</div>
+            </a>
+
+            <a class="card" href="https://rkl6fh7uua7x2.ok.kimi.link" target="_blank" rel="noopener noreferrer">
+                <span class="tag">教学</span>
+                <h3>Kimi 教学网站</h3>
+                <p>Kimi 相关的使用教程与技巧分享，帮助更高效地使用 AI 助手完成各类任务。</p>
+                <div class="url">https://rkl6fh7uua7x2.ok.kimi.link</div>
+            </a>
+
+            <a class="card" href="https://www.xuanyuancode.com/learn-claude-code" target="_blank" rel="noopener noreferrer">
+                <span class="tag">学习资源</span>
+                <h3>Claude Code 学习网站</h3>
+                <p>专为 Claude Code 打造的学习站点，涵盖安装配置、核心命令、实战技巧与最佳实践。</p>
+                <div class="url">https://www.xuanyuancode.com/learn-claude-code</div>
+            </a>
+
+            <a class="card" href="https://www.xuanyuancode.com/learn-claude-code/simulator" target="_blank" rel="noopener noreferrer">
+                <span class="tag">模拟器</span>
+                <h3>Claude Code 模拟器网站</h3>
+                <p>在浏览器中模拟 Claude Code 的交互体验，无需本地安装即可练习常用操作。</p>
+                <div class="url">https://www.xuanyuancode.com/learn-claude-code/simulator</div>
+            </a>
+
+            <a class="card" href="https://openai.com/zh-Hans-CN/index/unrolling-the-codex-agent-loop/" target="_blank" rel="noopener noreferrer">
+                <span class="tag">官方博客</span>
+                <h3>Codex 智能体循环学习网站</h3>
+                <p>OpenAI 官方文章，深入解析 Codex Agent 的工作原理、循环决策机制与工程实现细节。</p>
+                <div class="url">https://openai.com/zh-Hans-CN/index/unrolling-the-codex-agent-loop/</div>
+            </a>
+        </div>
+
+        <footer>
+            <p>由 hamletzhang 收集整理 · 通过 GitHub Pages 静态部署</p>
+        </footer>
+    </div>
+</body>
+</html>

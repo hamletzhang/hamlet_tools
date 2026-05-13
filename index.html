@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>hamlet_tools — 导航中心</title>
+    <style>
+        :root {
+            --bg: #0f172a;
+            --surface: rgba(30, 41, 59, 0.6);
+            --border: rgba(148, 163, 184, 0.15);
+            --text: #f1f5f9;
+            --text-muted: #94a3b8;
+            --accent: #38bdf8;
+            --accent-glow: rgba(56, 189, 248, 0.25);
+            --card-hover: rgba(56, 189, 248, 0.08);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans SC", sans-serif;
+            background: radial-gradient(ellipse at top, #1e293b 0%, #0f172a 100%);
+            color: var(--text);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 4rem 1.5rem;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        header h1 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, var(--text) 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            color: var(--text-muted);
+            font-size: 1.125rem;
+        }
+
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--accent);
+        }
+
+        .section-title::before {
+            content: '';
+            display: block;
+            width: 4px;
+            height: 1.25rem;
+            background: var(--accent);
+            border-radius: 2px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.25rem;
+        }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            backdrop-filter: blur(12px);
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(56, 189, 248, 0.35);
+            box-shadow: 0 10px 30px -10px var(--accent-glow);
+            background: var(--card-hover);
+        }
+
+        .card h3 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .card p {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .card .url {
+            font-size: 0.75rem;
+            color: var(--accent);
+            word-break: break-all;
+            margin-top: auto;
+            padding-top: 0.75rem;
+            opacity: 0.8;
+        }
+
+        footer {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.15rem 0.5rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            background: rgba(56, 189, 248, 0.12);
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+            width: fit-content;
+        }
+
+        @media (max-width: 640px) {
+            .container {
+                padding: 2rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>hamlet_tools</h1>
+            <p>个人小工具集导航中心 —— 所有页面与入口一览</p>
+        </header>
+
+        <section class="section">
+            <div class="section-title">🎮 游戏</div>
+            <div class="grid">
+                <a class="card" href="games/ddz.html">
+                    <span class="badge">人机对战</span>
+                    <h3>赛博朋克斗地主</h3>
+                    <p>经典三人斗地主，玩家 vs 双 AI 对手。完整叫分、抢地主、出牌流程，赛博朋克霓虹风格。</p>
+                    <div class="url">https://hamletzhang.github.io/hamlet_tools/games/ddz.html</div>
+                </a>
+                <a class="card" href="games/明熹宗-泰昌九月可玩原型.html">
+                    <span class="badge">叙事策略</span>
+                    <h3>明熹宗 · 泰昌九月</h3>
+                    <p>扮演明熹宗朱由校，处理泰昌元年九月的六大政治事件。轻策略 + 强叙事的纯文字选择游戏。</p>
+                    <div class="url">https://hamletzhang.github.io/hamlet_tools/games/明熹宗-泰昌九月可玩原型.html</div>
+                </a>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-title">🛠️ 工具</div>
+            <div class="grid">
+                <a class="card" href="tools/dlcv_cam_viewer.html">
+                    <span class="badge">监控看板</span>
+                    <h3>DLCV 相机监控</h3>
+                    <p>RK 智能相机实时监控网页。轮询系统 CPU / NPU 数据，Chart.js 绘制负载趋势图。</p>
+                    <div class="url">https://hamletzhang.github.io/hamlet_tools/tools/dlcv_cam_viewer.html</div>
+                </a>
+                <a class="card" href="tools/lofi-radio/index.html">
+                    <span class="badge">音乐播放器</span>
+                    <h3>Lofi 电台播放器</h3>
+                    <p>基于 Bilibili 视频源的 Lofi 氛围音乐播放器。三套可切换主题，适合工作学习背景音。</p>
+                    <div class="url">https://hamletzhang.github.io/hamlet_tools/tools/lofi-radio/index.html</div>
+                </a>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-title">🔗 更多</div>
+            <div class="grid">
+                <a class="card" href="collection.html">
+                    <span class="badge">外部导航</span>
+                    <h3>精选网站导航</h3>
+                    <p>收集常用的 IOU 演示、软件定律、AI 教学与学习资源等外部网站链接。</p>
+                    <div class="url">https://hamletzhang.github.io/hamlet_tools/collection.html</div>
+                </a>
+            </div>
+        </section>
+
+        <footer>
+            <p>由 hamletzhang 维护 · 通过 GitHub Pages 静态部署</p>
+        </footer>
+    </div>
+</body>
+</html>
