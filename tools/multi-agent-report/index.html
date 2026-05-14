@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>多智能体协调模式深度解析 | Claude Blog 研究报告</title>
+  <meta name="description" content="基于 Claude 官方博客文章《Multi-agent coordination patterns》的深度解析报告，涵盖五种核心协调模式、设计原则与实践建议。">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="container nav-inner">
+      <a href="#" class="nav-brand">Multi-Agent <span>Patterns</span></a>
+      <ul class="nav-links">
+        <li><a href="#overview">概览</a></li>
+        <li><a href="#patterns">五大模式</a></li>
+        <li><a href="#comparison">选择指南</a></li>
+        <li><a href="#principles">设计原则</a></li>
+        <li><a href="#summary">总结</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <header class="hero">
+    <div class="container">
+      <div class="hero-meta">Research Report · 2026</div>
+      <h1 class="hero-title">多智能体协调模式深度解析</h1>
+      <p class="hero-desc">基于 Claude 官方博客《Multi-agent coordination patterns》的结构化研究报告，系统梳理五种核心协调模式、适用场景与设计权衡。</p>
+      <div class="hero-stats">
+        <div class="stat">
+          <span class="stat-number">5</span>
+          <span class="stat-label">核心模式</span>
+        </div>
+        <div class="stat">
+          <span class="stat-number">3</span>
+          <span class="stat-label">设计维度</span>
+        </div>
+        <div class="stat">
+          <span class="stat-number">N</span>
+          <span class="stat-label">实践建议</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Overview -->
+  <section class="section" id="overview">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">Executive Summary</div>
+        <h2 class="section-title">执行摘要</h2>
+        <p class="section-subtitle">当团队决定采用多智能体系统而非单一智能体后，核心问题变为：选择哪种协调模式才能最贴合实际问题的结构特征。</p>
+      </div>
+
+      <div class="blockquote">
+        <p>"我们建议从最简单的可行模式开始，观察它在哪些场景下表现吃力，再据此演进。"</p>
+        <cite>— Claude Blog, Multi-agent coordination patterns</cite>
+      </div>
+
+      <p style="color: var(--text-secondary); margin-bottom: 24px;">本文深入解析五种多智能体协调模式的机制、优势与局限。这些模式按复杂度递进排列：</p>
+
+      <div class="card-grid">
+        <div class="card">
+          <div class="card-icon">🔁</div>
+          <h3 class="card-title">Generator-Verifier</h3>
+          <p class="card-desc">生成器产出内容，验证器进行质量把关，适用于质量敏感且评估标准可显式定义的场景。</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">🎼</div>
+          <h3 class="card-title">Orchestrator-Subagent</h3>
+          <p class="card-desc">主控智能体规划工作、委派子任务并综合结果，适用于任务分解清晰、子任务边界明确的场景。</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">👥</div>
+          <h3 class="card-title">Agent Teams</h3>
+          <p class="card-desc">多个工作智能体作为独立进程长期运行，从共享队列中获取任务，适用于并行、独立的长周期子任务。</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">📡</div>
+          <h3 class="card-title">Message Bus</h3>
+          <p class="card-desc">通过发布/订阅机制进行事件驱动通信，适用于智能体生态持续增长、工作流由事件驱动的场景。</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">🗃️</div>
+          <h3 class="card-title">Shared-State</h3>
+          <p class="card-desc">智能体通过共享持久化存储直接读写协作，无需中央协调器，适用于需要相互建立工作成果的场景。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Patterns -->
+  <section class="section" id="patterns">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">Deep Dive</div>
+        <h2 class="section-title">五大协调模式详解</h2>
+        <p class="section-subtitle">每种模式都有特定的结构假设、通信拓扑和信息流管理方式。理解这些差异是做出正确架构决策的基础。</p>
+      </div>
+
+      <!-- Pattern 1 -->
+      <article class="pattern" id="pattern-1">
+        <div class="pattern-header">
+          <div class="pattern-number">1</div>
+          <div class="pattern-title-group">
+            <h3 class="pattern-title">Generator-Verifier</h3>
+            <p class="pattern-tagline">质量敏感型产出的显式评估循环</p>
+          </div>
+        </div>
+        <div class="pattern-body">
+          <p><strong>工作机制：</strong>生成器（Generator）接收任务并产出初始内容，随后将内容传递给验证器（Verifier）进行评估。验证器根据预定义标准检查输出质量，若通过则标记完成，若不通过则返回具体反馈。生成器依据反馈迭代修正，循环往复直至验证通过或达到最大迭代次数上限。</p>
+          
+          <div class="pattern-diagram">
+            <img src="https://kimi-web-img.moonshot.cn/prod-data/online-image/search-upload/b14fda9b24c6d3eaec420bb1c7edbfbd.png" alt="Generator-Verifier Pattern Diagram" loading="lazy">
+            <p class="pattern-diagram-caption">图 1：Generator-Verifier 模式 — 生成与验证的迭代闭环</p>
+          </div>
+
+          <p><strong>适用场景：</strong>客户服务邮件生成系统（验证器检查知识库准确性、品牌语调合规性、问题覆盖完整性）；代码生成（一智能体写代码，另一智能体写测试并运行）；事实核查；基于评分标准的自动评分；合规性验证等。</p>
+
+          <div class="pros-cons">
+            <div class="pros-cons-card pros">
+              <h4>✅ 优势</h4>
+              <ul>
+                <li>结构最简单，部署最广泛</li>
+                <li>评估标准可显式定义时效果极佳</li>
+                <li>错误的输出成本高于额外生成周期时尤为有效</li>
+                <li>明确的反馈循环易于调试和优化</li>
+              </ul>
+            </div>
+            <div class="pros-cons-card cons">
+              <h4>⚠️ 局限</h4>
+              <ul>
+                <li>验证器的质量完全取决于评估标准的清晰度</li>
+                <li>若生成与评估难度相当（如创意任务），验证器可能漏检</li>
+                <li>迭代循环可能陷入振荡，无法收敛</li>
+                <li>需设置最大迭代上限与降级策略</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="blockquote">
+            <p>"验证器的好坏完全取决于其标准。如果验证器只被告知'检查输出是否良好'，而没有进一步的标准，它就会对生成器的输出照单全收。"</p>
+          </div>
+        </div>
+      </article>
+
+      <!-- Pattern 2 -->
+      <article class="pattern" id="pattern-2">
+        <div class="pattern-header">
+          <div class="pattern-number">2</div>
+          <div class="pattern-title-group">
+            <h3 class="pattern-title">Orchestrator-Subagent</h3>
+            <p class="pattern-tagline">层级化任务分解与结果综合</p>
+          </div>
+        </div>
+        <div class="pattern-body">
+          <p><strong>工作机制：</strong>一个主控智能体（Orchestrator/Lead）扮演团队负责人角色，负责任务规划、子任务委派和结果综合。子智能体（Subagent）负责具体的专项工作并回报结果。主控智能体可能直接处理部分子任务，同时将其余任务分发给子智能体。</p>
+
+          <div class="pattern-diagram">
+            <img src="https://kimi-web-img.moonshot.cn/prod-data/online-image/search-upload/0acf1de7cdd1b0ce9e30bef9fe4d0a33.png" alt="Orchestrator-Subagent Pattern Diagram" loading="lazy">
+            <p class="pattern-diagram-caption">图 2：Orchestrator-Subagent 模式 — 主控智能体协调子智能体完成任务</p>
+          </div>
+
+          <p><strong>典型应用：</strong>Claude Code 使用此模式。主智能体负责写代码、编辑文件、运行命令，当需要搜索大型代码库或调查独立问题时，后台派发子智能体，使主智能体在等待结果的同时继续处理主要任务。每个子智能体在独立的上下文窗口中运行，返回精炼的发现摘要。</p>
+
+          <p><strong>适用场景：</strong>自动化代码审查系统（安全漏洞检查、测试覆盖验证、代码风格评估、架构一致性审查分别派发给专业子智能体）；任务分解清晰、子任务间相互依赖度低的场景。</p>
+
+          <div class="pros-cons">
+            <div class="pros-cons-card pros">
+              <h4>✅ 优势</h4>
+              <ul>
+                <li>主控智能体保持对整体目标的连贯视角</li>
+                <li>子智能体专注特定职责，上下文聚焦</li>
+                <li>天然支持任务并行化</li>
+                <li>子智能体可针对不同领域进行专门化配置</li>
+              </ul>
+            </div>
+            <div class="pros-cons-card cons">
+              <h4>⚠️ 局限</h4>
+              <ul>
+                <li>主控智能体成为信息瓶颈</li>
+                <li>子智能体间的信息传递需经主控中转，关键细节易丢失</li>
+                <li>除非显式并行化，否则子智能体串行执行限制吞吐量</li>
+                <li>多智能体 Token 成本没有换来速度收益</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Pattern 3 -->
+      <article class="pattern" id="pattern-3">
+        <div class="pattern-header">
+          <div class="pattern-number">3</div>
+          <div class="pattern-title-group">
+            <h3 class="pattern-title">Agent Teams</h3>
+            <p class="pattern-tagline">并行独立的长周期工作进程</p>
+          </div>
+        </div>
+        <div class="pattern-body">
+          <p><strong>工作机制：</strong>协调器（Coordinator）生成多个工作智能体（Worker/Teammate）作为独立进程。工作智能体从共享队列中认领任务，自主执行多步骤操作，完成后发出信号。与 Orchestrator-Subagent 的核心区别在于<strong>工作智能体的持久性</strong>：子智能体执行单一有界任务后即终止，而团队成员在多次任务分配中保持存活，累积上下文和领域专精，性能随时间提升。</p>
+
+          <div class="pattern-diagram">
+            <img src="https://kimi-web-img.moonshot.cn/prod-data/online-image/search-upload/d9721a4c5f810122628c7ff566a1a0af.png" alt="Agent Teams Pattern Diagram" loading="lazy">
+            <p class="pattern-diagram-caption">图 3：Agent Teams 模式 — 持久化工作智能体自主处理队列任务</p>
+          </div>
+
+          <p><strong>适用场景：</strong>大规模代码库框架迁移（每个服务由独立团队成员负责，包括依赖更新、代码修改、测试修复、验证等全流程）；子任务独立且受益于持续多步骤工作的场景。</p>
+
+          <div class="pros-cons">
+            <div class="pros-cons-card pros">
+              <h4>✅ 优势</h4>
+              <ul>
+                <li>工作智能体累积领域上下文，越用越精</li>
+                <li>真正并行执行，缩短总耗时</li>
+                <li>适合长周期、多步骤的独立子任务</li>
+                <li>协调器职责轻量，仅负责分配与收集</li>
+              </ul>
+            </div>
+            <div class="pros-cons-card cons">
+              <h4>⚠️ 局限</h4>
+              <ul>
+                <li>独立性是硬性要求，工作智能体间难以共享中间发现</li>
+                <li>完成检测更困难（不同智能体耗时差异大）</li>
+                <li>共享资源冲突（代码库、数据库、文件系统）</li>
+                <li>需要仔细的任务划分和冲突解决机制</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Pattern 4 -->
+      <article class="pattern" id="pattern-4">
+        <div class="pattern-header">
+          <div class="pattern-number">4</div>
+          <div class="pattern-title-group">
+            <h3 class="pattern-title">Message Bus</h3>
+            <p class="pattern-tagline">事件驱动型智能体生态的通信层</p>
+          </div>
+        </div>
+        <div class="pattern-body">
+          <p><strong>工作机制：</strong>智能体通过两个原语交互：<code>publish</code>（发布）和 <code>subscribe</code>（订阅）。智能体订阅其关心的主题（Topic），路由器（Router）将匹配的消息投递给订阅者。新增智能体能力时，只需订阅相关主题即可接收工作，无需重新连接现有节点。</p>
+
+          <div class="pattern-diagram">
+            <img src="https://kimi-web-img.moonshot.cn/prod-data/online-image/search-upload/65b1b293d00e79b3cfb733854e147a34.png" alt="Message Bus Pattern Diagram" loading="lazy">
+            <p class="pattern-diagram-caption">图 4：Message Bus 模式 — 基于发布/订阅的解耦通信</p>
+          </div>
+
+          <p><strong>适用场景：</strong>安全运营自动化（告警从多源到达，分类智能体按严重程度和类型路由，网络告警派给网络调查智能体，凭据告警派给身份分析智能体，调查智能体可发布富化请求由上下文收集智能体响应）；事件驱动型流水线；智能体生态预计持续增长的场景。</p>
+
+          <div class="pros-cons">
+            <div class="pros-cons-card pros">
+              <h4>✅ 优势</h4>
+              <ul>
+                <li>高度解耦，新增智能体无需修改现有连接</li>
+                <li>事件流自然形成工作流</li>
+                <li>团队可独立开发、部署智能体</li>
+                <li>天然支持动态扩展</li>
+              </ul>
+            </div>
+            <div class="pros-cons-card cons">
+              <h4>⚠️ 局限</h4>
+              <ul>
+                <li>事件追踪困难，调试复杂</li>
+                <li>路由准确性至关重要，错误分类会导致静默失败</li>
+                <li>LLM 路由器虽提供语义灵活性，但引入新故障模式</li>
+                <li>级联事件链路难以审计和排查</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Pattern 5 -->
+      <article class="pattern" id="pattern-5">
+        <div class="pattern-header">
+          <div class="pattern-number">5</div>
+          <div class="pattern-title-group">
+            <h3 class="pattern-title">Shared-State</h3>
+            <p class="pattern-tagline">去中心化协作与持续知识积累</p>
+          </div>
+        </div>
+        <div class="pattern-body">
+          <p><strong>工作机制：</strong>智能体自主运行，从共享存储（数据库、文件系统、文档）读取信息并写入发现。没有中央协调器。智能体检查存储中的相关信息，基于发现采取行动，并将结果写回。工作通常由初始化步骤启动（向存储中写入问题或数据集），由终止条件结束（时间限制、收敛阈值、或指定智能体判定存储中的答案已充分）。</p>
+
+          <div class="pattern-diagram">
+            <img src="https://kimi-web-img.moonshot.cn/prod-data/online-image/search-upload/d7707fb9192e88f98205dde3aac9708a.png" alt="Shared-State Pattern Diagram" loading="lazy">
+            <p class="pattern-diagram-caption">图 5：Shared-State 模式 — 智能体通过共享存储直接协作</p>
+          </div>
+
+          <p><strong>适用场景：</strong>研究综合系统（多个智能体分别调查学术文献、行业报告、专利、新闻，发现相互启发）；需要消除单点故障的系统（任一智能体停止不影响其他智能体）；协作探索型任务。</p>
+
+          <div class="pros-cons">
+            <div class="pros-cons-card pros">
+              <h4>✅ 优势</h4>
+              <ul>
+                <li>消除中央协调器的单点故障</li>
+                <li>发现即时共享，无需等待路由</li>
+                <li>共享存储成为不断演化的知识库</li>
+                <li>智能体间真正协同，相互建立成果</li>
+              </ul>
+            </div>
+            <div class="pros-cons-card cons">
+              <h4>⚠️ 局限</h4>
+              <ul>
+                <li>可能出现重复工作或矛盾方法</li>
+                <li>系统行为由交互涌现，而非顶层设计，可预测性降低</li>
+                <li>反应循环风险：智能体 A 写入，B 跟进，A 再回应，无限消耗 Token</li>
+                <li>需要显式的终止条件（时间预算、收敛阈值、裁决智能体）</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="blockquote">
+            <p>"重复工作和并发写入已有已知的工程修复方案（锁、版本控制、分区）。反应循环是行为问题，需要一等公民级的终止条件。"</p>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>

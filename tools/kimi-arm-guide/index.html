@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ARM 3576 Linux 平台 Kimi 安装指南</title>
+  <meta name="description" content="在 RK3576 / ARM64 Linux 上安装和运行 Kimi 的完整方案，含环境要求、命令行操作与常见问题">
+  <link rel="stylesheet" href="../multi-agent-report/css/style.css">
+  <style>
+    /* Additional styles for code blocks & badges */
+    .code-block {
+      background: #141414;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 20px 24px;
+      margin: 16px 0;
+      overflow-x: auto;
+    }
+    .code-block pre {
+      margin: 0;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      line-height: 1.7;
+      color: #e8e8e8;
+    }
+    .code-block .comment { color: #6e6e6e; }
+    .code-block .keyword { color: #c46849; }
+    .code-block .string { color: #7ec699; }
+    .code-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+    .code-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+    }
+    .badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 4px;
+      margin-left: 8px;
+      vertical-align: middle;
+    }
+    .badge-success { background: rgba(76, 175, 80, 0.15); color: var(--success); }
+    .badge-warning { background: rgba(255, 152, 0, 0.15); color: var(--warning); }
+    .badge-danger { background: rgba(244, 67, 54, 0.15); color: var(--danger); }
+    .badge-info { background: rgba(100, 181, 246, 0.15); color: #64b5f6; }
+    .step-list {
+      list-style: none;
+      padding: 0;
+      counter-reset: step;
+    }
+    .step-list > li {
+      position: relative;
+      padding-left: 48px;
+      margin-bottom: 32px;
+    }
+    .step-list > li::before {
+      counter-increment: step;
+      content: counter(step);
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+    }
+    .step-title {
+      font-size: 17px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: var(--text-primary);
+    }
+    .step-desc {
+      color: var(--text-secondary);
+      font-size: 15px;
+      margin-bottom: 12px;
+    }
+    .faq-item {
+      margin-bottom: 28px;
+    }
+    .faq-question {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    .faq-question::before {
+      content: "Q";
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      border-radius: 4px;
+      background: var(--accent);
+      color: white;
+      font-size: 12px;
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .faq-answer {
+      padding-left: 34px;
+      color: var(--text-secondary);
+      font-size: 15px;
+      line-height: 1.7;
+    }
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .tag {
+      font-size: 12px;
+      padding: 4px 10px;
+      border-radius: 4px;
+      background: var(--bg-tertiary);
+      color: var(--text-secondary);
+      border: 1px solid var(--border);
+    }
+    .platform-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-top: 24px;
+    }
+    .platform-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 20px;
+      text-align: center;
+    }
+    .platform-card .status {
+      font-size: 24px;
+      margin-bottom: 8px;
+    }
+    .platform-card h4 {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+    .platform-card p {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="container nav-inner">
+      <a href="#" class="nav-brand">Kimi <span>ARM Guide</span></a>
+      <ul class="nav-links">
+        <li><a href="#overview">概览</a></li>
+        <li><a href="#requirements">环境要求</a></li>
+        <li><a href="#install">安装方案</a></li>
+        <li><a href="#commands">命令速查</a></li>
+        <li><a href="#faq">常见问题</a></li>
+        <li><a href="#alternatives">替代方案</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <header class="hero">
+    <div class="container">
+      <div class="hero-meta">Installation Guide · ARM64 / RK3576</div>
+      <h1 class="hero-title">ARM 3576 Linux 平台<br>Kimi 安装指南</h1>
+      <p class="hero-desc">汇总在 RK3576 及 ARM64 Linux 设备上安装、配置和运行 Kimi 的完整方案，覆盖命令行工具、API 调用与容器化部署。</p>
+      <div class="hero-stats">
+        <div class="stat">
+          <span class="stat-number">4</span>
+          <span class="stat-label">安装方案</span>
+        </div>
+        <div class="stat">
+          <span class="stat-number">5+</span>
+          <span class="stat-label">常见问题</span>
+        </div>
+        <div class="stat">
+          <span class="stat-number">3</span>
+          <span class="stat-label">替代方案</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Overview -->
+  <section class="section" id="overview">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">Product Overview</div>
+        <h2 class="section-title">Kimi 产品矩阵与 ARM 支持概览</h2>
+        <p class="section-subtitle">Kimi 官方提供多种形态的产品，在 ARM64 Linux 上的支持程度各不相同，选择适合目标平台的方案是第一步。</p>
+      </div>
+
+      <table class="comparison-table">
+        <thead>
+          <tr>
+            <th>工具 / 产品</th>
+            <th>说明</th>
+            <th>ARM64 Linux 支持</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Kimi Code CLI</td>
+            <td>官方命令行 AI Agent（终端编程助手）</td>
+            <td><span class="badge badge-success">✅ 官方支持</span></td>
+          </tr>
+          <tr>
+            <td>Kimi API</td>
+            <td>OpenAI 兼容的 HTTP API</td>
+            <td><span class="badge badge-success">✅ 完全支持</span></td>
+          </tr>
+          <tr>
+            <td>MoonPalace（月宫）</td>
+            <td>官方 API 调试工具，Go 编写</td>
+            <td><span class="badge badge-success">✅ 提供 Linux 二进制</span></td>
+          </tr>
+          <tr>
+            <td>VS Code 插件</td>
+            <td>Kimi Code IDE 扩展</td>
+            <td><span class="badge badge-success">✅ 依赖 VS Code ARM64</span></td>
+          </tr>
+          <tr>
+            <td>Kimi 桌面版</td>
+            <td>官方 GUI 客户端</td>
+            <td><span class="badge badge-danger">❌ 无官方 Linux 版</span></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="blockquote" style="margin-top: 32px;">
+        <p>核心结论：Kimi Code CLI 是纯 Python 实现（wheel 标签 py3-none-any），不依赖特定 CPU 架构，因此可在任何支持 Python 3.12+ 的 ARM64 Linux 平台上直接运行。</p>
+        <cite>— 基于 PyPI 发行包分析与社区实测验证</cite>
+      </div>
+    </div>
+  </section>
+
+  <!-- Requirements -->
+  <section class="section" id="requirements">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">System Requirements</div>
+        <h2 class="section-title">环境要求</h2>
+        <p class="section-subtitle">明确 RK3576 及通用 ARM64 Linux 设备的软硬件门槛，避免安装过程中出现不兼容问题。</p>
+      </div>
+
+      <div class="card-grid" style="margin-bottom: 32px;">
+        <div class="card">
+          <div class="card-icon">🖥</div>
+          <div class="card-title">CPU</div>
+          <div class="card-desc">任意 ARM64 / AArch64 处理器均可。<br>推荐 RK3576（4×Cortex-A72 + 4×Cortex-A53）或更高性能平台。</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🧠</div>
+          <div class="card-title">内存</div>
+          <div class="card-desc">最低 512 MB RAM。<br>推荐 2 GB+，用于大型项目索引与复杂上下文处理。</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">💾</div>
+          <div class="card-title">磁盘</div>
+          <div class="card-desc">最低 200 MB（Python + uv + Kimi CLI）。<br>推荐 1 GB+，含缓存、日志及模型文件。</div>
+        </div>
+        <div class="card">
+          <div class="card-icon">🐧</div>
+          <div class="card-title">操作系统</div>
+          <div class="card-desc">Linux 内核 4.x+，glibc 2.28+ 或 musl。<br>推荐 Ubuntu 22.04+ / Debian 12+ / Buildroot。</div>
+        </div>
+      </div>
+
+      <div class="pattern">
+        <div class="pattern-header">
+          <div class="pattern-number">1</div>
+          <div class="pattern-title-group">
+            <div class="pattern-title">Python 版本</div>
+            <div class="pattern-tagline">Kimi CLI 的硬性依赖</div>
+          </div>
+        </div>
+        <div class="pattern-body">
+          <p>官方要求 <strong>Python ≥ 3.12</strong>，最佳兼容性版本为 <strong>Python 3.13</strong>。如果系统自带 Python 低于 3.12，请先升级。</p>
+          <div class="code-block">
+            <div class="code-header"><span class="code-label">bash</span></div>
+            <pre># 检查当前 Python 版本
+python3 --version
+
+# Ubuntu/Debian 安装 Python 3.13
+sudo apt update
+sudo apt install -y python3.13 python3.13-venv python3.13-pip
+
+# 若系统包管理器无 3.13，可从源码编译或使用 uv 管理</pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="pattern">
+        <div class="pattern-header">
+          <div class="pattern-number">2</div>
+          <div class="pattern-title-group">
+            <div class="pattern-title">网络环境</div>
+            <div class="pattern-tagline">API 调用的前置条件</div>
+          </div>
+        </div>
+        <div class="pattern-body">
+          <p>设备需能稳定访问 <code>api.moonshot.ai</code>（海外）或 <code>api.moonshot.cn</code>（国内）。如处于受限网络，需提前配置代理或检查防火墙策略。</p>
+          <div class="code-block">
+            <div class="code-header"><span class="code-label">bash</span></div>
+            <pre># 测试连通性
+curl -I https://api.moonshot.cn/v1
+
+# 如需代理
+export HTTPS_PROXY=http://your-proxy:port</pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="pattern">
+        <div class="pattern-header">
+          <div class="pattern-number">3</div>
+          <div class="pattern-title-group">
+            <div class="pattern-title">RK3576 特别提示</div>
+            <div class="pattern-tagline">嵌入式 Linux 的额外注意点</div>
+          </div>
+        </div>
+        <div class="pattern-body">
+          <ul style="margin-left: 20px; color: var(--text-secondary);">
+            <li style="margin-bottom: 8px;">部分嵌入式发行版使用 <strong>musl libc</strong> 而非 glibc，uv 的 ARM64/musl 预编译版可用，但 <code>uv python install</code> 管理的 Python 解释器可能受限，建议使用系统自带 Python。</li>
+            <li style="margin-bottom: 8px;">RK3576 内置 <strong>6 TOPS NPU</strong>，与 Kimi CLI 无直接关系，但可用于本地推理替代方案（见文末）。</li>
+            <li>典型发行版：Buildroot、Ubuntu 22.04/24.04、Debian、openKylin、银河麒麟 V10。</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Installation -->
+  <section class="section" id="install">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">Installation</div>
+        <h2 class="section-title">安装方案</h2>
+        <p class="section-subtitle">提供四种在 ARM64 Linux 上部署 Kimi 的方案，按推荐程度排序。</p>
+      </div>
+
+      <!-- Method 1 -->
+      <div class="pattern">
+        <div class="pattern-header">
+          <div class="pattern-number" style="background: var(--success);">1</div>
+          <div class="pattern-title-group">
+            <div class="pattern-title">官方推荐：uv + kimi-cli</div>
+            <div class="pattern-tagline">最简洁、官方维护的安装路径</div>
+          </div>
+        </div>
+        <div class="pattern-body">
+          <p>uv 是由 Astral 开发的高性能 Python 包管理器，官方对 Linux aarch64 提供 Tier 2 支持（保证可构建，提供预编译二进制）。</p>
+          <ol class="step-list">
+            <li>
+              <div class="step-title">安装 uv 包管理器</div>
+              <div class="step-desc">运行官方安装脚本，自动识别 aarch64 架构并下载对应版本。</div>
+              <div class="code-block">
+                <div class="code-header"><span class="code-label">bash</span></div>
+                <pre>curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# uv 将被安装到 ~/.local/bin/
+# 脚本会自动识别 aarch64 并下载 uv-aarch64-unknown-linux-gnu</pre>
+              </div>
+            </li>
+            <li>
+              <div class="step-title">刷新环境变量</div>
+              <div class="step-desc">使当前 shell 识别 uv 命令。</div>
+              <div class="code-block">
+                <div class="code-header"><span class="code-label">bash</span></div>
+                <pre>source $HOME/.local/bin/env
+
+# 或手动写入 ~/.bashrc
+echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
+source ~/.bashrc</pre>
+              </div>
+            </li>
+            <li>
+              <div class="step-title">安装 Kimi CLI</div>
+              <div class="step-desc">使用 Python 3.13 获得最佳兼容性。若系统无 3.13，可改用 <code>--python 3.12</code> 或 <code>--python $(which python3)</code>。</div>
+              <div class="code-block">
+                <div class="code-header"><span class="code-label">bash</span></div>
+                <pre>uv tool install --python 3.13 kimi-cli
+
+# 若使用系统自带 Python
+uv tool install --python $(which python3) kimi-cli</pre>
+              </div>
+            </li>
+            <li>
+              <div class="step-title">验证安装</div>
+              <div class="code-block">
+                <div class="code-header"><span class="code-label">bash</span></div>
+                <pre>kimi --version
+kimi --help</pre>
+              </div>
+            </li>
+            <li>
+              <div class="step-title">启动并配置 API Key</div>
+              <div class="code-block">
+                <div class="code-header"><span class="code-label">bash</span></div>
+                <pre>kimi
+# 在交互界面中输入 /login 或 /setup 配置 API Key</pre>
+              </div>
+            </li>
+          </ol>
+        </div>
+      </div>
+
+      <!-- Method 2 -->
+      <div class="pattern">
+        <div class="pattern-header">
+          <div class="pattern-number" style="background: var(--warning);">2</div>
+          <div class="pattern-title-group">
+            <div class="pattern-title">系统 pip 安装</div>
+            <div class="pattern-tagline">当 uv 遇到兼容性问题时使用</div>
+          </div>
+        </div>
+        <div class="pattern-body">
+          <p>Kimi CLI 是纯 Python 包，不依赖架构，可直接通过 pip 安装。</p>
+          <div class="code-block">
+            <div class="code-header"><span class="code-label">bash</span></div>
+            <pre># 确保 Python >= 3.12
+python3 --version
+
+# 安装 kimi-cli
+pip3 install kimi-cli
+
+# 验证
+kimi --version
+
+# 升级
+pip3 install -U kimi-cli</pre>
+          </div>
+          <div class="pros-cons" style="margin-top: 16px;">
+            <div class="pros-cons-card pros">
+              <h4>✅ 优势</h4>
+              <ul>
+                <li>不依赖 uv，兼容所有 Python 环境</li>
+                <li>适合 musl libc 嵌入式系统</li>
+                <li>升级简单，pip 用户熟悉</li>
+              </ul>
+            </div>
+            <div class="pros-cons-card cons">
+              <h4>⚠️ 注意</h4>
+              <ul>
+                <li>可能污染系统 Python 环境</li>
+                <li>不如 uv 的隔离性好</li>
+                <li>依赖版本冲突风险稍高</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Method 3 -->
+      <div class="pattern">
+        <div class="pattern-header">
+          <div class="pattern-number" style="background: #64b5f6;">3</div>
+          <div class="pattern-title-group">
+            <div class="pattern-title">Docker 容器化部署</div>
+            <div class="pattern-tagline">环境隔离、可移植性最佳</div>
+          </div>
+        </div>
+        <div class="pattern-body">
+          <p>适用于需要环境隔离、多版本共存或 musl libc 系统的场景。需预装 Docker（ARM64 版）。</p>
+          <div class="code-block">
+            <div class="code-header"><span class="code-label">dockerfile</span></div>
+            <pre>FROM python:3.13-slim
+
+WORKDIR /app
+
+# 安装 uv
+RUN apt-get update && apt-get install -y curl \
+    && curl -LsSf https://astral.sh/uv/install.sh | sh \
+    && apt-get clean
+ENV PATH="/root/.local/bin:$PATH"
+
+# 安装 Kimi CLI
+RUN uv tool install kimi-cli
+
+WORKDIR /workspace
+CMD ["kimi"]</pre>
+          </div>
+          <div class="code-block">
+            <div class="code-header"><span class="code-label">bash</span></div>
+            <pre># 构建镜像
+docker build -t kimi-cli:latest .
+
+# 运行容器（挂载配置与当前目录）
+docker run -it --rm \
+  -v $(pwd):/workspace \
+  -v ~/.kimi:/root/.kimi \
+  kimi-cli:latest</pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- Method 4 -->
+      <div class="pattern">
+        <div class="pattern-header">
+          <div class="pattern-number">4</div>
+          <div class="pattern-title-group">
+            <div class="pattern-title">源码运行（开发者模式）</div>
+            <div class="pattern-tagline">需要修改或调试时使用</div>
+          </div>
+        </div>
+        <div class="pattern-body">
+          <div class="code-block">
+            <div class="code-header"><span class="code-label">bash</span></div>
+            <pre>git clone https://github.com/MoonshotAI/kimi-cli.git
+cd kimi-cli
+
+# 使用 uv 安装依赖并运行
+uv sync
+uv run kimi
+
+# 或直接以开发模式运行 Python
+python3 -m kimi_cli</pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Commands -->
+  <section class="section" id="commands">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">Command Reference</div>
+        <h2 class="section-title">命令行操作速查</h2>
+        <p class="section-subtitle">安装完成后，快速上手 Kimi CLI 的核心命令。</p>
+      </div>
+
+      <div class="code-block">
+        <div class="code-header"><span class="code-label">常用命令</span></div>
+        <pre><span class="comment"># 启动交互式会话</span>
+kimi
+
+<span class="comment"># 直接执行单次提问</span>
+kimi <span class="string">"如何查看 Linux 内核版本？"</span>
+
+<span class="comment"># 登录 / 配置 API Key</span>
+kimi /login
+kimi /setup
+
+<span class="comment"># 查看版本与帮助</span>
+kimi --version
+kimi --help
+
+<span class="comment"># 更新到最新版本（uv 安装）</span>
+uv tool upgrade kimi-cli
+
+<span class="comment"># 更新到最新版本（pip 安装）</span>
+pip3 install -U kimi-cli
+
+<span class="comment"># 卸载</span>
+uv tool uninstall kimi-cli
+pip3 uninstall kimi-cli</pre>
+      </div>
+
+      <div class="code-block" style="margin-top: 20px;">
+        <div class="code-header"><span class="code-label">Kimi API 调用示例</span></div>
+        <pre><span class="comment"># 使用 curl 直接调用（无需安装 CLI）</span>
+curl https://api.moonshot.cn/v1/chat/completions \
+  -H <span class="string">"Content-Type: application/json"</span> \
+  -H <span class="string">"Authorization: Bearer $MOONSHOT_API_KEY"</span> \
+  -d <span class="string">'{
+    "model": "kimi-k2.6",
+    "messages": [{"role": "user", "content": "你好"}]
+  }'</span>
+
+<span class="comment"># Python 示例</span>
+<span class="keyword">from</span> openai <span class="keyword">import</span> OpenAI
+
+client = OpenAI(
+    api_key=<span class="string">"your-moonshot-api-key"</span>,
+    base_url=<span class="string">"https://api.moonshot.cn/v1"</span>
+)
+
+completion = client.chat.completions.create(
+    model=<span class="string">"kimi-k2.6"</span>,
+    messages=[{<span class="string">"role"</span>: <span class="string">"user"</span>, <span class="string">"content"</span>: <span class="string">"你好"</span>}]
+)
+<span class="keyword">print</span>(completion.choices[0].message.content)</pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section" id="faq">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">FAQ</div>
+        <h2 class="section-title">常见问题与解决方案</h2>
+        <p class="section-subtitle">汇总在 ARM64 Linux 设备上安装和使用 Kimi 时的典型问题。</p>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">uv 安装脚本下载了错误架构的二进制文件？</div>
+        <div class="faq-answer">
+          <p>某些精简版嵌入式系统可能无法正确识别架构。可手动下载对应版本：</p>
+          <div class="code-block" style="margin-top: 10px;">
+            <pre># glibc 系统
+curl -LO https://github.com/astral-sh/uv/releases/latest/download/uv-aarch64-unknown-linux-gnu.tar.gz
+tar -xzf uv-aarch64-unknown-linux-gnu.tar.gz -C ~/.local/bin
+
+# musl 系统
+curl -LO https://github.com/astral-sh/uv/releases/latest/download/uv-aarch64-unknown-linux-musl.tar.gz
+tar -xzf uv-aarch64-unknown-linux-musl.tar.gz -C ~/.local/bin</pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">uv python install 3.13 在 ARM64/musl 上失败？</div>
+        <div class="faq-answer">
+          <p>uv 对 ARM musl 平台的 Python 预构建版本支持尚不完整。解决方案：使用系统包管理器安装 Python 3.12+，再指定系统 Python 安装 Kimi CLI：</p>
+          <div class="code-block" style="margin-top: 10px;">
+            <pre>uv tool install --python $(which python3) kimi-cli</pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">安装后 kimi 命令找不到？</div>
+        <div class="faq-answer">
+          <p>uv 和 pip 的 user install 默认将可执行文件放到 <code>~/.local/bin</code>，该目录可能不在 PATH 中：</p>
+          <div class="code-block" style="margin-top: 10px;">
+            <pre>export PATH="$HOME/.local/bin:$PATH"
+echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc</pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">Kimi CLI 启动时报 double free or corruption？</div>
+        <div class="faq-answer">
+          <p>该问题曾在 Termux / Proot 等受限容器环境中报告。建议：</p>
+          <ul style="margin-left: 20px;">
+            <li>更新 Kimi CLI 到最新版本：<code>uv tool upgrade kimi-cli</code></li>
+            <li>避免在受限容器中处理超大上下文</li>
+            <li>尝试使用系统原生 Python 而非容器内版本</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">Asahi Linux（16K 页大小）上显示异常？</div>
+        <div class="faq-answer">
+          <p>内核页大小非标准 4K 时，某些终端渲染库可能出现兼容性问题。通常不影响 Kimi CLI 核心对话功能，可尝试更换终端模拟器（如 Alacritty、Kitty）或更新至最新版本。</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">ARM 设备上运行缓慢或卡顿？</div>
+        <div class="faq-answer">
+          <p>Kimi CLI 本身计算量很小，运行缓慢通常是网络延迟或内存不足导致：</p>
+          <ul style="margin-left: 20px;">
+            <li>检查网络连通性：<code>ping api.moonshot.cn</code></li>
+            <li>关闭不必要的后台服务释放内存</li>
+            <li>对于 RK3576 等 2GB 内存设备，避免同时运行大型 IDE 和 Kimi CLI</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Alternatives -->
+  <section class="section" id="alternatives">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">Alternatives</div>
+        <h2 class="section-title">替代方案</h2>
+        <p class="section-subtitle">当 Kimi CLI 不适合当前场景时，可考虑以下替代路径。</p>
+      </div>
+
+      <div class="platform-grid">
+        <div class="platform-card">
+          <div class="status">🌐</div>
+          <h4>Kimi API</h4>
+          <p>最通用方式，任何支持 HTTP 的语言均可调用，无需安装 CLI。</p>
+        </div>
+        <div class="platform-card">
+          <div class="status">🍒</div>
+          <h4>Cherry Studio</h4>
+          <p>开源多模型桌面客户端，支持 Linux aarch64，可配置 Kimi API。</p>
+        </div>
+        <div class="platform-card">
+          <div class="status">🗨</div>
+          <h4>LobeChat / Next-Web</h4>
+          <p>部署 Web 客户端，通过浏览器访问，后端调用 Kimi API。</p>
+        </div>
+        <div class="platform-card">
+          <div class="status">🧠</div>
+          <h4>RKLLM 本地推理</h4>
+          <p>利用 RK3576 的 6 TOPS NPU 运行量化模型，适用于无网络场景。</p>
+        </div>
+      </div>
+
+      <div class="pattern" style="margin-top: 40px;">
+        <div class="pattern-header">
+          <div class="pattern-number">1</div>
+          <div class="pattern-title-group">
+            <div class="pattern-title">Kimi API 直接调用</div>
+            <div class="pattern-tagline">无需任何安装，最轻量</div>
+          </div>
+        </div>
+        <div class="pattern-body">
+          <p>如果设备资源极其有限或仅需脚本化调用，直接使用 HTTP API 是最佳选择。支持 Python、Node.js、Go、Shell 等任意语言。</p>
+          <div class="code-block">
+            <div class="code-header"><span class="code-label">python</span></div>
+            <pre><span class="keyword">from</span> openai <span class="keyword">import</span> OpenAI
+
+client = OpenAI(
+    api_key=<span class="string">"your-moonshot-api-key"</span>,
+    base_url=<span class="string">"https://api.moonshot.cn/v1"</span>
+)
+
+response = client.chat.completions.create(
+    model=<span class="string">"kimi-k2.6"</span>,
+    messages=[{<span class="string">"role"</span>: <span class="string">"user"</span>, <span class="string">"content"</span>: <span class="string">"你好"</span>}]
+)
+<span class="keyword">print</span>(response.choices[0].message.content)</pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="pattern">
+        <div class="pattern-header">
+          <div class="pattern-number">2</div>
+          <div class="pattern-title-group">
+            <div class="pattern-title">RKLLM 本地量化部署（RK3576 NPU）</div>
+            <div class="pattern-tagline">离线、隐私、零网络依赖</div>
+          </div>
+        </div>
+        <div class="pattern-body">
+          <p>适用于无公网或数据隐私敏感场景。RK3576 的 NPU 可加速推理，但只能运行小型量化模型（如 DeepSeek-R1 1.5B/7B、Qwen2.5 等），<strong>并非 Kimi 本身</strong>。</p>
+          <div class="code-block">
+            <div class="code-header"><span class="code-label">部署流程概览</span></div>
+            <pre><span class="comment"># 1. 上位机（x86 Linux）安装 RKLLM-Toolkit</span>
+pip3 install rkllm_toolkit-1.1.4-cp38-cp38-linux_x86_64.whl
+
+<span class="comment"># 2. 转换 HuggingFace 模型为 RKLLM 格式</span>
+python3 export_rkllm.py
+
+<span class="comment"># 3. 交叉编译 RKLLM Runtime</span>
+./build-linux.sh
+
+<span class="comment"># 4. 目标板（RK3576）运行</span>
+./llm_demo ../DeepSeek-R1-Distill-Qwen-1.5B_W4A16G128_RK3576.rkllm 2048 4096</pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Summary -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">Summary</div>
+        <h2 class="section-title">综合建议</h2>
+        <p class="section-subtitle">针对 RK3576 等 ARM64 Linux 平台的快速决策指南。</p>
+      </div>
+
+      <ul class="takeaway-list">
+        <li>
+          <div class="takeaway-num">1</div>
+          <div class="takeaway-content">
+            <h4>首选方案：uv + Kimi CLI</h4>
+            <p>安装 uv（aarch64 预编译版），再通过 <code>uv tool install kimi-cli</code> 安装。官方支持，纯 Python，ARM64 完全兼容。</p>
+          </div>
+        </li>
+        <li>
+          <div class="takeaway-num">2</div>
+          <div class="takeaway-content">
+            <h4>uv 遇阻时：系统 pip 安装</h4>
+            <p>使用系统自带 Python 3.12+，执行 <code>pip3 install kimi-cli</code>。简单直接，适合 musl 嵌入式系统。</p>
+          </div>
+        </li>
+        <li>
+          <div class="takeaway-num">3</div>
+          <div class="takeaway-content">
+            <h4>需要 GUI：Web 客户端 + Kimi API</h4>
+            <p>部署 LobeChat 或 Next-Web Docker 容器，通过浏览器访问，后端接入 Kimi API。</p>
+          </div>
+        </li>
+        <li>
+          <div class="takeaway-num">4</div>
+          <div class="takeaway-content">
+            <h4>离线场景：RKLLM + NPU</h4>
+            <p>利用 RK3576 的 6 TOPS NPU 运行本地量化小模型，作为 Kimi 云端服务的离线替代。</p>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- References -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">References</div>
+        <h2 class="section-title">参考链接</h2>
+      </div>
+      <ul style="color: var(--text-secondary); line-height: 2;">
+        <li><a href="https://platform.kimi.com/docs/guide/kimi-cli-support" target="_blank" style="color: var(--accent-light);">Kimi CLI 官方文档</a></li>
+        <li><a href="https://docs.astral.sh/uv/reference/policies/platforms/" target="_blank" style="color: var(--accent-light);">uv 平台支持策略</a></li>
+        <li><a href="https://pypi.org/project/kimi-cli/" target="_blank" style="color: var(--accent-light);">Kimi CLI PyPI 页面</a></li>
+        <li><a href="https://platform.kimi.ai/docs/api/overview" target="_blank" style="color: var(--accent-light);">Kimi API 文档</a></li>
+        <li><a href="https://github.com/MoonshotAI/kimi-cli" target="_blank" style="color: var(--accent-light);">Kimi CLI GitHub 仓库</a></li>
+        <li><a href="https://www.cnblogs.com/Tronlong818/p/18945812" target="_blank" style="color: var(--accent-light);">RK3576 DeepSeek 本地部署教程（创龙科技）</a></li>
+      </ul>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <p>本指南基于网络公开资料与社区实测整理，仅供技术参考。内容更新日期：2026-05-15。</p>
+    </div>
+  </footer>
+
+</body>
+</html>
