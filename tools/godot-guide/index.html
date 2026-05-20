@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Godot 引擎完全指南 —— 从入门到 AI 协作开发</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <!-- 顶部导航 -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-brand"><i class="fas fa-gamepad"></i> Godot 完全指南</div>
+        <button class="nav-toggle" id="navToggle"><i class="fas fa-bars"></i></button>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#hero">首页</a></li>
+            <li><a href="#features">特点</a></li>
+            <li><a href="#install">安装</a></li>
+            <li><a href="#languages">语言</a></li>
+            <li><a href="#architecture">架构</a></li>
+            <li><a href="#ai-dev" class="highlight">AI 协作</a></li>
+            <li><a href="#cases">案例</a></li>
+            <li><a href="#roadmap">学习路径</a></li>
+            <li><a href="#resources">资源</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero 区 -->
+    <section class="hero" id="hero">
+        <div class="hero-content">
+            <div class="hero-badge">完全开源 · MIT 协议 · 跨平台</div>
+            <h1>Godot 引擎<br><span class="gradient-text">从入门到 AI 协作开发</span></h1>
+            <p class="hero-desc">
+                Godot 是一款完全免费开源的跨平台游戏引擎，由阿根廷开发者 Juan Linietsky 于 2014 年创建，
+                采用 MIT 许可证，无需注册账号、无需版税分成，是独立开发者和小团队的首选工具。
+                本指南涵盖引擎介绍、安装配置、开发语言、核心架构，以及<strong>AI 辅助开发</strong>的完整生态。
+            </p>
+            <div class="hero-btns">
+                <a href="https://godotengine.org/download/" target="_blank" class="btn btn-primary"><i class="fas fa-download"></i> 下载 Godot 4.x</a>
+                <a href="#ai-dev" class="btn btn-secondary"><i class="fas fa-robot"></i> AI 协作开发</a>
+            </div>
+            <div class="hero-stats">
+                <div class="stat"><span class="stat-num">~70MB</span><span class="stat-label">编辑器体积</span></div>
+                <div class="stat"><span class="stat-num">84%</span><span class="stat-label">GDScript 用户</span></div>
+                <div class="stat"><span class="stat-num">0元</span><span class="stat-label">授权费用</span></div>
+                <div class="stat"><span class="stat-num">9+</span><span class="stat-label">导出平台</span></div>
+            </div>
+        </div>
+        <div class="hero-visual">
+            <div class="godot-logo">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="50" cy="50" r="45" fill="none" stroke="#478cbf" stroke-width="4"/>
+                    <circle cx="50" cy="28" r="10" fill="#478cbf"/>
+                    <circle cx="32" cy="62" r="8" fill="#478cbf"/>
+                    <circle cx="68" cy="62" r="8" fill="#478cbf"/>
+                </svg>
+            </div>
+            <div class="orbit orbit-1"></div>
+            <div class="orbit orbit-2"></div>
+            <div class="orbit orbit-3"></div>
+        </div>
+    </section>
+
+    <!-- 引擎对比 -->
+    <section class="section" id="features">
+        <div class="container">
+            <h2 class="section-title"><i class="fas fa-scale-balanced"></i> 引擎对比</h2>
+            <p class="section-subtitle">Godot vs Unity vs Unreal Engine —— 为什么选择 Godot？</p>
+            <div class="table-wrapper">
+                <table class="compare-table">
+                    <thead>
+                        <tr>
+                            <th>维度</th>
+                            <th class="col-godot"><i class="fas fa-star"></i> Godot</th>
+                            <th>Unity</th>
+                            <th>Unreal Engine</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>授权模式</td><td class="col-godot"><strong>MIT 开源，完全免费</strong></td><td>免费个人版，Pro $2,040/年</td><td>免费（收入<$1M），之后 5% 版税</td></tr>
+                        <tr><td>安装体积</td><td class="col-godot"><strong>~50-70 MB</strong></td><td>数 GB</td><td>数十 GB</td></tr>
+                        <tr><td>2D 支持</td><td class="col-godot"><strong>⭐⭐⭐ 专用 2D 引擎</strong></td><td>⭐⭐ 基于 3D 模拟</td><td>⭐ 非强项</td></tr>
+                        <tr><td>3D 画质</td><td class="col-godot">⭐⭐ 大幅提升中</td><td>⭐⭐⭐ 非常成熟</td><td>⭐⭐⭐ 顶级 AAA</td></tr>
+                        <tr><td>学习曲线</td><td class="col-godot"><strong>平缓，类似 Python</strong></td><td>中等</td><td>陡峭（C++/蓝图）</td></tr>
+                        <tr><td>账号要求</td><td class="col-godot"><strong>无需注册，离线可用</strong></td><td>强制联网登录</td><td>需要 Epic 账号</td></tr>
+                        <tr><td>目标用户</td><td class="col-godot"><strong>独立开发者、小团队</strong></td><td>跨平台、中大型团队</td><td>AAA 大作</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-feather"></i></div>
+                    <h3>极致轻量</h3>
+                    <p>编辑器仅 50~70MB，U盘随身携带，低配置电脑也能流畅运行，启动速度极快。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-sitemap"></i></div>
+                    <h3>节点-场景系统</h3>
+                    <p>树状节点组织一切对象，场景可嵌套复用，天然支持模块化开发，组合优于继承。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-code"></i></div>
+                    <h3>多语言支持</h3>
+                    <p>原生 GDScript（类Python）、C#（.NET 8）、C++（GDExtension），按需选择。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-rocket"></i></div>
+                    <h3>一键导出多平台</h3>
+                    <p>Windows、macOS、Linux、Android、iOS、Web/HTML5 等平台一键导出。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 安装指南 -->
+    <section class="section section-alt" id="install">
+        <div class="container">
+            <h2 class="section-title"><i class="fas fa-download"></i> 安装指南</h2>
+            <p class="section-subtitle">Godot 是绿色软件，下载即用，无需注册账号</p>
+            <div class="install-cards">
+                <div class="install-card">
+                    <div class="install-header">
+                        <i class="fab fa-windows"></i>
+                        <h3>Windows</h3>
+                    </div>
+                    <ol class="install-steps">
+                        <li>访问 <a href="https://godotengine.org/download/" target="_blank">官方下载页</a></li>
+                        <li>下载 <code>.exe</code>（标准版）或 <code>_mono</code>（C# 版）</li>
+                        <li>解压到任意目录，双击运行</li>
+                        <li>（可选）添加到系统 PATH</li>
+                    </ol>
+                </div>
+                <div class="install-card">
+                    <div class="install-header">
+                        <i class="fab fa-apple"></i>
+                        <h3>macOS</h3>
+                    </div>
+                    <ol class="install-steps">
+                        <li>下载 <code>.zip</code> 并解压</li>
+                        <li>将 <code>Godot.app</code> 拖入 Applications</li>
+                        <li>或 Homebrew: <code>brew install --cask godot</code></li>
+                        <li>已通过代码签名和公证</li>
+                    </ol>
+                </div>
+                <div class="install-card">
+                    <div class="install-header">
+                        <i class="fab fa-linux"></i>
+                        <h3>Linux</h3>
+                    </div>
+                    <ol class="install-steps">
+                        <li>下载 <code>.zip</code> 或 AppImage</li>
+                        <li>解压并赋予执行权限</li>
+                        <li>命令行: <code>chmod +x godot</code></li>
+                        <li>（可选）移动到 <code>/usr/local/bin</code></li>
+                    </ol>
+                </div>
+            </div>
+            <div class="install-note">
+                <i class="fas fa-circle-info"></i>
+                <strong>导出前必读：</strong>导出游戏需要下载对应平台的<strong>导出模板</strong>。菜单路径：编辑器 → 管理导出模板 → 下载并安装。
+                C# 项目暂不支持 Web/HTML5 导出。更多导出配置见 <a href="https://docs.godotengine.org/en/stable/tutorials/export/" target="_blank">官方导出文档</a>。
+            </div>
+        </div>
+    </section>
+
+    <!-- 开发语言 -->
+    <section class="section" id="languages">
+        <div class="container">
+            <h2 class="section-title"><i class="fas fa-code"></i> 开发语言</h2>
+            <p class="section-subtitle">三种语言，覆盖从原型到高性能的全部需求</p>
+            <div class="tabs" id="langTabs">
+                <button class="tab-btn active" data-tab="gdscript">GDScript <span class="tab-badge">推荐</span></button>
+                <button class="tab-btn" data-tab="csharp">C#</button>
+                <button class="tab-btn" data-tab="cpp">C++ (GDExtension)</button>
+            </div>
+            <div class="tab-content active" id="gdscript">
+                <div class="lang-intro">
+                    <div class="lang-info">
+                        <h3>GDScript <span class="lang-percent">84% 用户</span></h3>
+                        <p>Godot 原生脚本语言，语法类似 Python，与引擎深度集成。零编译时间、支持热重载、类型推断、渐进式类型系统。</p>
+                        <div class="lang-tags">
+                            <span class="tag tag-green">热重载</span>
+                            <span class="tag tag-green">零配置</span>
+                            <span class="tag tag-green">类型推断</span>
+                            <span class="tag tag-blue">GDScript 2.0</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="code-block">
+                    <div class="code-header"><span>GDScript 示例</span><span class="code-lang">gdscript</span></div>
+                    <pre><code>extends CharacterBody2D
+
+@export var speed: float = 300.0
+@export var jump_force: float = -400.0
+@onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
+
+signal health_changed(new_health: int)
+
+func _physics_process(delta: float) -> void:
+    velocity.x = Input.get_axis("ui_left", "ui_right") * speed
+    if Input.is_action_just_pressed("ui_jump") and is_on_floor():
+        velocity.y = jump_force
+    move_and_slide()
+
+func take_damage(amount: int) -> void:
+    health -= amount
+    health_changed.emit(health)</code></pre>
+                </div>
+                <div class="lang-choose"><i class="fas fa-check-circle"></i> <strong>适用：</strong>初学者、快速原型、中小型游戏、Game Jam、Web 导出</div>
+            </div>
+            <div class="tab-content" id="csharp">
+                <div class="lang-intro">
+                    <div class="lang-info">
+                        <h3>C# <span class="lang-percent">16% 用户</span></h3>
+                        <p>通过 .NET 8 支持（取代旧版 Mono），静态强类型，完整 .NET 生态，支持 NuGet 包和高级语言特性。</p>
+                        <div class="lang-tags">
+                            <span class="tag tag-blue">.NET 8</span>
+                            <span class="tag tag-blue">强类型</span>
+                            <span class="tag tag-blue">NuGet</span>
+                            <span class="tag tag-orange">无热重载</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="code-block">
+                    <div class="code-header"><span>C# 示例</span><span class="code-lang">csharp</span></div>
+                    <pre><code>using Godot;
+
+public partial class Player : CharacterBody2D
+{
+    [Export] public float Speed = 300.0f;
+    [Export] public float JumpForce = -400.0f;
+
+    public override void _PhysicsProcess(double delta)
+    {
+        Vector2 velocity = Velocity;
+        velocity.X = Input.GetAxis("ui_left", "ui_right") * Speed;
+        if (Input.IsActionJustPressed("ui_jump") && IsOnFloor())
+            velocity.Y = JumpForce;
+        Velocity = velocity;
+        MoveAndSlide();
+    }
+}</code></pre>
+                </div>
+                <div class="lang-choose warn"><i class="fas fa-exclamation-triangle"></i> <strong>注意：</strong>修改后需重启场景；暂不支持 Web 导出</div>
+                <div class="lang-choose"><i class="fas fa-check-circle"></i> <strong>适用：</strong>Unity 迁移者、大型项目、复杂架构、计算密集型任务</div>
+            </div>
+            <div class="tab-content" id="cpp">
+                <div class="lang-intro">
+                    <div class="lang-info">
+                        <h3>C++ (GDExtension)</h3>
+                        <p>Godot 4 引入的原生扩展系统，编译为共享库动态加载，无需重新编译引擎，可获得原生性能。</p>
+                        <div class="lang-tags">
+                            <span class="tag tag-purple">原生性能</span>
+                            <span class="tag tag-purple">动态加载</span>
+                            <span class="tag tag-purple">第三方库</span>
+                            <span class="tag tag-orange">学习曲线陡峭</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="code-block">
+                    <div class="code-header"><span>GDExtension 流程</span><span class="code-lang">workflow</span></div>
+                    <pre><code>1. 下载 godot-cpp 绑定仓库（版本需匹配引擎）
+2. 使用 SCons 或 CMake 构建 C++ 绑定
+3. 编写扩展代码并编译为 .dll / .so / .dylib
+4. 创建 .gdextension 配置文件
+5. Godot 编辑器自动识别并加载扩展</code></pre>
+                </div>
+                <div class="lang-choose"><i class="fas fa-check-circle"></i> <strong>适用：</strong>性能关键模块（自定义物理、音频DSP）、复用 C++ 库、渲染特效</div>
+            </div>
+            <div class="lang-summary">
+                <table class="simple-table">
+                    <thead><tr><th>场景</th><th>推荐语言</th><th>理由</th></tr></thead>
+                    <tbody>
+                        <tr><td>初学者 / 快速原型</td><td><strong>GDScript</strong></td><td>零配置、即时反馈、教程最丰富</td></tr>
+                        <tr><td>中小型 2D/3D 游戏</td><td><strong>GDScript</strong></td><td>开发效率最高，性能足够</td></tr>
+                        <tr><td>有 C# /.NET 背景</td><td><strong>C#</strong></td><td>语言熟悉，可利用现有技能</td></tr>
+                        <tr><td>大型商业项目</td><td><strong>C#</strong></td><td>强类型、接口、泛型利于协作</td></tr>
+                        <tr><td>性能瓶颈模块</td><td><strong>C++</strong></td><td>原生速度，适合路径finding等</td></tr>
+                        <tr><td>Web/HTML5 发布</td><td><strong>GDScript</strong></td><td>C# 暂不支持 Web 导出</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- 核心架构 -->
+    <section class="section section-alt" id="architecture">
+        <div class="container">
+            <h2 class="section-title"><i class="fas fa-cubes"></i> 核心架构</h2>
+            <p class="section-subtitle">节点、场景、信号、资源 —— 理解这四者就理解了 Godot</p>
+            <div class="arch-grid">
+                <div class="arch-card">
+                    <div class="arch-num">01</div>
+                    <h3><i class="fas fa-circle-nodes"></i> 节点 Node</h3>
+                    <p>Godot 中一切的基础构建块。每个节点拥有名称、可被选择、可接收回调（<code>_ready()</code>、<code>_process()</code>），在场景树中以父子层级组织。</p>
+                    <div class="arch-example">
+                        <strong>常用节点：</strong><br>
+                        <code>Node2D/Node3D</code> — 变换基础<br>
+                        <code>Sprite2D/MeshInstance3D</code> — 渲染<br>
+                        <code>CharacterBody2D</code> — 角色控制<br>
+                        <code>Area2D</code> — 碰撞检测区域
+                    </div>
+                </div>
+                <div class="arch-card">
+                    <div class="arch-num">02</div>
+                    <h3><i class="fas fa-layer-group"></i> 场景 Scene</h3>
+                    <p>可复用的节点树模板，保存为 <code>.tscn</code> 文件。小场景嵌套组合成大场景，每个场景可独立开发、测试和复用。</p>
+                    <div class="arch-example">
+                        <strong>核心设计哲学：组合优于继承</strong><br>
+                        "房子"场景放入"村庄"场景<br>
+                        <code>ENEMY_SCENE.instantiate()</code><br>
+                        运行时从模板创建实例
+                    </div>
+                </div>
+                <div class="arch-card">
+                    <div class="arch-num">03</div>
+                    <h3><i class="fas fa-broadcast-tower"></i> 信号 Signal</h3>
+                    <p>观察者模式实现，用于节点间松耦合通信。发射者不需要知道谁在监听，监听者在感兴趣时连接信号。</p>
+                    <div class="arch-example">
+                        <strong>典型信号：</strong><br>
+                        <code>Button.pressed</code> — 按钮点击<br>
+                        <code>Area2D.body_entered</code> — 进入区域<br>
+                        <code>Timer.timeout</code> — 计时器到期
+                    </div>
+                </div>
+                <div class="arch-card">
+                    <div class="arch-num">04</div>
+                    <h3><i class="fas fa-database"></i> 资源 Resource</h3>
+                    <p>所有数据容器的基类，不参与场景树，可被多个节点引用共享。用于存储配置、材质、纹理、音频等。</p>
+                    <div class="arch-example">
+                        <strong>常用资源：</strong><br>
+                        <code>Texture2D</code> — 纹理<br>
+                        <code>Material</code> — 材质<br>
+                        <code>PackedScene</code> — 场景模板<br>
+                        <code>AudioStream</code> — 音频
+                    </div>
+                </div>
+            </div>
+            <div class="arch-workflow">
+                <h3><i class="fas fa-route"></i> 典型开发工作流</h3>
+                <div class="workflow-steps">
+                    <div class="workflow-step">
+                        <div class="step-num">1</div>
+                        <div class="step-content">
+                            <strong>创建项目</strong>
+                            <p>选择渲染器（Forward+ / Mobile / Compatibility）</p>
+                        </div>
+                    </div>
+                    <div class="workflow-arrow"><i class="fas fa-arrow-right"></i></div>
+                    <div class="workflow-step">
+                        <div class="step-num">2</div>
+                        <div class="step-content">
+                            <strong>创建场景</strong>
+                            <p>以 <code>.tscn</code> 为可复用组件，组合节点树</p>
+                        </div>
+                    </div>
+                    <div class="workflow-arrow"><i class="fas fa-arrow-right"></i></div>
+                    <div class="workflow-step">
+                        <div class="step-num">3</div>
+                        <div class="step-content">
+                            <strong>附加脚本</strong>
+                            <p>用 GDScript/C# 实现行为逻辑，信号通信</p>
+                        </div>
+                    </div>
+                    <div class="workflow-arrow"><i class="fas fa-arrow-right"></i></div>
+                    <div class="workflow-step">
+                        <div class="step-num">4</div>
+                        <div class="step-content">
+                            <strong>快速测试</strong>
+                            <p>按 <kbd>F6</kbd> 运行当前场景迭代</p>
+                        </div>
+                    </div>
+                    <div class="workflow-arrow"><i class="fas fa-arrow-right"></i></div>
+                    <div class="workflow-step">
+                        <div class="step-num">5</div>
+                        <div class="step-content">
+                            <strong>导出发布</strong>
+                            <p>安装模板 → 配置预设 → 一键导出</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- AI 协作开发（重点） -->
+    <section class="section section-ai" id="ai-dev">
+        <div class="container">
+            <div class="ai-header">
+                <h2 class="section-title"><i class="fas fa-robot"></i> Godot + AI 协作开发</h2>
+                <p class="section-subtitle">2025-2026 年，Godot 的 AI 生态已从"复制粘贴 ChatGPT 代码"发展为拥有专用插件、MCP 服务器、本地 LLM 集成的成熟体系</p>
+            </div>
+
+            <div class="tabs tabs-ai" id="aiTabs">
+                <button class="tab-btn active" data-tab="ai-tools">AI 辅助工具</button>
+                <button class="tab-btn" data-tab="ai-code">代码与调试</button>
+                <button class="tab-btn" data-tab="ai-llm">LLM 运行时集成</button>
+                <button class="tab-btn" data-tab="ai-asset">AI 资产生成</button>
+                <button class="tab-btn" data-tab="ai-practice">最佳实践</button>
+            </div>
+
+            <!-- AI 辅助工具 -->
+            <div class="tab-content active" id="ai-tools">
+                <h3 class="tab-title">专用 AI 工具与插件生态</h3>
+                <div class="tool-grid">
+                    <div class="tool-card tool-featured">
+                        <div class="tool-header">
+                            <span class="tool-name">Ziva</span>
+                            <span class="tool-tag tag-primary">编辑器插件</span>
+                        </div>
+                        <p class="tool-desc">专为 Godot 设计的原生 AI 助手，支持代码生成、场景创建、项目理解、Debugger 集成。2025 年最佳整体 AI 工具。</p>
+                        <div class="tool-meta"><i class="fas fa-link"></i> <a href="https://ziva.sh" target="_blank">ziva.sh</a> · 免费 20 credits / Pro $20/月</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-header">
+                            <span class="tool-name">AI Assistant Hub</span>
+                            <span class="tool-tag tag-green">开源免费</span>
+                        </div>
+                        <p class="tool-desc">支持多后端（OpenAI、Anthropic、Ollama、本地模型），专注编辑器内代码生成。</p>
+                        <div class="tool-meta">Asset Library · 免费</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-header">
+                            <span class="tool-name">Godot Copilot</span>
+                            <span class="tool-tag tag-green">开源</span>
+                        </div>
+                        <p class="tool-desc">连接 OpenAI API 实现编辑器内代码补全，支持复用 GitHub Copilot Token。</p>
+                        <div class="tool-meta"><i class="fab fa-github"></i> <a href="https://github.com/minosvasilias/godot-copilot" target="_blank">minosvasilias/godot-copilot</a></div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-header">
+                            <span class="tool-name">GDAI MCP</span>
+                            <span class="tool-tag tag-blue">MCP 服务器</span>
+                        </div>
+                        <p class="tool-desc">将 Claude、Cursor 等 MCP 客户端与 Godot 项目连接，读取项目结构、场景文件和脚本。</p>
+                        <div class="tool-meta"><i class="fas fa-link"></i> <a href="https://gdaimcp.com" target="_blank">gdaimcp.com</a> · 免费开源</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-header">
+                            <span class="tool-name">Cursor + godot-mcp</span>
+                            <span class="tool-tag tag-blue">IDE 集成</span>
+                        </div>
+                        <p class="tool-desc">通过 MCP 服务器，Cursor 可直接读取和修改 Godot 项目文件（.tscn、.gd、project.godot）。</p>
+                        <div class="tool-meta">多社区版本可选</div>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-header">
+                            <span class="tool-name">JetBrains Rider</span>
+                            <span class="tool-tag tag-blue">IDE</span>
+                        </div>
+                        <p class="tool-desc">AI Assistant 基于项目上下文生成代码建议，对 C# Godot 项目支持最佳。</p>
+                        <div class="tool-meta">付费 IDE · C# 首选</div>
+                    </div>
+                </div>
+                <div class="info-box">
+                    <i class="fas fa-lightbulb"></i>
+                    <div><strong>选型建议：</strong>预算有限或需离线 → AI Assistant Hub + Ollama；已有 Claude/Cursor 工作流 → GDAI MCP；追求编辑器原生体验 → Ziva。</div>
+                </div>
+            </div>
+
+            <!-- 代码与调试 -->
+            <div class="tab-content" id="ai-code">
+                <h3 class="tab-title">AI 代码生成、调试与 IDE 支持</h3>
+                <div class="two-col">
+                    <div class="col">
+                        <h4><i class="fas fa-check-circle"></i> AI 擅长生成的代码</h4>
+                        <ul class="check-list">
+                            <li>玩家控制器（CharacterBody2D + _physics_process）</li>
+                            <li>信号连接与 UI 交互</li>
+                            <li>基础状态机（枚举 + match 语句）</li>
+                            <li>资源加载与管理（preload/load 模式）</li>
+                            <li>简单的 JSON 存档系统</li>
+                        </ul>
+                        <h4><i class="fas fa-times-circle" style="color:#ef4444"></i> 常见失败模式</h4>
+                        <ul class="warn-list">
+                            <li>混淆 Godot 3.x 与 4.x API</li>
+                            <li>AnimationTree 接线静默失败</li>
+                            <li>节点生命周期时序问题</li>
+                            <li>生成冗长的"意大利面条式"代码</li>
+                        </ul>
+                    </div>
+                    <div class="col">
+                        <h4><i class="fas fa-brain"></i> 大模型对 GDScript 的支持</h4>
+                        <table class="simple-table">
+                            <thead><tr><th>模型</th><th>GDScript 支持</th><th>推荐场景</th></tr></thead>
+                            <tbody>
+                                <tr><td><strong>Claude (Opus/Sonnet)</strong></td><td>⭐⭐⭐⭐⭐</td><td>架构分析、代码审查、长上下文</td></tr>
+                                <tr><td>GPT-4o / GPT-5.x</td><td>⭐⭐⭐⭐</td><td>快速代码生成、解释概念</td></tr>
+                                <tr><td>Gemini 2.5 Pro</td><td>⭐⭐⭐⭐</td><td>性价比、多模态处理</td></tr>
+                                <tr><td>GitHub Copilot</td><td>⭐⭐⭐</td><td>基础补全，质量波动较大</td></tr>
+                                <tr><td>godot-dodo (微调)</td><td>⭐⭐⭐⭐</td><td>本地离线、GDScript 专用</td></tr>
+                            </tbody>
+                        </table>
+                        <div class="tip-box">
+                            <i class="fas fa-magic"></i>
+                            <strong>Prompt 技巧：</strong>始终在提示中明确指定 "Godot 4.3+ GDScript 2.0"，避免版本混淆。
+                        </div>
+                    </div>
+                </div>
+                <div class="code-block">
+                    <div class="code-header"><span>GDScript 调用 OpenAI API 示例</span><span class="code-lang">gdscript</span></div>
+                    <pre><code>extends Node
+@onready var http_request = HTTPRequest.new()
+
+func _ready():
+    add_child(http_request)
+    http_request.request_completed.connect(_on_request_completed)
+
+func ask_ai(prompt: String):
+    var url = "https://api.openai.com/v1/chat/completions"
+    var headers = [
+        "Content-Type: application/json",
+        "Authorization: Bearer YOUR_API_KEY"
+    ]
+    var body = {
+        "model": "gpt-4o-mini",
+        "messages": [{"role": "user", "content": prompt}]
+    }
+    http_request.request(url, headers, HTTPClient.METHOD_POST, JSON.stringify(body))
+
+func _on_request_completed(result, response_code, headers, body):
+    var json = JSON.parse_string(body.get_string_from_utf8())
+    if json and json.has("choices"):
+        print(json["choices"][0]["message"]["content"])</code></pre>
+                </div>
+            </div>
+
+            <!-- LLM 运行时集成 -->
+            <div class="tab-content" id="ai-llm">
+                <h3 class="tab-title">在 Godot 中集成 LLM —— 运行时 AI NPC 与对话系统</h3>
+                <div class="two-col">
+                    <div class="col">
+                        <h4><i class="fas fa-cloud"></i> 云端 API 方案</h4>
+                        <div class="tool-card small">
+                            <strong>gd-openai</strong>
+                            <p>GDScript OpenAI API Helper，封装了 chat completions 和 image generation 接口。</p>
+                        </div>
+                        <div class="tool-card small">
+                            <strong>Player 2 AI NPC</strong>
+                            <p>通过 Player2 App 提供免费的 LLM/STT/TTS API，快速原型首选。</p>
+                        </div>
+                        <div class="warn-box">
+                            <i class="fas fa-shield-halved"></i>
+                            <strong>安全提醒：</strong>API Key 不要硬编码在脚本中，使用 <code>user://</code> 路径存储配置文件。
+                        </div>
+                    </div>
+                    <div class="col">
+                        <h4><i class="fas fa-server"></i> 本地模型方案（推荐）</h4>
+                        <div class="tool-card small">
+                            <strong>NobodyWho</strong> <span class="tag tag-green">GDExtension</span>
+                            <p>本地运行 LLM（Gemma 2 2B 等），无需联网，隐私优先，永久可玩的单机 RPG 首选。</p>
+                            <div class="tool-meta"><i class="fab fa-gitlab"></i> NobodyWho/Nobody</div>
+                        </div>
+                        <div class="tool-card small">
+                            <strong>Noko</strong> <span class="tag tag-green">开源</span>
+                            <p>运行时与 Ollama 模型交互，支持对话、模型管理、动态 NPC。</p>
+                            <div class="tool-meta"><i class="fab fa-github"></i> nthnn/noko</div>
+                        </div>
+                        <div class="tool-card small">
+                            <strong>godot-ollama-assistant</strong>
+                            <p>编辑器内 AI 代码助手，支持重构、优化、解释、补全。</p>
+                            <div class="tool-meta"><i class="fab fa-github"></i> TheCronkTM/godot-ollama-assistant</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="code-block">
+                    <div class="code-header"><span>Noko + Ollama 运行时对话示例</span><span class="code-lang">gdscript</span></div>
+                    <pre><code>const NokoModel = preload("res://modules/NokoModel.gd")
+const NokoPrompt = preload("res://modules/NokoPrompt.gd")
+
+var server = {"host": "http://localhost", "port": 11434}
+var model = "gemma3"
+
+func _start_npc_dialogue(player_input: String):
+    var prompt = [
+        {"role": "system", "content": "You are a wise village elder in a fantasy RPG."},
+        {"role": "user", "content": player_input}
+    ]
+    if await NokoModel.load_chat_model(get_tree().root, server, model, false):
+        var response = await NokoPrompt.chat(get_tree().root, server, model, prompt)
+        display_dialogue(response["body"]["message"]["content"])
+        await NokoModel.unload_chat_model(get_tree().root, server, model, false)</code></pre>
+                </div>
+                <div class="info-box">
+                    <i class="fas fa-route"></i>
+                    <div><strong>LM Studio / llama.cpp 方案：</strong>启动本地 HTTP 服务器（兼容 OpenAI API 格式），Godot 的 HTTPRequest 直接连接 <code>http://localhost:1234/v1/chat/completions</code>，适合运行 Gemma、Qwen、LLaMA 等开源模型，完全离线零费用。</div>
+                </div>
+            </div>
+
+            <!-- AI 资产生成 -->
+            <div class="tab-content" id="ai-asset">
+                <h3 class="tab-title">AI 生成游戏资产与 Godot 工作流</h3>
+                <div class="asset-grid">
+                    <div class="asset-card">
+                        <div class="asset-icon"><i class="fas fa-image"></i></div>
+                        <h4>2D 精灵/纹理</h4>
+                        <p class="asset-tools">Pixelcut、Scenario、ComfyUI</p>
+                        <p class="asset-flow">导出 PNG/WebP → 直接拖入 Godot</p>
+                    </div>
+                    <div class="asset-card">
+                        <div class="asset-icon"><i class="fas fa-cube"></i></div>
+                        <h4>3D 模型</h4>
+                        <p class="asset-tools">Meshy.ai、Tripo3D、Sloyd</p>
+                        <p class="asset-flow">导出 GLB/FBX → Godot 自动导入</p>
+                    </div>
+                    <div class="asset-card">
+                        <div class="asset-icon"><i class="fas fa-palette"></i></div>
+                        <h4>3D PBR 纹理</h4>
+                        <p class="asset-tools">Meshy.ai、Rodin (Hyper3D)</p>
+                        <p class="asset-flow">导出含 PBR 纹理的 GLB → 标准材质兼容</p>
+                    </div>
+                    <div class="asset-card">
+                        <div class="asset-icon"><i class="fas fa-person-running"></i></div>
+                        <h4>自动绑定动画</h4>
+                        <p class="asset-tools">Meshy.ai（500+ 预设）、Tripo3D（Uni-Rig）</p>
+                        <p class="asset-flow">导出带骨骼的 FBX/GLB → Skeleton3D 直接识别</p>
+                    </div>
+                    <div class="asset-card">
+                        <div class="asset-icon"><i class="fas fa-music"></i></div>
+                        <h4>音频/音效</h4>
+                        <p class="asset-tools">ElevenLabs、Suno、Udio</p>
+                        <p class="asset-flow">导出 WAV/OGG → AudioStreamPlayer</p>
+                    </div>
+                    <div class="asset-card">
+                        <div class="asset-icon"><i class="fas fa-map"></i></div>
+                        <h4>关卡数据</h4>
+                        <p class="asset-tools">AI 生成 JSON/CSV 配置</p>
+                        <p class="asset-flow">GDScript JSON.parse() → 动态实例化场景</p>
+                    </div>
+                </div>
+                <div class="tip-box">
+                    <i class="fas fa-wrench"></i>
+                    <strong>关键工作流：</strong>AI 生成基础资产 → Blender 精修拓扑/UV → 导出 GLB → Godot 自动导入。Tripo3D 的 Smart Low Poly 可将 90 万面模型自动重拓扑至 7,000 面左右，适合游戏实时渲染。
+                </div>
+            </div>
+
+            <!-- 最佳实践 -->
+            <div class="tab-content" id="ai-practice">
+                <h3 class="tab-title">AI 辅助开发工作流最佳实践</h3>
+                <div class="practice-list">
+                    <div class="practice-item">
+                        <div class="practice-num">1</div>
+                        <div class="practice-content">
+                            <strong>混合架构法</strong>
+                            <p>AI 生成具体功能代码（移动、攻击、UI），<strong>人类定义场景结构、文件组织和系统边界</strong>。不要完全交给 AI 设计架构。</p>
+                        </div>
+                    </div>
+                    <div class="practice-item">
+                        <div class="practice-num">2</div>
+                        <div class="practice-content">
+                            <strong>阅读 AI 代码原则</strong>
+                            <p>永远不要直接合并不理解的代码。调查显示初级开发者对 AI 代码信心最高，但质量提升最低。逐行理解后再使用。</p>
+                        </div>
+                    </div>
+                    <div class="practice-item">
+                        <div class="practice-num">3</div>
+                        <div class="practice-content">
+                            <strong>模块化提示</strong>
+                            <p>不要要求 AI"做一个完整的 RPG"，而是拆解为"生成玩家移动脚本"→"生成敌人追逐逻辑"→"生成血条 UI"。</p>
+                        </div>
+                    </div>
+                    <div class="practice-item">
+                        <div class="practice-num">4</div>
+                        <div class="practice-content">
+                            <strong>版本控制保护</strong>
+                            <p>使用 AI 重构前务必提交 Git。AI 常引入"幽灵回归"——修复 A 时破坏 B，需要能随时回滚。</p>
+                        </div>
+                    </div>
+                    <div class="practice-item">
+                        <div class="practice-num">5</div>
+                        <div class="practice-content">
+                            <strong>利用 Godot 的 AI 友好特性</strong>
+                            <p><code>.tscn</code> 场景文件是文本格式，AI 可直接读取修改。120MB 轻量引擎使 AI 更容易理解完整项目结构。</p>
+                        </div>
+                    </div>
+                    <div class="practice-item">
+                        <div class="practice-num">6</div>
+                        <div class="practice-content">
+                            <strong>LSP 辅助验证</strong>
+                            <p>让 AI 工具连接 Godot 语言服务器（GDScript LSP），确保生成的代码通过静态检查，避免运行时错误。</p>
+                        </div>
+                    </div>
+                </div>
+
+                <h4 style="margin-top:2rem"><i class="fas fa-triangle-exclamation"></i> 常见陷阱与规避方法</h4>
+                <table class="simple-table">
+                    <thead><tr><th>陷阱</th><th>说明</th><th>规避方法</th></tr></thead>
+                    <tbody>
+                        <tr><td>版本混淆</td><td>AI 混用 Godot 3.x 和 4.x API</td><td>Prompt 中明确指定 "Godot 4.3+ GDScript 2.0"</td></tr>
+                        <tr><td>幻觉方法</td><td>AI 编造不存在的 Godot 方法</td><td>对照官方文档验证，使用 Context7 查询</td></tr>
+                        <tr><td>过度复杂化</td><td>简单需求被实现为冗长代码</td><td>要求 AI "保持简洁，遵循 GDScript 风格指南"</td></tr>
+                        <tr><td>静默失败</td><td>AnimationTree、信号连接等"接线"错误</td><td>AI 生成后手动在编辑器中验证</td></tr>
+                        <tr><td>技术债务</td><td>AI 以不同方式解决相似问题</td><td>人类定义架构模式，AI 负责实现细节</td></tr>
+                        <tr><td>性能忽视</td><td>AI 代码常不考虑性能特性</td><td>要求使用对象池、避免 _process 重型计算</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- 实战案例 -->
+    <section class="section section-alt" id="cases">
+        <div class="container">
+            <h2 class="section-title"><i class="fas fa-flask"></i> 实战案例</h2>
+            <p class="section-subtitle">开发者真实经验 —— 成功与教训</p>
+            <div class="case-grid">
+                <div class="case-card case-success">
+                    <div class="case-badge"><i class="fas fa-check"></i> 成功案例</div>
+                    <h4>code-forge-temple：离线 AI NPC 教育游戏</h4>
+                    <p><strong>技术栈：</strong>Godot 4 + C# + Ollama + Gemma 3n</p>
+                    <p>成功构建教育游戏，NPC 教授可持续农业，完全开源（CC BY 4.0）。每个 NPC 拥有独立的 System Prompt 和模型端点配置，支持苏格拉底式教学对话。</p>
+                    <div class="case-lesson"><i class="fas fa-lightbulb"></i> <strong>经验：</strong>本地 LLM 方案适合隐私优先、永久可玩的单机游戏</div>
+                </div>
+                <div class="case-card case-warn">
+                    <div class="case-badge"><i class="fas fa-exclamation-triangle"></i> 教训案例</div>
+                    <h4>Lucca Sanwald：100% AI 代写像素风 RTS</h4>
+                    <p><strong>技术栈：</strong>Claude + Godot</p>
+                    <p>8 小时做出可玩原型，但因"失控感"最终放弃——无法独立修复 AI 生成代码中的问题。完全依赖 AI 导致失去对代码的理解。</p>
+                    <div class="case-lesson"><i class="fas fa-triangle-exclamation"></i> <strong>教训：</strong>不要 100% 依赖 AI，必须理解每一行代码的工作原理</div>
+                </div>
+                <div class="case-card case-warn">
+                    <div class="case-badge"><i class="fas fa-exclamation-triangle"></i> 教训案例</div>
+                    <h4>Olga Biro：Cursor 辅助三消游戏</h4>
+                    <p><strong>技术栈：</strong>Cursor + Godot</p>
+                    <p>AI 首尝试幻化为"猫咪射激光的太空入侵者"，130/150 积分耗尽。每次微调都过度复杂化，简单需求被层层包装。</p>
+                    <div class="case-lesson"><i class="fas fa-triangle-exclamation"></i> <strong>教训：</strong>AI 倾向于过度工程化，需要人类主动控制复杂度</div>
+                </div>
+                <div class="case-card case-insight">
+                    <div class="case-badge"><i class="fas fa-quote-left"></i> 开发者洞察</div>
+                    <h4>Jack Le Hamster：GameDev.js Jam 2025</h4>
+                    <p><strong>核心观点：</strong>"AI 从不测试自己的代码"，称 vibe coders 是"从不测试的开发者的测试员"。</p>
+                    <p>AI 生成的代码必须经过人工测试验证，不能假设其正确性。场景节点路径、信号连接等"接线"类错误是 AI 最薄弱的环节。</p>
+                    <div class="case-lesson"><i class="fas fa-lightbulb"></i> <strong>经验：</strong>每个子系统单独测试通过后再组合，AI 生成 ≠ 质量保证</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 学习路径 -->
+    <section class="section" id="roadmap">
+        <div class="container">
+            <h2 class="section-title"><i class="fas fa-road"></i> 初学者学习路径</h2>
+            <p class="section-subtitle">从零基础到独立开发可发布游戏的完整路线图</p>
+            <div class="roadmap">
+                <div class="roadmap-phase">
+                    <div class="roadmap-marker">1</div>
+                    <div class="roadmap-card">
+                        <h4>基础认知 <span class="roadmap-time">1 周</span></h4>
+                        <p>理解 Godot 编辑器、节点树、场景系统</p>
+                        <div class="roadmap-ai"><i class="fas fa-robot"></i> AI 用法：解释概念，生成最简示例代码</div>
+                    </div>
+                </div>
+                <div class="roadmap-phase">
+                    <div class="roadmap-marker">2</div>
+                    <div class="roadmap-card">
+                        <h4>脚本入门 <span class="roadmap-time">1-2 周</span></h4>
+                        <p>掌握 GDScript 语法、变量、函数、条件、循环</p>
+                        <div class="roadmap-ai"><i class="fas fa-robot"></i> AI 用法：检查代码错误，解释报错信息</div>
+                    </div>
+                </div>
+                <div class="roadmap-phase">
+                    <div class="roadmap-marker">3</div>
+                    <div class="roadmap-card">
+                        <h4>第一个小游戏 <span class="roadmap-time">2-3 周</span></h4>
+                        <p>完成完整的 2D 小游戏（平台跳跃、弹幕射击）</p>
+                        <div class="roadmap-ai"><i class="fas fa-robot"></i> AI 用法：生成各个子系统（玩家、敌人、UI），人类组装</div>
+                    </div>
+                </div>
+                <div class="roadmap-phase">
+                    <div class="roadmap-marker">4</div>
+                    <div class="roadmap-card">
+                        <h4>引入 AI 资产 <span class="roadmap-time">1 周</span></h4>
+                        <p>使用 AI 生成 2D 精灵/纹理，替换占位资源</p>
+                        <div class="roadmap-ai"><i class="fas fa-robot"></i> AI 用法：Pixelcut、Scenario 等工具生成美术资源</div>
+                    </div>
+                </div>
+                <div class="roadmap-phase">
+                    <div class="roadmap-marker">5</div>
+                    <div class="roadmap-card">
+                        <h4>AI 集成探索 <span class="roadmap-time">2 周</span></h4>
+                        <p>尝试在 Godot 中调用 LLM API 或集成本地模型</p>
+                        <div class="roadmap-ai"><i class="fas fa-robot"></i> AI 用法：使用 Noko 或 HTTPRequest 实现简单对话</div>
+                    </div>
+                </div>
+                <div class="roadmap-phase">
+                    <div class="roadmap-marker">6</div>
+                    <div class="roadmap-card">
+                        <h4>项目实战 <span class="roadmap-time">持续</span></h4>
+                        <p>独立开发一个可发布的完整游戏</p>
+                        <div class="roadmap-ai"><i class="fas fa-robot"></i> AI 用法：辅助编码、调试、优化，人类把控架构</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="demo-box">
+                <h4><i class="fas fa-gamepad"></i> 5 天做一个 Roguelike Demo（AI 辅助版）</h4>
+                <div class="demo-days">
+                    <div class="demo-day"><strong>Day 1</strong><p>项目搭建 + CharacterBody2D 玩家移动（AI 生成脚本）</p></div>
+                    <div class="demo-day"><strong>Day 2</strong><p>TileMapLayer 程序化地牢生成（AI 生成 BSP 算法）</p></div>
+                    <div class="demo-day"><strong>Day 3</strong><p>敌人 AI + 碰撞伤害系统（AI 生成追逐逻辑）</p></div>
+                    <div class="demo-day"><strong>Day 4</strong><p>血条 UI + JSON 存档（AI 生成 TextureProgressBar + FileAccess）</p></div>
+                    <div class="demo-day"><strong>Day 5</strong><p>音效 + 屏幕震动 + 导出（AI 生成 Shader/动画代码）</p></div>
+                </div>
+                <div class="demo-principle">
+                    <i class="fas fa-star"></i> <strong>关键原则：</strong>每个子系统单独测试通过后再组合 · 所有 AI 生成代码必须理解其工作原理 · 保持模块化，避免单文件超过 300 行
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 资源链接 -->
+    <section class="section section-alt" id="resources">
+        <div class="container">
+            <h2 class="section-title"><i class="fas fa-bookmark"></i> 资源链接</h2>
+            <div class="resource-grid">
+                <div class="resource-col">
+                    <h4><i class="fas fa-globe"></i> 官方资源</h4>
+                    <ul class="resource-list">
+                        <li><a href="https://godotengine.org" target="_blank"><i class="fas fa-external-link-alt"></i> Godot 官网</a></li>
+                        <li><a href="https://docs.godotengine.org" target="_blank"><i class="fas fa-external-link-alt"></i> 官方文档</a></li>
+                        <li><a href="https://godotengine.org/download/" target="_blank"><i class="fas fa-external-link-alt"></i> 下载页面</a></li>
+                        <li><a href="https://godotengine.org/asset-library" target="_blank"><i class="fas fa-external-link-alt"></i> 资产库</a></li>
+                        <li><a href="https://github.com/godotengine/godot" target="_blank"><i class="fab fa-github"></i> GitHub 仓库</a></li>
+                    </ul>
+                </div>
+                <div class="resource-col">
+                    <h4><i class="fas fa-graduation-cap"></i> 学习资源</h4>
+                    <ul class="resource-list">
+                        <li><a href="https://gdquest.com/tutorial/godot/learning-paths/learn-gdscript-from-zero/" target="_blank"><i class="fas fa-external-link-alt"></i> Learn GDScript From Zero</a></li>
+                        <li><a href="https://www.youtube.com/results?search_query=brackeys+godot" target="_blank"><i class="fab fa-youtube"></i> Brackeys Godot 教程</a></li>
+                        <li><a href="https://github.com/godotengine/awesome-godot" target="_blank"><i class="fab fa-github"></i> Awesome Godot 插件列表</a></li>
+                    </ul>
+                </div>
+                <div class="resource-col">
+                    <h4><i class="fas fa-robot"></i> AI 工具</h4>
+                    <ul class="resource-list">
+                        <li><a href="https://ziva.sh" target="_blank"><i class="fas fa-external-link-alt"></i> Ziva AI</a></li>
+                        <li><a href="https://gdaimcp.com" target="_blank"><i class="fas fa-external-link-alt"></i> GDAI MCP</a></li>
+                        <li><a href="https://summerengine.com" target="_blank"><i class="fas fa-external-link-alt"></i> Summer Engine</a></li>
+                        <li><a href="https://github.com/minosvasilias/godot-copilot" target="_blank"><i class="fab fa-github"></i> Godot Copilot</a></li>
+                        <li><a href="https://github.com/nthnn/noko" target="_blank"><i class="fab fa-github"></i> Noko (Ollama)</a></li>
+                        <li><a href="https://gitlab.com/NobodyWho/Nobody" target="_blank"><i class="fab fa-gitlab"></i> NobodyWho</a></li>
+                    </ul>
+                </div>
+                <div class="resource-col">
+                    <h4><i class="fas fa-image"></i> AI 资产生成</h4>
+                    <ul class="resource-list">
+                        <li><a href="https://meshy.ai" target="_blank"><i class="fas fa-external-link-alt"></i> Meshy.ai (3D)</a></li>
+                        <li><a href="https://tripo3d.ai" target="_blank"><i class="fas fa-external-link-alt"></i> Tripo3D (3D)</a></li>
+                        <li><a href="https://www.pixelcut.ai" target="_blank"><i class="fas fa-external-link-alt"></i> Pixelcut (2D)</a></li>
+                        <li><a href="https://scenario.com" target="_blank"><i class="fas fa-external-link-alt"></i> Scenario (2D)</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="container">
+            <p>本指南基于公开资料整理，仅供学习参考 · 数据来源：Godot 官方文档、GitHub、开发者社区</p>
+            <p><a href="../../index.html" class="back-link"><i class="fas fa-arrow-left"></i> 返回 hamlet_tools 导航</a></p>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
