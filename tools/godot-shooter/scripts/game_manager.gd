@@ -8,6 +8,7 @@ extends Node
 signal score_changed(new_score: int)
 signal health_changed(new_health: int)
 signal wave_changed(new_wave: int)
+signal enemy_count_changed(remaining: int)
 signal game_started
 signal game_over(final_score: int)
 signal game_paused

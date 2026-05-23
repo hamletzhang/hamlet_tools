@@ -39,6 +39,11 @@ func _ready() -> void:
 	invincible_timer.timeout.connect(_end_invincibility)
 	blink_timer.timeout.connect(_toggle_blink)
 
+	# 受伤碰撞统一在代码中连接（项目约定：信号一律在 _ready 中连接，
+	# 不在 .tscn 里连，避免"场景连一次、代码再连一次"的双重连接）
+	hurtbox.area_entered.connect(_on_hurtbox_area_entered)
+	hurtbox.body_entered.connect(_on_hurtbox_body_entered)
+
 	# 初始无敌
 	_start_invincibility()
 
@@ -51,6 +56,13 @@ func _physics_process(_delta: float) -> void:
 
 
 # ========== 射击逻辑 ==========
+
+# 手动射击：每次按下"shoot"(空格)立即发射一发，与 ShootTimer 自动射击并存。
+# 用 _input 事件而非轮询，按键不会因 echo 连发；松开后自动射击仍持续。
+func _input(event: InputEvent) -> void:
+	if event.is_action_pressed("shoot"):
+		_shoot()
+
 
 func _on_shoot_timer_timeout() -> void:
 	_shoot()

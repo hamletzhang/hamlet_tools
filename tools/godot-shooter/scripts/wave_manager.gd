@@ -34,7 +34,12 @@ const WAVE_CONFIGS: Array[Dictionary] = [
 
 # ========== 状态变量 ==========
 var _current_wave_index: int = 0
-var _enemies_remaining: int = 0
+# 剩余待消灭敌人数。用 setter 在变化时通过 GameManager 信号总线广播给 HUD，
+# 避免 HUD 与 WaveManager 直接耦合（HUD 只认识 GameManager）。
+var _enemies_remaining: int = 0:
+	set(value):
+		_enemies_remaining = value
+		GameManager.enemy_count_changed.emit(value)
 var _spawn_queue: Array[Dictionary] = []
 var _spawn_timer: float = 0.0
 var _is_spawning: bool = false
@@ -113,7 +118,9 @@ func _spawn_next_enemy() -> void:
 
 
 func _get_spawn_position() -> Vector2:
-	var viewport_size := get_tree().root.size
+	# 用视口可见区域尺寸（拉伸后的逻辑坐标 480×854），而非窗口像素尺寸，
+	# 保证敌人 X 生成范围与玩家所见画面一致。
+	var viewport_size := get_viewport().get_visible_rect().size
 	var margin := 40.0
 	var x := randf_range(margin, viewport_size.x - margin)
 	return Vector2(x, -30.0)

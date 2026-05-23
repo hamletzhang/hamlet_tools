@@ -103,23 +103,27 @@ func _on_game_resumed() -> void:
 	hud.hide_pause_overlay()
 
 
+# 说明：以下计时器第二个参数 process_always 传 false，使计时器在 get_tree().paused
+# 时一同暂停。否则玩家在"重生等待 / 波次间隔 / 通关结算"期间按 ESC 暂停，计时器仍
+# 会触发，导致暂停态生成敌人或下一波永远不会开始（卡死）。
+
 func _on_player_died() -> void:
 	GameManager.player_take_damage(1)
 	if GameManager.health > 0:
-		await get_tree().create_timer(1.0).timeout
+		await get_tree().create_timer(1.0, false).timeout
 		if GameManager.current_state == GameManager.GameState.PLAYING:
 			_spawn_player()
 
 
 func _on_wave_completed(_wave_number: int) -> void:
 	GameManager.next_wave()
-	await get_tree().create_timer(2.0).timeout
+	await get_tree().create_timer(2.0, false).timeout
 	if GameManager.current_state == GameManager.GameState.PLAYING:
 		wave_manager.start_next_wave()
 
 
 func _on_all_waves_cleared() -> void:
 	GameManager.add_score(1000)
-	await get_tree().create_timer(3.0).timeout
+	await get_tree().create_timer(3.0, false).timeout
 	if GameManager.current_state == GameManager.GameState.PLAYING:
 		wave_manager.reset_and_intensify()

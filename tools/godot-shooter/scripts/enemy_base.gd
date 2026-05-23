@@ -31,8 +31,8 @@ var _move_direction: Vector2 = Vector2.DOWN
 func _ready() -> void:
 	_current_health = max_health
 	add_to_group("enemies")
-	body_entered.connect(_on_body_entered)
-	area_entered.connect(_on_area_entered)
+	# 敌人不需要主动监听碰撞：被玩家子弹击中由 player_bullet 调用 take_damage()，
+	# 撞到玩家由玩家 HurtBox 裁决。敌人自身无碰撞回调，保持职责单一。
 
 
 func _physics_process(delta: float) -> void:
@@ -98,16 +98,6 @@ func _try_shoot() -> void:
 	var main := get_tree().current_scene
 	var container := main.get_node("BulletContainer") as Node2D
 	container.add_child(bullet)
-
-
-# ========== 碰撞处理 ==========
-
-func _on_body_entered(_body: Node2D) -> void:
-	pass
-
-
-func _on_area_entered(_area: Area2D) -> void:
-	pass
 
 
 # ========== 出界检测 ==========

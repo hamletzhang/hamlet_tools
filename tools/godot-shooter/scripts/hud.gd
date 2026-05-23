@@ -10,6 +10,7 @@ const HEART_ICON := "❤"
 @onready var score_label: Label = $MarginContainer/VBoxContainer/ScoreLabel
 @onready var health_container: HBoxContainer = $MarginContainer/VBoxContainer/HealthContainer
 @onready var wave_label: Label = $MarginContainer/VBoxContainer/WaveLabel
+@onready var enemy_count_label: Label = $MarginContainer/VBoxContainer/EnemyCountLabel
 @onready var pause_overlay: ColorRect = $PauseOverlay
 
 
@@ -19,6 +20,7 @@ func _ready() -> void:
 	GameManager.score_changed.connect(_on_score_changed)
 	GameManager.health_changed.connect(_on_health_changed)
 	GameManager.wave_changed.connect(_on_wave_changed)
+	GameManager.enemy_count_changed.connect(_on_enemy_count_changed)
 	_update_score(GameManager.score)
 	_update_health(GameManager.health)
 	_update_wave(GameManager.current_wave)
@@ -56,6 +58,10 @@ func _update_wave(new_wave: int) -> void:
 	wave_label.text = "波次: %d" % new_wave
 
 
+func _update_enemy_count(remaining: int) -> void:
+	enemy_count_label.text = "敌人: %d" % remaining
+
+
 # ========== 信号回调 ==========
 
 func _on_score_changed(new_score: int) -> void:
@@ -68,3 +74,7 @@ func _on_health_changed(new_health: int) -> void:
 
 func _on_wave_changed(new_wave: int) -> void:
 	_update_wave(new_wave)
+
+
+func _on_enemy_count_changed(remaining: int) -> void:
+	_update_enemy_count(remaining)
