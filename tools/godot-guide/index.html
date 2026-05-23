@@ -21,6 +21,7 @@
             <li><a href="#ai-dev" class="highlight">AI 协作</a></li>
             <li><a href="#cases">案例</a></li>
             <li><a href="#roadmap">学习路径</a></li>
+            <li><a href="../godot-demo/index.html" class="highlight">游戏实例</a></li>
             <li><a href="#resources">资源</a></li>
         </ul>
     </nav>
@@ -805,6 +806,12 @@ func _start_npc_dialogue(player_input: String):
                 <div class="demo-principle">
                     <i class="fas fa-star"></i> <strong>关键原则：</strong>每个子系统单独测试通过后再组合 · 所有 AI 生成代码必须理解其工作原理 · 保持模块化，避免单文件超过 300 行
                 </div>
+            </div>
+
+            <div class="demo-box" style="border-color: var(--accent, #478cbf); margin-top: 1.5rem;">
+                <h4><i class="fas fa-rocket"></i> 本站实战实例：星际守卫者 (Star Defender)</h4>
+                <p style="margin: 0.6rem 0 1rem; line-height: 1.7;">我们用上面这套"AI 辅助 + 分层验证"流程，真做了一个可运行的 Godot 4.6.3 竖版飞机射击 Demo：3 种敌人 AI、10 波数据驱动关卡、HurtBox 单一伤害裁决架构、程序化滚动星空。配套页面完整详解了设计思路、场景树 / 信号 / 碰撞分层架构、真实关键代码，以及 <strong>AI 辅助开发流程复盘</strong>（含真实命中并修复的 6 个 AI 典型易错点）。</p>
+                <a href="../godot-demo/index.html" class="btn btn-primary"><i class="fas fa-gamepad"></i> 查看 godot-demo 实例详解 →</a>
             </div>
         </div>
     </section>

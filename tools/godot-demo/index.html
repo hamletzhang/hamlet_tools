@@ -24,6 +24,7 @@
                 <li><a href="#design">设计思路</a></li>
                 <li><a href="#architecture">架构解析</a></li>
                 <li><a href="#code">关键代码</a></li>
+                <li><a href="#ai-flow">AI 流程</a></li>
                 <li><a href="#process">开发流程</a></li>
                 <li><a href="#standards">开发规范</a></li>
                 <li><a href="#extension">扩展指南</a></li>
@@ -44,20 +45,15 @@
                 <span class="accent">Star Defender</span>
             </h1>
             <p class="hero-subtitle">
-                一个使用 Godot 引擎与 AI 辅助开发流程验证的 2D 俯视角飞机射击游戏 Demo。完整覆盖节点场景架构、信号通信、数据驱动波次与组合式设计模式。
+                一个使用 Godot 引擎、并以 AI 辅助开发流程逐步验证完成的 2D 竖版飞机射击游戏 Demo（480×854 竖屏）。完整覆盖节点场景架构、信号通信、数据驱动波次、继承式敌人类型层次与组合式职责拆分。
             </p>
             <div class="hero-meta">
                 <span><span class="dot"></span> 2D 俯视角射击</span>
                 <span><span class="dot"></span> 3 种敌人 AI</span>
                 <span><span class="dot"></span> 10 波关卡系统</span>
-                <span><span class="dot"></span> 单文件可运行</span>
+                <span><span class="dot"></span> 零美术资源（纯程序绘制）</span>
             </div>
-            <div class="hero-screenshot">
-                <div class="hero-screenshot-placeholder">
-                    <i class="fas fa-image"></i>
-                    <p>游戏截图占位（建议尺寸 1280×720）</p>
-                </div>
-            </div>
+            <div class="hero-screenshot"><img src="img/screenshot-gameplay.png" alt="星际守卫者 游戏画面" style="max-width:280px;width:100%;border-radius:12px;border:1px solid var(--border);box-shadow:0 10px 40px rgba(0,0,0,0.5);"></div>
             <div class="hero-actions">
                 <a href="#design" class="btn btn-primary">
                     <i class="fas fa-book-open"></i> 查看设计文档
@@ -91,8 +87,19 @@
             <div class="card">
                 <div class="card-icon success"><i class="fas fa-check-double"></i></div>
                 <h3>设计目标</h3>
-                <p>① 验证 Godot 4.x 节点场景工作流；② 实践 GDScript 2.0 类型系统与信号模式；③ 建立可复用的敌人基类 + 数据驱动波次系统；④ 验证 AI 辅助生成游戏代码的可行性。</p>
+                <p>① 验证 Godot 4.x 节点场景工作流；② 实践 GDScript 2.0 类型系统与信号模式；③ 建立可复用的敌人基类（继承）+ 数据驱动波次系统；④ 验证 AI 辅助生成游戏代码的可行性。</p>
             </div>
+        </div>
+
+        <div style="display:flex;gap:1.5rem;flex-wrap:wrap;justify-content:center;margin-top:2.5rem;">
+            <figure style="margin:0;text-align:center;">
+                <img src="img/screenshot-menu.png" alt="主菜单画面" style="width:200px;border-radius:12px;border:1px solid var(--border);box-shadow:0 8px 30px rgba(0,0,0,0.4);">
+                <figcaption style="color:var(--text-muted);font-size:0.85rem;margin-top:0.5rem;">主菜单：MainMenu (Control)，点击开始进入战斗</figcaption>
+            </figure>
+            <figure style="margin:0;text-align:center;">
+                <img src="img/screenshot-gameplay.png" alt="战斗画面" style="width:200px;border-radius:12px;border:1px solid var(--border);box-shadow:0 8px 30px rgba(0,0,0,0.4);">
+                <figcaption style="color:var(--text-muted);font-size:0.85rem;margin-top:0.5rem;">战斗中：滚动星空 + 红/黄/绿三类敌人 + 顶部 HUD</figcaption>
+            </figure>
         </div>
 
         <div class="tip-box info" style="margin-top: 2.5rem;">
@@ -100,6 +107,53 @@
             <div class="tip-content">
                 <h4>AI 辅助开发定位</h4>
                 <p>本项目将 AI 定位为"结对编程伙伴"——由人定义架构与接口，AI 生成具体实现与重复样板。所有代码均经过人工审阅、测试与调参，确保符合 Godot 最佳实践。</p>
+            </div>
+        </div>
+
+        <h3 style="margin-top:2.5rem;color:var(--text);">三种敌人（真实数值）</h3>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>敌人</th>
+                        <th>外观</th>
+                        <th>血量</th>
+                        <th>分值</th>
+                        <th>AI 行为</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>基础敌人</td>
+                        <td>红色三角</td>
+                        <td>1</td>
+                        <td>100</td>
+                        <td>正弦摆动 + 下降，会射击（间隔 3s）</td>
+                    </tr>
+                    <tr>
+                        <td>快速敌人</td>
+                        <td>黄色菱形</td>
+                        <td>1</td>
+                        <td>200</td>
+                        <td>高速追踪玩家 X 轴，不射击</td>
+                    </tr>
+                    <tr>
+                        <td>坦克敌人</td>
+                        <td>绿色方块</td>
+                        <td>5</td>
+                        <td>500</td>
+                        <td>慢速直线，3 连发散弹（间隔 2.5s）</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <p style="color:var(--text-muted);margin-top:0.75rem;">玩家：移动速度 350，自动射击间隔 0.15s，初始 / 重生后 2s 无敌。</p>
+
+        <div class="tip-box info" style="margin-top:2rem;">
+            <i class="fas fa-medal"></i>
+            <div class="tip-content">
+                <h4>评级体系（game_over.gd · 四档中文，分数无上限）</h4>
+                <p><code>&lt; 2000</code> 继续加油 · <code>≥ 2000</code> 优秀飞行员 · <code>≥ 5000</code> 王牌飞行员 · <code>≥ 10000</code> 传奇飞行员。通关 10 波后会进入更高强度的循环，分数可持续累加。</p>
             </div>
         </div>
     </section>
@@ -119,119 +173,112 @@
         </div>
 
         <div class="tab-content active" id="scene-tree">
-            <p style="color: var(--text-muted); margin-bottom: 1rem;">主场景 <code>main.tscn</code> 的节点树结构，体现 Godot "组合优于继承" 的设计理念：</p>
+            <p style="color: var(--text-muted); margin-bottom: 1rem;">主场景 <code>main.tscn</code> 的真实节点树。Main 作为"导演"协调各子系统；玩家与敌人在运行时动态实例化，并非预先摆在场景里：</p>
             <div class="tree-block">
-<span class="node-name">Main</span> <span class="node-type">(Node2D)</span> <span class="node-script">main.gd</span>  ← 主场景导演，负责游戏状态切换
-├── <span class="node-name">Background</span> <span class="node-type">(ParallaxBackground)</span>  ← 视差滚动星空背景
-├── <span class="node-name">PlayerSpawn</span> <span class="node-type">(Marker2D)</span> <span class="node-prop">@onready</span>  ← 玩家出生点标记
-├── <span class="node-name">EnemySpawnPath</span> <span class="node-type">(Path2D)</span>  ← 敌人生成路径（屏幕顶部横向）
-│   └── <span class="node-name">SpawnLocation</span> <span class="node-type">(PathFollow2D)</span>  ← 沿路径的生成位置
-├── <span class="node-name">Player</span> <span class="node-type">(CharacterBody2D)</span> <span class="node-script">player.gd</span>  ← 玩家实体
-│   ├── <span class="node-name">Sprite2D</span> <span class="node-type">(Sprite2D)</span>  ← 飞机贴图
-│   ├── <span class="node-name">HurtBox</span> <span class="node-type">(Area2D)</span>  ← 受伤判定区（碰撞检测）
-│   │   └── <span class="node-name">CollisionShape2D</span> <span class="node-type">(CollisionShape2D)</span>
-│   ├── <span class="node-name">Muzzle</span> <span class="node-type">(Marker2D)</span>  ← 子弹发射口
-│   └── <span class="node-name">InvincibleTimer</span> <span class="node-type">(Timer)</span>  ← 无敌闪烁计时器
-├── <span class="node-name">Camera2D</span> <span class="node-type">(Camera2D)</span> <span class="node-script">camera_shake.gd</span>  ← 摄像机 + 震动脚本
-├── <span class="node-name">WaveManager</span> <span class="node-type">(Node)</span> <span class="node-script">wave_manager.gd</span>  ← 波次管理器
-├── <span class="node-name">EnemyContainer</span> <span class="node-type">(Node2D)</span>  ← 敌人容器（动态实例化）
-│   ├── <span class="node-name">EnemyBasic</span> <span class="node-type">(RigidBody2D)</span> <span class="node-script">enemy_basic.gd</span>
-│   ├── <span class="node-name">EnemyFast</span> <span class="node-type">(RigidBody2D)</span> <span class="node-script">enemy_fast.gd</span>
-│   └── <span class="node-name">EnemyTank</span> <span class="node-type">(RigidBody2D)</span> <span class="node-script">enemy_tank.gd</span>
-├── <span class="node-name">BulletContainer</span> <span class="node-type">(Node2D)</span>  ← 子弹容器
-└── <span class="node-name">UI</span> <span class="node-type">(CanvasLayer)</span>  ← UI 根节点
-    ├── <span class="node-name">HUD</span> <span class="node-type">(Control)</span> <span class="node-script">hud.gd</span>  ← 游戏内 HUD
-    ├── <span class="node-name">MainMenu</span> <span class="node-type">(Control)</span> <span class="node-script">main_menu.gd</span>
-    └── <span class="node-name">GameOver</span> <span class="node-type">(Control)</span> <span class="node-script">game_over.gd</span>
+<span class="node-name">Main</span> <span class="node-type">(Node2D)</span> <span class="node-script">main.gd</span>  ← 主场景"导演"，状态切换与子系统协调
+├── <span class="node-name">Background</span> <span class="node-type">(ColorRect)</span>  ← 纯色深空背景
+├── <span class="node-name">StarField</span> <span class="node-type">(Node2D)</span> <span class="node-script">star_field.gd</span>  ← 程序生成的滚动星空（_draw 绘制）
+├── <span class="node-name">Camera2D</span> <span class="node-type">(Camera2D)</span> <span class="node-script">camera_shake.gd</span>  ← 摄像机 + 屏幕震动
+├── <span class="node-name">PlayerSpawnPoint</span> <span class="node-type">(Marker2D)</span>  ← 玩家出生点
+├── <span class="node-name">WaveManager</span> <span class="node-type">(Node)</span> <span class="node-script">wave_manager.gd</span>  ← 数据驱动波次管理
+├── <span class="node-name">EnemyContainer</span> <span class="node-type">(Node2D)</span>  ← 敌人容器（运行时动态实例化）
+├── <span class="node-name">BulletContainer</span> <span class="node-type">(Node2D)</span>  ← 子弹容器（运行时动态实例化）
+├── <span class="node-name">CanvasLayer</span> <span class="node-type">(CanvasLayer)</span>  ← UI 层，不受摄像机变换影响
+│   ├── <span class="node-name">HUD</span> <span class="node-type">(Control)</span> <span class="node-script">hud.gd</span>  ← 分数/血量/波次/剩余敌人
+│   ├── <span class="node-name">MainMenu</span> <span class="node-type">(Control)</span> <span class="node-script">main_menu.gd</span>
+│   └── <span class="node-name">GameOver</span> <span class="node-type">(Control)</span> <span class="node-script">game_over.gd</span>
+└── <span class="node-name">DeadZone</span> <span class="node-type">(Area2D)</span>  ← 屏幕下方越界回收区
+
+<span class="node-name">Player</span> <span class="node-type">(CharacterBody2D, 运行时实例化)</span> <span class="node-script">player.gd</span>  ← 玩家飞机
+├── <span class="node-name">Polygon2D</span>  ← 程序绘制的三角形机身（零美术资源）
+├── <span class="node-name">CollisionShape2D</span>  ← 机体碰撞（无敌时禁用）
+├── <span class="node-name">HurtBox</span> <span class="node-type">(Area2D)</span>  ← 受伤判定区（伤害的唯一裁决者，含无敌帧）
+│   └── <span class="node-name">CollisionShape2D</span>
+├── <span class="node-name">Muzzle</span> <span class="node-type">(Marker2D)</span>  ← 子弹发射口
+├── <span class="node-name">ShootTimer</span> <span class="node-type">(Timer)</span>  ← 自动射击（0.15s）
+├── <span class="node-name">InvincibleTimer</span> <span class="node-type">(Timer)</span>  ← 无敌时长（2s）
+└── <span class="node-name">BlinkTimer</span> <span class="node-type">(Timer)</span>  ← 受伤闪烁
             </div>
         </div>
 
         <div class="tab-content" id="signal-flow">
-            <p style="color: var(--text-muted); margin-bottom: 1rem;">各子系统通过信号解耦，避免直接引用，符合 Godot 推荐的事件驱动架构：</p>
+            <p style="color: var(--text-muted); margin-bottom: 1rem;">各子系统通过信号解耦。<code>GameManager</code> 作为 AutoLoad 信号总线居中转发，HUD 只认识 GameManager、并不直接耦合 WaveManager：</p>
             <div class="tree-block">
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                           信号流图（ASCII 示意）                              │
 └─────────────────────────────────────────────────────────────────────────────┘
 
-  <span class="node-name">Player</span>                                            <span class="node-name">GameManager</span> (AutoLoad)
-  │                                                      │
-  ├─ <span class="code-signal">health_changed(new_health)</span>  ───────────────────────▶│
-  │                                                      ├─ 更新全局状态
-  ├─ <span class="code-signal">score_changed(new_score)</span>    ───────────────────────▶│
-  │                                                      └─ <span class="code-signal">game_over(final_score)</span>
-  └─ <span class="code-signal">player_died()</span>               ───────────────────────▶│
-                                                         │
-  <span class="node-name">EnemyBase</span>                                            │
-  │                                                      ▼
-  ├─ <span class="code-signal">enemy_died(score_value, position)</span>  ────────────────▶│  <span class="node-name">Main</span>
-  │                                                      │    │
-  └─ <span class="code-signal">enemy_shoot(bullet_scene, position, direction)</span> ────▶│    ├─ 实例化 Explosion
-                                                         │    ├─ 实例化 ScorePopup
-  <span class="node-name">WaveManager</span>                                          │    └─ 通知 UI 更新
-  │                                                      │
-  ├─ <span class="code-signal">wave_started(wave_number, enemy_count)</span> ────────────▶│
-  │                                                      │
-  └─ <span class="code-signal">wave_cleared(wave_number)</span> ─────────────────────────▶│
-                                                         │
-  <span class="node-name">HurtBox</span> (Area2D)                                     │
-  │                                                      │
-  └─ <span class="code-signal">area_entered(hitbox)</span>  ─────────────────────────────▶│  伤害结算
-                                                         │
-  <span class="node-name">CameraShake</span>                                          │
-  │                                                      │
-  └─ 监听 <span class="code-signal">enemy_died</span> / <span class="code-signal">player_hurt</span>  ────────────────────▶│  触发屏幕震动
+  <span class="node-name">GameManager</span> (AutoLoad · 信号总线)
+  │  在 score/health/current_wave 的 setter 内自动 emit：
+  ├─ <span class="code-signal">score_changed(new_score)</span>        ─┐
+  ├─ <span class="code-signal">health_changed(new_health)</span>      ─┤
+  ├─ <span class="code-signal">wave_changed(new_wave)</span>          ─┼──▶  <span class="node-name">HUD</span> (hud.gd) 更新分数/血量/波次/剩余敌人
+  ├─ <span class="code-signal">enemy_count_changed(remaining)</span>  ─┘
+  ├─ <span class="code-signal">game_started</span>                     ───▶  <span class="node-name">Main</span> 开始游戏循环
+  ├─ <span class="code-signal">game_over(final_score)</span>           ───▶  <span class="node-name">Main</span> 显示 GameOver 结算
+  ├─ <span class="code-signal">game_paused</span> / <span class="code-signal">game_resumed</span>       ───▶  <span class="node-name">Main</span> 切换 HUD 暂停遮罩
+  ▲           ▲           ▲
+  │           │           │ (其他系统调用 add_score / 改 health / next_wave 间接触发)
+  │           │           │
+  <span class="node-name">Player</span> (player.gd)
+  └─ <span class="code-signal">died</span>                              ───▶  <span class="node-name">Main</span>._on_player_died → 重生或结算
+
+  <span class="node-name">EnemyBase</span> (enemy_base.gd)
+  └─ <span class="code-signal">died(position, score_value)</span>      ───▶  <span class="node-name">WaveManager</span> 计数 -1；_die 内已加分/爆炸/震动
+
+  <span class="node-name">WaveManager</span> (wave_manager.gd)
+  ├─ <span class="code-signal">wave_started(wave_number)</span>
+  ├─ <span class="code-signal">wave_completed(wave_number)</span>       ───▶  <span class="node-name">Main</span> 进入下一波（暂停感知计时器）
+  ├─ <span class="code-signal">enemy_spawned(enemy)</span>
+  └─ <span class="code-signal">all_waves_cleared</span>                ───▶  <span class="node-name">Main</span> 加 1000 分并循环增难
+       │
+       └─ 剩余敌人变化时，经 GameManager.<span class="code-signal">enemy_count_changed</span> 广播给 HUD
             </div>
             <div class="tip-box info">
                 <i class="fas fa-info-circle"></i>
                 <div class="tip-content">
                     <h4>为什么选择信号而非直接调用</h4>
-                    <p>Godot 的信号系统（Signal）实现了发布-订阅模式。敌人死亡时只需发射 <code>enemy_died</code>，无需知道谁会接收——可能是加分系统、震动系统、粒子系统或成就系统。新增消费者无需修改生产者代码。</p>
+                    <p>Godot 的信号系统实现了发布-订阅模式。例如 WaveManager 每消灭一个敌人，会通过 <code>GameManager.enemy_count_changed</code> 把"剩余敌人数"广播出去——它并不知道 HUD 的存在，HUD 也只订阅 GameManager。这样 WaveManager 与 HUD 完全解耦，新增任何"剩余敌人"的消费者都无需改动生产者代码。</p>
                 </div>
             </div>
         </div>
 
         <div class="tab-content" id="collision">
-            <p style="color: var(--text-muted); margin-bottom: 1rem;">使用 Godot 的物理 Layer / Mask 机制实现精确的碰撞分组，避免不必要的碰撞检测：</p>
+            <p style="color: var(--text-muted); margin-bottom: 1rem;"><code>project.godot</code> 定义了 5 个物理层（位号 → 名称）：1=玩家、2=敌人、3=玩家子弹、4=敌人子弹、5=场景边界。各节点据此设置 <code>collision_layer</code>（我属于谁）与 <code>collision_mask</code>（我检测谁）：</p>
             <div class="table-wrap">
                 <table>
                     <thead>
                         <tr>
-                            <th>层级 (Layer)</th>
-                            <th>位号</th>
-                            <th>包含节点</th>
-                            <th>检测掩码 (Mask)</th>
+                            <th>节点</th>
+                            <th>collision_layer（所属层）</th>
+                            <th>collision_mask（检测谁）</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td><code>Player</code></td>
-                            <td>1</td>
-                            <td>Player 的 HurtBox</td>
-                            <td>EnemyBullet (4) + EnemyBody (3)</td>
+                            <td><code>Player</code> 机体 + <code>HurtBox</code></td>
+                            <td>1（玩家）</td>
+                            <td>HurtBox mask=10 → 检测 2(敌人) + 4(敌人子弹)</td>
                         </tr>
                         <tr>
-                            <td><code>PlayerBullet</code></td>
-                            <td>2</td>
-                            <td>玩家发射的子弹</td>
-                            <td>EnemyBody (3)</td>
+                            <td>敌人 <code>enemy_basic/fast/tank</code></td>
+                            <td>2（敌人）</td>
+                            <td>mask=5 → 检测 1(玩家) + 3(玩家子弹)</td>
                         </tr>
                         <tr>
-                            <td><code>EnemyBody</code></td>
-                            <td>3</td>
-                            <td>所有敌人的 HurtBox</td>
-                            <td>PlayerBullet (2) + Player (1)</td>
+                            <td><code>player_bullet</code> 玩家子弹</td>
+                            <td>3（玩家子弹，bit3 / 值 4）</td>
+                            <td>检测 2(敌人)</td>
                         </tr>
                         <tr>
-                            <td><code>EnemyBullet</code></td>
-                            <td>4</td>
-                            <td>敌人发射的子弹</td>
-                            <td>Player (1)</td>
+                            <td><code>enemy_bullet</code> 敌人子弹</td>
+                            <td>4（敌人子弹，bit4 / 值 8）</td>
+                            <td>检测 1(玩家)</td>
                         </tr>
                         <tr>
-                            <td><code>WorldBoundary</code></td>
-                            <td>5</td>
-                            <td>屏幕边界（用于清理越界子弹）</td>
-                            <td>PlayerBullet (2) + EnemyBullet (4)</td>
+                            <td><code>DeadZone</code> 边界回收</td>
+                            <td>5（场景边界）</td>
+                            <td>检测子弹 / 敌人越界</td>
                         </tr>
                     </tbody>
                 </table>
@@ -239,8 +286,15 @@
             <div class="tip-box warning">
                 <i class="fas fa-exclamation-triangle"></i>
                 <div class="tip-content">
-                    <h4>Layer 与 Mask 的区别</h4>
-                    <p><strong>Layer</strong> 定义"我属于哪个组"，<strong>Mask</strong> 定义"我想检测哪些组"。两个 Area2D 发生交集的充要条件是：<code>A 的 Mask 包含 B 的 Layer</code> 且 <code>B 的 Mask 包含 A 的 Layer</code>。WorldBoundary 只设置 Mask 不设置 Layer，因此它不会与任何物体产生物理碰撞，仅用于检测越界。</p>
+                    <h4>Layer 与 Mask 的触发条件（注意：不是双向）</h4>
+                    <p><strong>Layer</strong> 定义"我属于哪个组"，<strong>Mask</strong> 定义"我想检测哪些组"。Area A 能检测到 B 的条件是 <strong>A 的 mask 包含 B 的 layer</strong>——单向即可触发 <code>area_entered</code> / <code>body_entered</code>，<u>并不要求双方互含</u>。例如玩家子弹 mask 含"敌人"层，子弹一进入敌人区域即触发回调，敌人无需反向检测子弹。</p>
+                </div>
+            </div>
+            <div class="tip-box success">
+                <i class="fas fa-gavel"></i>
+                <div class="tip-content">
+                    <h4>伤害模型：单一裁决者（本工程关键设计 / 修过的 bug）</h4>
+                    <p>玩家是否受伤<strong>只由 Player 的 HurtBox 单独裁决</strong>（它检查无敌帧 <code>_is_invincible</code>）。敌人子弹命中玩家时只负责<strong>自毁</strong>、不自己扣血——保证伤害只有一个权威来源，避免无敌帧被绕过、以及一次碰撞被扣两次血。所有碰撞信号统一在脚本 <code>_ready()</code> 里 <code>connect</code>，不在 <code>.tscn</code> 里连，避免双重连接。</p>
                 </div>
             </div>
         </div>
@@ -271,94 +325,79 @@
                     </div>
                     <span class="code-lang">GDScript</span>
                 </div>
-<pre><span class="code-comment">## 全局游戏管理器（AutoLoad 单例）</span>
-<span class="code-comment">## 职责：维护全局状态、分发跨系统信号、记录最高分</span>
+<pre><span class="code-comment"># 全局游戏管理器 (AutoLoad 单例)</span>
+<span class="code-comment"># 负责: 游戏状态管理、分数统计、生命值、信号总线</span>
 <span class="code-keyword">extends</span> <span class="code-class">Node</span>
 
-<span class="code-comment"># ── 信号 ──</span>
+<span class="code-comment"># ========== 信号 ==========</span>
 <span class="code-keyword">signal</span> <span class="code-signal">score_changed</span>(new_score: <span class="code-type">int</span>)
 <span class="code-keyword">signal</span> <span class="code-signal">health_changed</span>(new_health: <span class="code-type">int</span>)
-<span class="code-keyword">signal</span> <span class="code-signal">game_over</span>(final_score: <span class="code-type">int</span>, rating: <span class="code-type">String</span>)
-<span class="code-keyword">signal</span> <span class="code-signal">wave_started</span>(wave_number: <span class="code-type">int</span>)
+<span class="code-keyword">signal</span> <span class="code-signal">wave_changed</span>(new_wave: <span class="code-type">int</span>)
+<span class="code-keyword">signal</span> <span class="code-signal">enemy_count_changed</span>(remaining: <span class="code-type">int</span>)
+<span class="code-keyword">signal</span> <span class="code-signal">game_started</span>
+<span class="code-keyword">signal</span> <span class="code-signal">game_over</span>(final_score: <span class="code-type">int</span>)
+<span class="code-keyword">signal</span> <span class="code-signal">game_paused</span>
+<span class="code-keyword">signal</span> <span class="code-signal">game_resumed</span>
 
-<span class="code-comment"># ── 常量 ──</span>
+<span class="code-comment"># ========== 游戏状态枚举 ==========</span>
+<span class="code-keyword">enum</span> GameState { MENU, PLAYING, PAUSED, GAME_OVER }
+
+<span class="code-comment"># ========== 常量 ==========</span>
 <span class="code-keyword">const</span> <span class="code-export">MAX_HEALTH</span>: <span class="code-type">int</span> = <span class="code-number">3</span>
-<span class="code-keyword">const</span> <span class="code-export">RATING_THRESHOLDS</span>: <span class="code-type">Dictionary</span> = {
-    <span class="code-string">"S"</span>: <span class="code-number">10000</span>,
-    <span class="code-string">"A"</span>: <span class="code-number">7000</span>,
-    <span class="code-string">"B"</span>: <span class="code-number">4000</span>,
-    <span class="code-string">"C"</span>: <span class="code-number">2000</span>,
-}
+<span class="code-keyword">const</span> <span class="code-export">INITIAL_SCORE</span>: <span class="code-type">int</span> = <span class="code-number">0</span>
+<span class="code-keyword">const</span> <span class="code-export">INITIAL_WAVE</span>: <span class="code-type">int</span> = <span class="code-number">1</span>
 
-<span class="code-comment"># ── 运行时状态 ──</span>
-<span class="code-keyword">var</span> score: <span class="code-type">int</span> = <span class="code-number">0</span> : <span class="code-keyword">set</span> = <span class="code-func">_set_score</span>
-<span class="code-keyword">var</span> health: <span class="code-type">int</span> = <span class="code-export">MAX_HEALTH</span> : <span class="code-keyword">set</span> = <span class="code-func">_set_health</span>
-<span class="code-keyword">var</span> current_wave: <span class="code-type">int</span> = <span class="code-number">0</span>
-<span class="code-keyword">var</span> high_score: <span class="code-type">int</span> = <span class="code-number">0</span>
+<span class="code-comment"># ========== 状态变量（内联 setter：变更即发信号）==========</span>
+<span class="code-keyword">var</span> current_state: GameState = GameState.MENU
+<span class="code-keyword">var</span> score: <span class="code-type">int</span> = <span class="code-export">INITIAL_SCORE</span>:
+    <span class="code-keyword">set</span>(value):
+        score = value
+        score_changed.<span class="code-func">emit</span>(score)
+
+<span class="code-keyword">var</span> health: <span class="code-type">int</span> = <span class="code-export">MAX_HEALTH</span>:
+    <span class="code-keyword">set</span>(value):
+        health = <span class="code-func">clampi</span>(value, <span class="code-number">0</span>, <span class="code-export">MAX_HEALTH</span>)
+        health_changed.<span class="code-func">emit</span>(health)
+        <span class="code-keyword">if</span> health <= <span class="code-number">0</span> <span class="code-keyword">and</span> current_state == GameState.PLAYING:
+            <span class="code-func">_trigger_game_over</span>()
+
+<span class="code-keyword">var</span> current_wave: <span class="code-type">int</span> = <span class="code-export">INITIAL_WAVE</span>:
+    <span class="code-keyword">set</span>(value):
+        current_wave = value
+        wave_changed.<span class="code-func">emit</span>(current_wave)
 
 
-<span class="code-keyword">func</span> <span class="code-func">_ready</span>() -> <span class="code-type">void</span>:
-    <span class="code-comment">## 从本地配置文件读取最高分</span>
-    <span class="code-keyword">var</span> config := <span class="code-class">ConfigFile</span>.<span class="code-func">new</span>()
-    <span class="code-keyword">var</span> err := config.<span class="code-func">load</span>(<span class="code-string">"user://save.cfg"</span>)
-    <span class="code-keyword">if</span> err == <span class="code-type">OK</span>:
-        high_score = config.<span class="code-func">get_value</span>(<span class="code-string">"game"</span>, <span class="code-string">"high_score"</span>, <span class="code-number">0</span>)
+<span class="code-comment"># ========== 公共方法 ==========</span>
 
-
+<span class="code-comment">## 开始新游戏</span>
 <span class="code-keyword">func</span> <span class="code-func">start_game</span>() -> <span class="code-type">void</span>:
-    <span class="code-comment">## 重置所有状态并开始新游戏</span>
-    score = <span class="code-number">0</span>
+    score = <span class="code-export">INITIAL_SCORE</span>
     health = <span class="code-export">MAX_HEALTH</span>
-    current_wave = <span class="code-number">1</span>
-    <span class="code-func">get_tree</span>().<span class="code-func">reload_current_scene</span>()
+    current_wave = <span class="code-export">INITIAL_WAVE</span>
+    current_state = GameState.PLAYING
+    game_started.<span class="code-func">emit</span>()
 
 
-<span class="code-keyword">func</span> <span class="code-func">add_score</span>(value: <span class="code-type">int</span>) -> <span class="code-type">void</span>:
-    score += value
+<span class="code-keyword">func</span> <span class="code-func">add_score</span>(points: <span class="code-type">int</span>) -> <span class="code-type">void</span>:
+    score += points
 
 
-<span class="code-keyword">func</span> <span class="code-func">take_damage</span>(amount: <span class="code-type">int</span> = <span class="code-number">1</span>) -> <span class="code-type">void</span>:
-    health -= amount
-    <span class="code-keyword">if</span> health <= <span class="code-number">0</span>:
-        <span class="code-func">_trigger_game_over</span>()
+<span class="code-keyword">func</span> <span class="code-func">player_take_damage</span>(damage: <span class="code-type">int</span> = <span class="code-number">1</span>) -> <span class="code-type">void</span>:
+    health -= damage
 
 
-<span class="code-keyword">func</span> <span class="code-func">calculate_rating</span>() -> <span class="code-type">String</span>:
-    <span class="code-keyword">for</span> rating <span class="code-keyword">in</span> [<span class="code-string">"S"</span>, <span class="code-string">"A"</span>, <span class="code-string">"B"</span>, <span class="code-string">"C"</span>]:
-        <span class="code-keyword">if</span> score >= <span class="code-export">RATING_THRESHOLDS</span>[rating]:
-            <span class="code-keyword">return</span> rating
-    <span class="code-keyword">return</span> <span class="code-string">"D"</span>
-
-
-<span class="code-keyword">func</span> <span class="code-func">_set_score</span>(value: <span class="code-type">int</span>) -> <span class="code-type">void</span>:
-    score = <span class="code-func">max</span>(value, <span class="code-number">0</span>)
-    score_changed.<span class="code-func">emit</span>(score)
-
-
-<span class="code-keyword">func</span> <span class="code-func">_set_health</span>(value: <span class="code-type">int</span>) -> <span class="code-type">void</span>:
-    health = <span class="code-func">clamp</span>(value, <span class="code-number">0</span>, <span class="code-export">MAX_HEALTH</span>)
-    health_changed.<span class="code-func">emit</span>(health)
-
+<span class="code-comment"># ========== 私有方法 ==========</span>
 
 <span class="code-keyword">func</span> <span class="code-func">_trigger_game_over</span>() -> <span class="code-type">void</span>:
-    <span class="code-keyword">var</span> rating := <span class="code-func">calculate_rating</span>()
-    <span class="code-keyword">if</span> score > high_score:
-        high_score = score
-        <span class="code-func">_save_high_score</span>()
-    game_over.<span class="code-func">emit</span>(score, rating)
-
-
-<span class="code-keyword">func</span> <span class="code-func">_save_high_score</span>() -> <span class="code-type">void</span>:
-    <span class="code-keyword">var</span> config := <span class="code-class">ConfigFile</span>.<span class="code-func">new</span>()
-    config.<span class="code-func">set_value</span>(<span class="code-string">"game"</span>, <span class="code-string">"high_score"</span>, high_score)
-    config.<span class="code-func">save</span>(<span class="code-string">"user://save.cfg"</span>)
+    current_state = GameState.GAME_OVER
+    game_over.<span class="code-func">emit</span>(score)
 </pre>
             </div>
             <div class="tip-box success">
                 <i class="fas fa-check-circle"></i>
                 <div class="tip-content">
-                    <h4>设计要点：全局单例模式</h4>
-                    <p><code>GameManager</code> 在 <code>project.godot</code> 中注册为 AutoLoad（自动加载），任何场景都可以通过 <code>GameManager.score_changed.emit(...)</code> 访问。使用 setter (<code>: set = _set_score</code>) 保证状态变更时自动发射信号，避免遗漏通知。</p>
+                    <h4>设计要点：AutoLoad 单例 + setter 自动发信号</h4>
+                    <p><code>GameManager</code> 在 <code>project.godot</code> 中注册为 AutoLoad，任何场景都能直接访问。<code>score</code> / <code>health</code> / <code>current_wave</code> 都用<strong>内联 setter</strong>：赋值时自动 <code>emit</code> 对应信号，调用方只管改值、无需手动通知 UI。<code>health</code> 的 setter 还会在血量归零且处于 PLAYING 时直接触发 game over——状态收口在一处。</p>
                 </div>
             </div>
         </div>
@@ -372,119 +411,125 @@
                     </div>
                     <span class="code-lang">GDScript</span>
                 </div>
-<pre><span class="code-comment">## 波次管理器 —— 数据驱动配置 + 程序化生成</span>
-<span class="code-comment">## 职责：根据波次数据生成敌人，控制游戏节奏</span>
+<pre><span class="code-comment"># 波次管理器</span>
+<span class="code-comment"># 负责: 程序化生成敌人波次，难度递增，关卡设计</span>
 <span class="code-keyword">extends</span> <span class="code-class">Node</span>
 
-<span class="code-keyword">signal</span> <span class="code-signal">wave_started</span>(wave_number: <span class="code-type">int</span>, total_enemies: <span class="code-type">int</span>)
-<span class="code-keyword">signal</span> <span class="code-signal">wave_cleared</span>(wave_number: <span class="code-type">int</span>)
+<span class="code-comment"># ========== 信号 ==========</span>
+<span class="code-keyword">signal</span> <span class="code-signal">wave_started</span>(wave_number: <span class="code-type">int</span>)
+<span class="code-keyword">signal</span> <span class="code-signal">wave_completed</span>(wave_number: <span class="code-type">int</span>)
 <span class="code-keyword">signal</span> <span class="code-signal">enemy_spawned</span>(enemy: <span class="code-class">Node2D</span>)
+<span class="code-keyword">signal</span> <span class="code-signal">all_waves_cleared</span>
 
-<span class="code-comment"># ── 导出配置 ──</span>
-<span class="code-keyword">@export</span> <span class="code-keyword">var</span> spawn_interval: <span class="code-type">float</span> = <span class="code-number">1.5</span>  <span class="code-comment">## 同波内敌人生成间隔（秒）</span>
-<span class="code-keyword">@export</span> <span class="code-keyword">var</span> wave_interval: <span class="code-type">float</span> = <span class="code-number">3.0</span>   <span class="code-comment">## 波次间隔（秒）</span>
+<span class="code-comment"># ========== 预加载 ==========</span>
+<span class="code-keyword">const</span> <span class="code-export">ENEMY_SCENES</span>: <span class="code-type">Dictionary</span> = {
+    <span class="code-string">"basic"</span>: <span class="code-keyword">preload</span>(<span class="code-string">"res://scenes/enemy_basic.tscn"</span>),
+    <span class="code-string">"fast"</span>: <span class="code-keyword">preload</span>(<span class="code-string">"res://scenes/enemy_fast.tscn"</span>),
+    <span class="code-string">"tank"</span>: <span class="code-keyword">preload</span>(<span class="code-string">"res://scenes/enemy_tank.tscn"</span>)
+}
 
-<span class="code-comment"># ── 预加载敌人场景 ──</span>
-<span class="code-keyword">const</span> <span class="code-export">ENEMY_BASIC</span> := <span class="code-keyword">preload</span>(<span class="code-string">"res://scenes/enemy_basic.tscn"</span>)
-<span class="code-keyword">const</span> <span class="code-export">ENEMY_FAST</span>  := <span class="code-keyword">preload</span>(<span class="code-string">"res://scenes/enemy_fast.tscn"</span>)
-<span class="code-keyword">const</span> <span class="code-export">ENEMY_TANK</span>  := <span class="code-keyword">preload</span>(<span class="code-string">"res://scenes/enemy_tank.tscn"</span>)
-
-<span class="code-comment"># ── 波次配置表（数据驱动）──</span>
-<span class="code-keyword">var</span> wave_data: <span class="code-type">Array</span>[<span class="code-type">Dictionary</span>] = [
-    {<span class="code-string">"basic"</span>: <span class="code-number">3</span>, <span class="code-string">"fast"</span>: <span class="code-number">0</span>, <span class="code-string">"tank"</span>: <span class="code-number">0</span>},   <span class="code-comment"># 波 1：热身</span>
-    {<span class="code-string">"basic"</span>: <span class="code-number">5</span>, <span class="code-string">"fast"</span>: <span class="code-number">1</span>, <span class="code-string">"tank"</span>: <span class="code-number">0</span>},   <span class="code-comment"># 波 2：引入快速敌人</span>
-    {<span class="code-string">"basic"</span>: <span class="code-number">4</span>, <span class="code-string">"fast"</span>: <span class="code-number">3</span>, <span class="code-string">"tank"</span>: <span class="code-number">0</span>},   <span class="code-comment"># 波 3</span>
-    {<span class="code-string">"basic"</span>: <span class="code-number">3</span>, <span class="code-string">"fast"</span>: <span class="code-number">2</span>, <span class="code-string">"tank"</span>: <span class="code-number">1</span>},   <span class="code-comment"># 波 4：引入坦克</span>
-    {<span class="code-string">"basic"</span>: <span class="code-number">5</span>, <span class="code-string">"fast"</span>: <span class="code-number">4</span>, <span class="code-string">"tank"</span>: <span class="code-number">1</span>},   <span class="code-comment"># 波 5</span>
-    {<span class="code-string">"basic"</span>: <span class="code-number">4</span>, <span class="code-string">"fast"</span>: <span class="code-number">4</span>, <span class="code-string">"tank"</span>: <span class="code-number">2</span>},   <span class="code-comment"># 波 6</span>
-    {<span class="code-string">"basic"</span>: <span class="code-number">6</span>, <span class="code-string">"fast"</span>: <span class="code-number">5</span>, <span class="code-string">"tank"</span>: <span class="code-number">2</span>},   <span class="code-comment"># 波 7</span>
-    {<span class="code-string">"basic"</span>: <span class="code-number">5</span>, <span class="code-string">"fast"</span>: <span class="code-number">6</span>, <span class="code-string">"tank"</span>: <span class="code-number">3</span>},   <span class="code-comment"># 波 8</span>
-    {<span class="code-string">"basic"</span>: <span class="code-number">8</span>, <span class="code-string">"fast"</span>: <span class="code-number">6</span>, <span class="code-string">"tank"</span>: <span class="code-number">3</span>},   <span class="code-comment"># 波 9</span>
-    {<span class="code-string">"basic"</span>: <span class="code-number">6</span>, <span class="code-string">"fast"</span>: <span class="code-number">8</span>, <span class="code-string">"tank"</span>: <span class="code-number">4</span>},   <span class="code-comment"># 波 10：终局</span>
+<span class="code-comment"># ========== 波次配置（数据驱动）==========</span>
+<span class="code-comment"># 每波: { enemies:[{type,count}...], spawn_interval, pattern }</span>
+<span class="code-keyword">const</span> <span class="code-export">WAVE_CONFIGS</span>: <span class="code-type">Array</span>[<span class="code-type">Dictionary</span>] = [
+    {<span class="code-string">"enemies"</span>: [{<span class="code-string">"type"</span>: <span class="code-string">"basic"</span>, <span class="code-string">"count"</span>: <span class="code-number">5</span>}], <span class="code-string">"spawn_interval"</span>: <span class="code-number">1.5</span>, <span class="code-string">"pattern"</span>: <span class="code-string">"line"</span>},
+    {<span class="code-string">"enemies"</span>: [{<span class="code-string">"type"</span>: <span class="code-string">"basic"</span>, <span class="code-string">"count"</span>: <span class="code-number">4</span>}, {<span class="code-string">"type"</span>: <span class="code-string">"fast"</span>, <span class="code-string">"count"</span>: <span class="code-number">2</span>}], <span class="code-string">"spawn_interval"</span>: <span class="code-number">1.2</span>, <span class="code-string">"pattern"</span>: <span class="code-string">"mixed"</span>},
+    {<span class="code-string">"enemies"</span>: [{<span class="code-string">"type"</span>: <span class="code-string">"basic"</span>, <span class="code-string">"count"</span>: <span class="code-number">10</span>}], <span class="code-string">"spawn_interval"</span>: <span class="code-number">0.8</span>, <span class="code-string">"pattern"</span>: <span class="code-string">"rush"</span>},
+    <span class="code-comment"># …第 4~9 波省略，按 type/count 混合并逐波加密…</span>
+    {<span class="code-string">"enemies"</span>: [{<span class="code-string">"type"</span>: <span class="code-string">"tank"</span>, <span class="code-string">"count"</span>: <span class="code-number">3</span>}, {<span class="code-string">"type"</span>: <span class="code-string">"fast"</span>, <span class="code-string">"count"</span>: <span class="code-number">10</span>}, {<span class="code-string">"type"</span>: <span class="code-string">"basic"</span>, <span class="code-string">"count"</span>: <span class="code-number">10</span>}], <span class="code-string">"spawn_interval"</span>: <span class="code-number">0.6</span>, <span class="code-string">"pattern"</span>: <span class="code-string">"boss_support"</span>}
 ]
 
-<span class="code-keyword">var</span> current_wave: <span class="code-type">int</span> = <span class="code-number">0</span>
-<span class="code-keyword">var</span> _enemies_alive: <span class="code-type">int</span> = <span class="code-number">0</span>
-<span class="code-keyword">var</span> _spawning: <span class="code-type">bool</span> = <span class="code-keyword">false</span>
-
-<span class="code-keyword">@onready</span> <span class="code-keyword">var</span> _spawn_timer: <span class="code-class">Timer</span> = $<span class="code-string">"SpawnTimer"</span>
-<span class="code-keyword">@onready</span> <span class="code-keyword">var</span> _wave_timer: <span class="code-class">Timer</span> = $<span class="code-string">"WaveTimer"</span>
-<span class="code-keyword">@onready</span> <span class="code-keyword">var</span> _spawn_path: <span class="code-class">PathFollow2D</span> = $<span class="code-string">"../EnemySpawnPath/SpawnLocation"</span>
-<span class="code-keyword">@onready</span> <span class="code-keyword">var</span> _enemy_container: <span class="code-class">Node2D</span> = $<span class="code-string">"../EnemyContainer"</span>
-
-
-<span class="code-keyword">func</span> <span class="code-func">_ready</span>() -> <span class="code-type">void</span>:
-    _spawn_timer.timeout.<span class="code-func">connect</span>(<span class="code-func">_on_spawn_timer_timeout</span>)
-    _wave_timer.timeout.<span class="code-func">connect</span>(<span class="code-func">_on_wave_timer_timeout</span>)
+<span class="code-comment"># ========== 状态变量 ==========</span>
+<span class="code-keyword">var</span> _current_wave_index: <span class="code-type">int</span> = <span class="code-number">0</span>
+<span class="code-comment"># 剩余敌人数：setter 内经 GameManager 信号总线广播给 HUD，避免直接耦合</span>
+<span class="code-keyword">var</span> _enemies_remaining: <span class="code-type">int</span> = <span class="code-number">0</span>:
+    <span class="code-keyword">set</span>(value):
+        _enemies_remaining = value
+        <span class="code-class">GameManager</span>.enemy_count_changed.<span class="code-func">emit</span>(value)
+<span class="code-keyword">var</span> _spawn_queue: <span class="code-type">Array</span>[<span class="code-type">Dictionary</span>] = []
+<span class="code-keyword">var</span> _spawn_timer: <span class="code-type">float</span> = <span class="code-number">0.0</span>
+<span class="code-keyword">var</span> _is_spawning: <span class="code-type">bool</span> = <span class="code-keyword">false</span>
+<span class="code-keyword">var</span> _intensity_multiplier: <span class="code-type">float</span> = <span class="code-number">1.0</span>
 
 
-<span class="code-keyword">func</span> <span class="code-func">start_first_wave</span>() -> <span class="code-type">void</span>:
-    current_wave = <span class="code-number">0</span>
-    <span class="code-func">_start_next_wave</span>()
+<span class="code-keyword">func</span> <span class="code-func">start_waves</span>() -> <span class="code-type">void</span>:
+    _current_wave_index = <span class="code-number">0</span>
+    _intensity_multiplier = <span class="code-number">1.0</span>
+    <span class="code-func">_start_wave</span>(_current_wave_index)
 
 
-<span class="code-keyword">func</span> <span class="code-func">_start_next_wave</span>() -> <span class="code-type">void</span>:
-    <span class="code-keyword">if</span> current_wave >= wave_data.<span class="code-func">size</span>():
-        <span class="code-keyword">return</span>  <span class="code-comment">## 所有波次完成，进入胜利结算</span>
-
-    current_wave += <span class="code-number">1</span>
-    <span class="code-keyword">var</span> data := wave_data[current_wave - <span class="code-number">1</span>]
-    <span class="code-keyword">var</span> total := data[<span class="code-string">"basic"</span>] + data[<span class="code-string">"fast"</span>] + data[<span class="code-string">"tank"</span>]
-
-    _enemies_alive = total
-    _spawning = <span class="code-keyword">true</span>
-
-    <span class="code-comment">## 构建待生成队列</span>
-    _spawn_queue.<span class="code-func">clear</span>()
-    <span class="code-keyword">for</span> i <span class="code-keyword">in</span> <span class="code-func">range</span>(data[<span class="code-string">"basic"</span>]): _spawn_queue.<span class="code-func">append</span>(<span class="code-export">ENEMY_BASIC</span>)
-    <span class="code-keyword">for</span> i <span class="code-keyword">in</span> <span class="code-func">range</span>(data[<span class="code-string">"fast"</span>]):  _spawn_queue.<span class="code-func">append</span>(<span class="code-export">ENEMY_FAST</span>)
-    <span class="code-keyword">for</span> i <span class="code-keyword">in</span> <span class="code-func">range</span>(data[<span class="code-string">"tank"</span>]):  _spawn_queue.<span class="code-func">append</span>(<span class="code-export">ENEMY_TANK</span>)
-    _spawn_queue.<span class="code-func">shuffle</span>()  <span class="code-comment">## 打乱生成顺序，避免模式化</span>
-
-    wave_started.<span class="code-func">emit</span>(current_wave, total)
-    _spawn_timer.<span class="code-func">start</span>(spawn_interval)
-
-
-<span class="code-keyword">var</span> _spawn_queue: <span class="code-type">Array</span>[<span class="code-type">PackedScene</span>] = []
-
-
-<span class="code-keyword">func</span> <span class="code-func">_on_spawn_timer_timeout</span>() -> <span class="code-type">void</span>:
-    <span class="code-keyword">if</span> _spawn_queue.<span class="code-func">is_empty</span>():
-        _spawning = <span class="code-keyword">false</span>
-        _spawn_timer.<span class="code-func">stop</span>()
+<span class="code-keyword">func</span> <span class="code-func">start_next_wave</span>() -> <span class="code-type">void</span>:
+    _current_wave_index += <span class="code-number">1</span>
+    <span class="code-keyword">if</span> _current_wave_index >= <span class="code-export">WAVE_CONFIGS</span>.<span class="code-func">size</span>():
+        all_waves_cleared.<span class="code-func">emit</span>()
         <span class="code-keyword">return</span>
+    <span class="code-func">_start_wave</span>(_current_wave_index)
 
-    <span class="code-keyword">var</span> scene := _spawn_queue.<span class="code-func">pop_front</span>()
-    <span class="code-keyword">var</span> enemy := scene.<span class="code-func">instantiate</span>() <span class="code-keyword">as</span> <span class="code-class">Node2D</span>
 
-    <span class="code-comment">## 在生成路径上随机位置生成</span>
-    _spawn_path.progress_ratio = <span class="code-func">randf</span>()
-    enemy.global_position = _spawn_path.global_position
+<span class="code-comment"># 通关后再来一轮，每轮整体加难</span>
+<span class="code-keyword">func</span> <span class="code-func">reset_and_intensify</span>() -> <span class="code-type">void</span>:
+    _intensity_multiplier += <span class="code-number">0.3</span>
+    _current_wave_index = <span class="code-number">0</span>
+    <span class="code-func">_start_wave</span>(<span class="code-number">0</span>)
 
+
+<span class="code-keyword">func</span> <span class="code-func">_start_wave</span>(index: <span class="code-type">int</span>) -> <span class="code-type">void</span>:
+    <span class="code-keyword">var</span> config: <span class="code-type">Dictionary</span> = <span class="code-export">WAVE_CONFIGS</span>[index]
+    _spawn_queue.<span class="code-func">clear</span>()
+    <span class="code-keyword">for</span> entry <span class="code-keyword">in</span> config[<span class="code-string">"enemies"</span>]:
+        <span class="code-keyword">for</span> i <span class="code-keyword">in</span> <span class="code-func">range</span>(entry[<span class="code-string">"count"</span>]):
+            _spawn_queue.<span class="code-func">append</span>({<span class="code-string">"type"</span>: entry[<span class="code-string">"type"</span>]})
+    _spawn_queue.<span class="code-func">shuffle</span>()  <span class="code-comment"># 打乱生成顺序，避免模式化</span>
+    _enemies_remaining = _spawn_queue.<span class="code-func">size</span>()
+    _spawn_timer = <span class="code-number">1.0</span>
+    _is_spawning = <span class="code-keyword">true</span>
+    wave_started.<span class="code-func">emit</span>(<span class="code-class">GameManager</span>.current_wave)
+
+
+<span class="code-comment"># 基于 float 计时累减，到点生成下一个；强度乘数缩短间隔</span>
+<span class="code-keyword">func</span> <span class="code-func">_physics_process</span>(delta: <span class="code-type">float</span>) -> <span class="code-type">void</span>:
+    <span class="code-keyword">if</span> <span class="code-keyword">not</span> _is_spawning:
+        <span class="code-keyword">return</span>
+    _spawn_timer -= delta
+    <span class="code-keyword">if</span> _spawn_timer <= <span class="code-number">0</span> <span class="code-keyword">and</span> _spawn_queue.<span class="code-func">size</span>() > <span class="code-number">0</span>:
+        <span class="code-func">_spawn_next_enemy</span>()
+        <span class="code-keyword">var</span> base_interval: <span class="code-type">float</span> = <span class="code-export">WAVE_CONFIGS</span>[_current_wave_index][<span class="code-string">"spawn_interval"</span>]
+        _spawn_timer = base_interval / _intensity_multiplier
+    <span class="code-keyword">if</span> _enemies_remaining <= <span class="code-number">0</span> <span class="code-keyword">and</span> _spawn_queue.<span class="code-func">size</span>() == <span class="code-number">0</span>:
+        _is_spawning = <span class="code-keyword">false</span>
+        wave_completed.<span class="code-func">emit</span>(<span class="code-class">GameManager</span>.current_wave)
+
+
+<span class="code-keyword">func</span> <span class="code-func">_spawn_next_enemy</span>() -> <span class="code-type">void</span>:
+    <span class="code-keyword">if</span> _spawn_queue.<span class="code-func">size</span>() == <span class="code-number">0</span>:
+        <span class="code-keyword">return</span>
+    <span class="code-keyword">var</span> entry: <span class="code-type">Dictionary</span> = _spawn_queue.<span class="code-func">pop_front</span>()
+    <span class="code-keyword">var</span> enemy_type: <span class="code-type">String</span> = entry[<span class="code-string">"type"</span>]
+    <span class="code-keyword">var</span> enemy := <span class="code-export">ENEMY_SCENES</span>[enemy_type].<span class="code-func">instantiate</span>() <span class="code-keyword">as</span> <span class="code-class">Node2D</span>
+    enemy.global_position = <span class="code-func">_get_spawn_position</span>()
+    <span class="code-keyword">if</span> enemy <span class="code-keyword">is</span> <span class="code-class">EnemyBase</span>:  <span class="code-comment"># 难度缩放</span>
+        enemy.speed *= _intensity_multiplier
+        enemy.score_value = <span class="code-func">int</span>(enemy.score_value * _intensity_multiplier)
     enemy.died.<span class="code-func">connect</span>(<span class="code-func">_on_enemy_died</span>)
-    _enemy_container.<span class="code-func">add_child</span>(enemy)
+    (<span class="code-func">get_tree</span>().current_scene.<span class="code-func">get_node</span>(<span class="code-string">"EnemyContainer"</span>) <span class="code-keyword">as</span> <span class="code-class">Node2D</span>).<span class="code-func">add_child</span>(enemy)
     enemy_spawned.<span class="code-func">emit</span>(enemy)
 
-    <span class="code-keyword">if</span> <span class="code-keyword">not</span> _spawn_queue.<span class="code-func">is_empty</span>():
-        _spawn_timer.<span class="code-func">start</span>(spawn_interval)
+
+<span class="code-keyword">func</span> <span class="code-func">_get_spawn_position</span>() -> <span class="code-class">Vector2</span>:
+    <span class="code-comment"># 用视口可见区域尺寸（拉伸后逻辑坐标 480×854），随机 X，从屏幕上方进入</span>
+    <span class="code-keyword">var</span> viewport_size := <span class="code-func">get_viewport</span>().<span class="code-func">get_visible_rect</span>().size
+    <span class="code-keyword">var</span> x := <span class="code-func">randf_range</span>(<span class="code-number">40.0</span>, viewport_size.x - <span class="code-number">40.0</span>)
+    <span class="code-keyword">return</span> <span class="code-class">Vector2</span>(x, <span class="code-number">-30.0</span>)
 
 
-<span class="code-keyword">func</span> <span class="code-func">_on_enemy_died</span>() -> <span class="code-type">void</span>:
-    _enemies_alive -= <span class="code-number">1</span>
-    <span class="code-keyword">if</span> _enemies_alive <= <span class="code-number">0</span> <span class="code-keyword">and not</span> _spawning:
-        wave_cleared.<span class="code-func">emit</span>(current_wave)
-        _wave_timer.<span class="code-func">start</span>(wave_interval)
-
-
-<span class="code-keyword">func</span> <span class="code-func">_on_wave_timer_timeout</span>() -> <span class="code-type">void</span>:
-    <span class="code-func">_start_next_wave</span>()
+<span class="code-keyword">func</span> <span class="code-func">_on_enemy_died</span>(_pos: <span class="code-class">Vector2</span>, _score: <span class="code-type">int</span>) -> <span class="code-type">void</span>:
+    _enemies_remaining -= <span class="code-number">1</span>
 </pre>
             </div>
             <div class="tip-box info">
                 <i class="fas fa-database"></i>
                 <div class="tip-content">
-                    <h4>数据驱动的优势</h4>
-                    <p>波次配置是纯数据（Dictionary 数组），无需修改脚本逻辑即可调整难度曲线。未来可从 JSON / CSV 加载，甚至实现用户自定义关卡编辑器。</p>
+                    <h4>数据驱动 + 程序化生成</h4>
+                    <p>10 波配置全在 <code>WAVE_CONFIGS</code> 常量里（每项含敌人组合、生成间隔、节奏标签），<code>_physics_process</code> 用一个 float 计时器累减触发生成，调难度只改数据、不改逻辑。敌人在屏幕上方随机 X 进入（<strong>没有 Path2D / PathFollow2D</strong>），并按 <code>_intensity_multiplier</code> 缩放速度与分值；通关后 <code>reset_and_intensify()</code> 提高乘数循环增难。</p>
                 </div>
             </div>
         </div>
@@ -498,45 +543,77 @@
                     </div>
                     <span class="code-lang">GDScript</span>
                 </div>
-<pre><span class="code-comment">## 快速敌人 —— 黄色菱形</span>
-<span class="code-comment">## 行为：高速下降 + 追踪玩家 X 轴，制造压迫感</span>
-<span class="code-keyword">extends</span> <span class="code-string">"res://scripts/enemy_base.gd"</span>
+<pre><span class="code-comment"># ───── enemy_base.gd（基类，节选）：定义"敌人"这一类型与通用行为 ─────</span>
+<span class="code-keyword">extends</span> <span class="code-class">Area2D</span>
+<span class="code-keyword">class_name</span> <span class="code-class">EnemyBase</span>
 
-<span class="code-keyword">@export</span> <span class="code-keyword">var</span> speed: <span class="code-type">float</span> = <span class="code-number">180.0</span>
-<span class="code-keyword">@export</span> <span class="code-keyword">var</span> track_strength: <span class="code-type">float</span> = <span class="code-number">0.6</span>  <span class="code-comment">## X轴追踪强度（0=不追踪, 1=完全锁定）</span>
+<span class="code-keyword">signal</span> <span class="code-signal">died</span>(position: <span class="code-class">Vector2</span>, score_value: <span class="code-type">int</span>)
 
-<span class="code-keyword">@onready</span> <span class="code-keyword">var</span> _player: <span class="code-class">Node2D</span> = <span class="code-func">get_tree</span>().<span class="code-func">get_first_node_in_group</span>(<span class="code-string">"player"</span>)
+<span class="code-keyword">@export</span> <span class="code-keyword">var</span> max_health: <span class="code-type">int</span> = <span class="code-number">1</span>
+<span class="code-keyword">@export</span> <span class="code-keyword">var</span> speed: <span class="code-type">float</span> = <span class="code-number">100.0</span>
+<span class="code-keyword">@export</span> <span class="code-keyword">var</span> score_value: <span class="code-type">int</span> = <span class="code-number">100</span>
+<span class="code-keyword">@export</span> <span class="code-keyword">var</span> can_shoot: <span class="code-type">bool</span> = <span class="code-keyword">false</span>
 
-
-<span class="code-keyword">func</span> <span class="code-func">_ready</span>() -> <span class="code-type">void</span>:
-    <span class="code-keyword">super</span>.<span class="code-func">_ready</span>()
-    health = <span class="code-number">2</span>
-    score_value = <span class="code-number">20</span>
-    <span class="code-keyword">if</span> _player == <span class="code-keyword">null</span>:
-        <span class="code-func">push_warning</span>(<span class="code-string">"FastEnemy: 未找到玩家节点，将执行直线下降"</span>)
+<span class="code-keyword">var</span> _move_direction: <span class="code-class">Vector2</span> = <span class="code-class">Vector2</span>.<span class="code-func">DOWN</span>
 
 
 <span class="code-keyword">func</span> <span class="code-func">_physics_process</span>(delta: <span class="code-type">float</span>) -> <span class="code-type">void</span>:
-    <span class="code-keyword">var</span> velocity := <span class="code-class">Vector2</span>.<span class="code-func">DOWN</span> * speed
+    <span class="code-func">_update_ai</span>(delta)                          <span class="code-comment"># 由子类覆盖，决定移动方向</span>
+    position += _move_direction * speed * delta
+    <span class="code-comment"># …射击 / 出界检测略…</span>
 
-    <span class="code-keyword">if</span> _player != <span class="code-keyword">null</span>:
-        <span class="code-comment">## 计算朝向玩家 X 方向的水平偏移</span>
-        <span class="code-keyword">var</span> diff_x := _player.global_position.x - global_position.x
-        <span class="code-keyword">var</span> track_x := <span class="code-func">sign</span>(diff_x) * <span class="code-func">min</span>(<span class="code-func">abs</span>(diff_x), speed * track_strength)
-        velocity.x = track_x
 
-    <span class="code-func">move_and_collide</span>(velocity * delta)
+<span class="code-comment"># 默认 AI：直线向下。子类覆盖此方法做差异化行为</span>
+<span class="code-keyword">func</span> <span class="code-func">_update_ai</span>(_delta: <span class="code-type">float</span>) -> <span class="code-type">void</span>:
+    _move_direction = <span class="code-class">Vector2</span>.<span class="code-func">DOWN</span>
 
-    <span class="code-comment">## 越界清理</span>
-    <span class="code-keyword">if</span> global_position.y > <span class="code-func">get_viewport_rect</span>().<span class="code-func">size</span>.y + <span class="code-number">50</span>:
-        <span class="code-func">queue_free</span>()
+
+<span class="code-keyword">func</span> <span class="code-func">take_damage</span>(amount: <span class="code-type">int</span> = <span class="code-number">1</span>) -> <span class="code-type">void</span>:
+    _current_health -= amount
+    _flash_white()
+    <span class="code-keyword">if</span> _current_health <= <span class="code-number">0</span>:
+        <span class="code-func">_die</span>()  <span class="code-comment"># 加分 + 爆炸 + 震动 + emit died()</span>
+
+
+<span class="code-comment"># ───── enemy_fast.gd（子类）：黄色菱形，追踪玩家 X，不射击 ─────</span>
+<span class="code-keyword">extends</span> <span class="code-class">EnemyBase</span>
+
+<span class="code-keyword">var</span> _player: <span class="code-class">Node2D</span> = <span class="code-keyword">null</span>
+
+
+<span class="code-comment"># 在 _ready 里覆盖基类导出的数值，再调 super._ready()</span>
+<span class="code-keyword">func</span> <span class="code-func">_ready</span>() -> <span class="code-type">void</span>:
+    max_health = <span class="code-number">1</span>
+    speed = <span class="code-number">220.0</span>
+    score_value = <span class="code-number">200</span>
+    can_shoot = <span class="code-keyword">false</span>
+    <span class="code-keyword">super</span>.<span class="code-func">_ready</span>()
+    _player = <span class="code-func">_find_player</span>()
+
+
+<span class="code-comment"># 覆盖 AI：朝玩家 X 缓慢偏移（clampf 限幅，避免"瞬移"锁定）</span>
+<span class="code-keyword">func</span> <span class="code-func">_update_ai</span>(_delta: <span class="code-type">float</span>) -> <span class="code-type">void</span>:
+    <span class="code-keyword">var</span> target_x := global_position.x
+    <span class="code-keyword">if</span> _player != <span class="code-keyword">null</span> <span class="code-keyword">and</span> <span class="code-func">is_instance_valid</span>(_player):
+        target_x = _player.global_position.x
+    <span class="code-keyword">var</span> diff_x := target_x - global_position.x
+    <span class="code-keyword">var</span> move_x := <span class="code-func">clampf</span>(diff_x * <span class="code-number">0.02</span>, <span class="code-number">-0.8</span>, <span class="code-number">0.8</span>)
+    _move_direction = <span class="code-class">Vector2</span>(move_x, <span class="code-number">1.0</span>).<span class="code-func">normalized</span>()
+
+
+<span class="code-keyword">func</span> <span class="code-func">_find_player</span>() -> <span class="code-class">Node2D</span>:
+    <span class="code-keyword">var</span> main := <span class="code-func">get_tree</span>().current_scene
+    <span class="code-keyword">for</span> child <span class="code-keyword">in</span> main.<span class="code-func">get_children</span>():
+        <span class="code-keyword">if</span> child.<span class="code-func">is_in_group</span>(<span class="code-string">"player"</span>):
+            <span class="code-keyword">return</span> child
+    <span class="code-keyword">return</span> <span class="code-keyword">null</span>
 </pre>
             </div>
             <div class="tip-box warning">
                 <i class="fas fa-bolt"></i>
                 <div class="tip-content">
-                    <h4>AI 设计细节</h4>
-                    <p><code>track_strength</code> 使用 <code>min(abs(diff_x), speed * track_strength)</code> 限制最大水平速度，避免敌人"瞬移"到玩家正上方。这种"有延迟的追踪"比直接锁定坐标更具可玩性。</p>
+                    <h4>继承定义类型，子类覆盖 AI</h4>
+                    <p><code>EnemyBase</code>（<code>class_name</code> 注册全局类型）封装移动/受伤/死亡/加分等通用逻辑，并暴露一个待覆盖的 <code>_update_ai()</code>。三种敌人都 <code>extends EnemyBase</code>，只在 <code>_ready</code> 覆盖 <code>max_health/speed/score_value</code> 等数值、并覆盖 <code>_update_ai</code> 写各自行为：快速敌人用 <code>clampf(diff_x*0.02, -0.8, 0.8)</code> 做"有延迟的追踪"，比直接锁定坐标更耐玩。</p>
                 </div>
             </div>
         </div>
@@ -550,475 +627,175 @@
                     </div>
                     <span class="code-lang">GDScript</span>
                 </div>
-<pre><span class="code-comment">## 玩家控制 + HurtBox 碰撞架构</span>
+<pre><span class="code-comment"># 玩家飞机控制：移动 + 自动/手动射击 + HurtBox 单一伤害裁决 + 无敌帧</span>
 <span class="code-keyword">extends</span> <span class="code-class">CharacterBody2D</span>
 
-<span class="code-keyword">signal</span> <span class="code-signal">died</span>()
+<span class="code-keyword">signal</span> <span class="code-signal">died</span>
 
-<span class="code-keyword">@export</span> <span class="code-keyword">var</span> move_speed: <span class="code-type">float</span> = <span class="code-number">300.0</span>
-<span class="code-keyword">@export</span> <span class="code-keyword">var</span> fire_rate: <span class="code-type">float</span> = <span class="code-number">0.15</span>  <span class="code-comment">## 射击间隔（秒）</span>
-<span class="code-keyword">@export</span> <span class="code-keyword">var</span> invincible_time: <span class="code-type">float</span> = <span class="code-number">1.5</span>
+<span class="code-keyword">const</span> <span class="code-export">BULLET_SCENE</span>: <span class="code-type">PackedScene</span> = <span class="code-keyword">preload</span>(<span class="code-string">"res://scenes/player_bullet.tscn"</span>)
 
-<span class="code-keyword">const</span> <span class="code-export">BULLET_SCENE</span> := <span class="code-keyword">preload</span>(<span class="code-string">"res://scenes/player_bullet.tscn"</span>)
+<span class="code-keyword">@export</span> <span class="code-keyword">var</span> speed: <span class="code-type">float</span> = <span class="code-number">350.0</span>
+<span class="code-keyword">@export</span> <span class="code-keyword">var</span> shoot_interval: <span class="code-type">float</span> = <span class="code-number">0.15</span>
+<span class="code-keyword">@export</span> <span class="code-keyword">var</span> invincible_duration: <span class="code-type">float</span> = <span class="code-number">2.0</span>
 
-<span class="code-keyword">var</span> _can_fire: <span class="code-type">bool</span> = <span class="code-keyword">true</span>
 <span class="code-keyword">var</span> _is_invincible: <span class="code-type">bool</span> = <span class="code-keyword">false</span>
 
-<span class="code-keyword">@onready</span> <span class="code-keyword">var</span> _muzzle: <span class="code-class">Marker2D</span> = $<span class="code-string">"Muzzle"</span>
-<span class="code-keyword">@onready</span> <span class="code-keyword">var</span> _hurt_box: <span class="code-class">Area2D</span> = $<span class="code-string">"HurtBox"</span>
-<span class="code-keyword">@onready</span> <span class="code-keyword">var</span> _sprite: <span class="code-class">Sprite2D</span> = $<span class="code-string">"Sprite2D"</span>
-<span class="code-keyword">@onready</span> <span class="code-keyword">var</span> _invincible_timer: <span class="code-class">Timer</span> = $<span class="code-string">"InvincibleTimer"</span>
-<span class="code-keyword">@onready</span> <span class="code-keyword">var</span> _fire_timer: <span class="code-class">Timer</span> = <span class="code-class">Timer</span>.<span class="code-func">new</span>()
+<span class="code-keyword">@onready</span> <span class="code-keyword">var</span> sprite: <span class="code-class">Polygon2D</span> = $Polygon2D
+<span class="code-keyword">@onready</span> <span class="code-keyword">var</span> hurtbox: <span class="code-class">Area2D</span> = $HurtBox
+<span class="code-keyword">@onready</span> <span class="code-keyword">var</span> muzzle: <span class="code-class">Marker2D</span> = $Muzzle
+<span class="code-keyword">@onready</span> <span class="code-keyword">var</span> collision_shape: <span class="code-class">CollisionShape2D</span> = $CollisionShape2D
+<span class="code-keyword">@onready</span> <span class="code-keyword">var</span> shoot_timer: <span class="code-class">Timer</span> = $ShootTimer
+<span class="code-keyword">@onready</span> <span class="code-keyword">var</span> invincible_timer: <span class="code-class">Timer</span> = $InvincibleTimer
+<span class="code-keyword">@onready</span> <span class="code-keyword">var</span> blink_timer: <span class="code-class">Timer</span> = $BlinkTimer
 
 
 <span class="code-keyword">func</span> <span class="code-func">_ready</span>() -> <span class="code-type">void</span>:
-    <span class="code-func">add_to_group</span>(<span class="code-string">"player"</span>)
-
-    <span class="code-comment">## 初始化射击计时器</span>
-    _fire_timer.one_shot = <span class="code-keyword">true</span>
-    _fire_timer.timeout.<span class="code-func">connect</span>(<span class="code-func">_on_fire_timer_timeout</span>)
-    <span class="code-func">add_child</span>(_fire_timer)
-
-    <span class="code-comment">## HurtBox 碰撞信号连接</span>
-    _hurt_box.area_entered.<span class="code-func">connect</span>(<span class="code-func">_on_hurt_box_entered</span>)
-    _invincible_timer.timeout.<span class="code-func">connect</span>(<span class="code-func">_on_invincible_timeout</span>)
+    shoot_timer.wait_time = shoot_interval
+    shoot_timer.timeout.<span class="code-func">connect</span>(<span class="code-func">_on_shoot_timer_timeout</span>)
+    shoot_timer.<span class="code-func">start</span>()
+    invincible_timer.timeout.<span class="code-func">connect</span>(<span class="code-func">_end_invincibility</span>)
+    blink_timer.timeout.<span class="code-func">connect</span>(<span class="code-func">_toggle_blink</span>)
+    <span class="code-comment"># 约定：碰撞信号一律在 _ready 代码里连，不在 .tscn 连，避免双重连接</span>
+    hurtbox.area_entered.<span class="code-func">connect</span>(<span class="code-func">_on_hurtbox_area_entered</span>)
+    hurtbox.body_entered.<span class="code-func">connect</span>(<span class="code-func">_on_hurtbox_body_entered</span>)
+    <span class="code-func">_start_invincibility</span>()  <span class="code-comment"># 出生即 2s 无敌</span>
 
 
 <span class="code-keyword">func</span> <span class="code-func">_physics_process</span>(_delta: <span class="code-type">float</span>) -> <span class="code-type">void</span>:
-    <span class="code-keyword">var</span> input := <span class="code-class">Input</span>.<span class="code-func">get_vector</span>(<span class="code-string">"ui_left"</span>, <span class="code-string">"ui_right"</span>, <span class="code-string">"ui_up"</span>, <span class="code-string">"ui_down"</span>)
-    velocity = input * move_speed
+    <span class="code-keyword">var</span> input_direction := <span class="code-class">Input</span>.<span class="code-func">get_vector</span>(<span class="code-string">"move_left"</span>, <span class="code-string">"move_right"</span>, <span class="code-string">"move_up"</span>, <span class="code-string">"move_down"</span>)
+    velocity = input_direction * speed
     <span class="code-func">move_and_slide</span>()
-
-    <span class="code-comment">## 限制在屏幕范围内</span>
-    <span class="code-keyword">var</span> screen := <span class="code-func">get_viewport_rect</span>().<span class="code-func">size</span>
-    global_position.x = <span class="code-func">clamp</span>(global_position.x, <span class="code-number">20</span>, screen.x - <span class="code-number">20</span>)
-    global_position.y = <span class="code-func">clamp</span>(global_position.y, <span class="code-number">20</span>, screen.y - <span class="code-number">20</span>)
-
-    <span class="code-comment">## 自动射击（按住空格或自动）</span>
-    <span class="code-keyword">if</span> <span class="code-class">Input</span>.<span class="code-func">is_action_pressed</span>(<span class="code-string">"ui_accept"</span>) <span class="code-keyword">or</span> <span class="code-class">Input</span>.<span class="code-func">is_action_pressed</span>(<span class="code-string">"shoot"</span>):
-        <span class="code-func">_try_fire</span>()
+    <span class="code-func">_clamp_to_screen</span>()
 
 
-<span class="code-keyword">func</span> <span class="code-func">_try_fire</span>() -> <span class="code-type">void</span>:
-    <span class="code-keyword">if not</span> _can_fire:
-        <span class="code-keyword">return</span>
-    _can_fire = <span class="code-keyword">false</span>
-    _fire_timer.<span class="code-func">start</span>(fire_rate)
-
-    <span class="code-keyword">var</span> bullet := <span class="code-export">BULLET_SCENE</span>.<span class="code-func">instantiate</span>() <span class="code-keyword">as</span> <span class="code-class">Area2D</span>
-    bullet.global_position = _muzzle.global_position
-    <span class="code-func">get_tree</span>().root.<span class="code-func">get_node</span>(<span class="code-string">"Main/BulletContainer"</span>).<span class="code-func">add_child</span>(bullet)
+<span class="code-comment"># 手动射击：按下 "shoot"(空格) 立即发一发，与 ShootTimer 自动射击并存</span>
+<span class="code-keyword">func</span> <span class="code-func">_input</span>(event: <span class="code-class">InputEvent</span>) -> <span class="code-type">void</span>:
+    <span class="code-keyword">if</span> event.<span class="code-func">is_action_pressed</span>(<span class="code-string">"shoot"</span>):
+        <span class="code-func">_shoot</span>()
 
 
-<span class="code-keyword">func</span> <span class="code-func">_on_hurt_box_entered</span>(area: <span class="code-class">Area2D</span>) -> <span class="code-type">void</span>:
+<span class="code-keyword">func</span> <span class="code-func">_on_shoot_timer_timeout</span>() -> <span class="code-type">void</span>:
+    <span class="code-func">_shoot</span>()
+
+
+<span class="code-comment"># ── 碰撞处理：HurtBox 是唯一的伤害裁决者 ──</span>
+<span class="code-keyword">func</span> <span class="code-func">_on_hurtbox_area_entered</span>(area: <span class="code-class">Area2D</span>) -> <span class="code-type">void</span>:
     <span class="code-keyword">if</span> _is_invincible:
         <span class="code-keyword">return</span>
-
-    <span class="code-comment">## 通过 Area 的 collision_layer 判断伤害来源类型</span>
-    <span class="code-keyword">if</span> area.<span class="code-func">get_collision_layer_value</span>(<span class="code-number">4</span>):  <span class="code-comment">## EnemyBullet</span>
-        area.<span class="code-func">get_parent</span>().<span class="code-func">queue_free</span>()  <span class="code-comment">## 销毁子弹</span>
-
-    <span class="code-func">_take_damage</span>()
-
-
-<span class="code-keyword">func</span> <span class="code-func">_take_damage</span>() -> <span class="code-type">void</span>:
-    <span class="code-class">GameManager</span>.<span class="code-func">take_damage</span>(<span class="code-number">1</span>)
-    <span class="code-func">_start_invincible</span>()
-    <span class="code-func">get_tree</span>().root.<span class="code-func">get_node</span>(<span class="code-string">"Main/Camera2D"</span>).<span class="code-func">shake</span>(<span class="code-number">0.3</span>, <span class="code-number">15</span>)
-
-    <span class="code-keyword">if</span> <span class="code-class">GameManager</span>.health <= <span class="code-number">0</span>:
+    <span class="code-keyword">if</span> area.<span class="code-func">is_in_group</span>(<span class="code-string">"enemies"</span>) <span class="code-keyword">or</span> area.<span class="code-func">is_in_group</span>(<span class="code-string">"enemy_bullets"</span>):
         <span class="code-func">_die</span>()
 
 
-<span class="code-keyword">func</span> <span class="code-func">_start_invincible</span>() -> <span class="code-type">void</span>:
+<span class="code-keyword">func</span> <span class="code-func">_on_hurtbox_body_entered</span>(body: <span class="code-class">Node2D</span>) -> <span class="code-type">void</span>:
+    <span class="code-keyword">if</span> _is_invincible:
+        <span class="code-keyword">return</span>
+    <span class="code-keyword">if</span> body.<span class="code-func">is_in_group</span>(<span class="code-string">"enemies"</span>):
+        <span class="code-func">_die</span>()
+
+
+<span class="code-comment"># ── 无敌帧：关闭 HurtBox 监听 + 禁用机体碰撞 + 闪烁 ──</span>
+<span class="code-keyword">func</span> <span class="code-func">_start_invincibility</span>() -> <span class="code-type">void</span>:
     _is_invincible = <span class="code-keyword">true</span>
-    _hurt_box.<span class="code-func">set_deferred</span>(<span class="code-string">"monitoring"</span>, <span class="code-keyword">false</span>)
-    _invincible_timer.<span class="code-func">start</span>(invincible_time)
-
-    <span class="code-comment">## 无敌闪烁效果（通过 Tween 实现）</span>
-    <span class="code-keyword">var</span> tween := <span class="code-func">create_tween</span>()
-    tween.<span class="code-func">tween_property</span>(_sprite, <span class="code-string">"modulate:a"</span>, <span class="code-number">0.3</span>, <span class="code-number">0.1</span>)
-    tween.<span class="code-func">tween_property</span>(_sprite, <span class="code-string">"modulate:a"</span>, <span class="code-number">1.0</span>, <span class="code-number">0.1</span>)
-    tween.<span class="code-func">set_loops</span>(<span class="code-func">int</span>(invincible_time / <span class="code-number">0.2</span>))
+    hurtbox.monitoring = <span class="code-keyword">false</span>
+    collision_shape.<span class="code-func">set_deferred</span>(<span class="code-string">"disabled"</span>, <span class="code-keyword">true</span>)
+    invincible_timer.<span class="code-func">start</span>(invincible_duration)
+    blink_timer.<span class="code-func">start</span>(<span class="code-number">0.1</span>)
 
 
-<span class="code-keyword">func</span> <span class="code-func">_on_invincible_timeout</span>() -> <span class="code-type">void</span>:
+<span class="code-keyword">func</span> <span class="code-func">_end_invincibility</span>() -> <span class="code-type">void</span>:
     _is_invincible = <span class="code-keyword">false</span>
-    _hurt_box.<span class="code-func">set_deferred</span>(<span class="code-string">"monitoring"</span>, <span class="code-keyword">true</span>)
-    _sprite.modulate.a = <span class="code-number">1.0</span>
+    hurtbox.monitoring = <span class="code-keyword">true</span>
+    collision_shape.<span class="code-func">set_deferred</span>(<span class="code-string">"disabled"</span>, <span class="code-keyword">false</span>)
+    blink_timer.<span class="code-func">stop</span>()
+    sprite.visible = <span class="code-keyword">true</span>
 
 
-<span class="code-keyword">func</span> <span class="code-func">_die</span>() -> <span class="code-type">void</span>:
-    <span class="code-comment">## 实例化爆炸特效</span>
-    <span class="code-keyword">var</span> explosion := <span class="code-keyword">preload</span>(<span class="code-string">"res://scenes/explosion.tscn"</span>).<span class="code-func">instantiate</span>()
-    explosion.global_position = global_position
-    <span class="code-func">get_tree</span>().root.<span class="code-func">get_node</span>(<span class="code-string">"Main"</span>).<span class="code-func">add_child</span>(explosion)
-    died.<span class="code-func">emit</span>()
-    <span class="code-func">queue_free</span>()
-
-
-<span class="code-keyword">func</span> <span class="code-func">_on_fire_timer_timeout</span>() -> <span class="code-type">void</span>:
-    _can_fire = <span class="code-keyword">true</span>
+<span class="code-keyword">func</span> <span class="code-func">_toggle_blink</span>() -> <span class="code-type">void</span>:
+    sprite.visible = <span class="code-keyword">not</span> sprite.visible
 </pre>
             </div>
             <div class="tip-box success">
                 <i class="fas fa-shield-alt"></i>
                 <div class="tip-content">
-                    <h4>HurtBox 架构说明</h4>
-                    <p>玩家身上只有 <code>HurtBox</code>（Area2D，检测受伤），没有 <code>HitBox</code>（因为子弹是独立场景）。敌人身上同时拥有 <code>HitBox</code>（造成伤害）和 <code>HurtBox</code>（接受伤害）。这种拆分让"谁打谁"的逻辑完全由碰撞矩阵决定，极大降低了耦合度。</p>
+                    <h4>HurtBox 单一裁决者 + 无敌帧</h4>
+                    <p>玩家身上只有 <code>HurtBox</code>（Area2D）。是否受伤<strong>只</strong>在 <code>_on_hurtbox_area_entered</code> / <code>_on_hurtbox_body_entered</code> 里判定，且先检查 <code>_is_invincible</code>——伤害只有一个权威来源。无敌期间同时关闭 <code>hurtbox.monitoring</code> 与机体 <code>CollisionShape2D</code> 并用 <code>BlinkTimer</code> 闪烁；出生即 2s 无敌。<strong>手动射击</strong>（<code>_input</code> 读 "shoot"）与 <strong>ShootTimer 自动射击</strong>（0.15s）并存，按键不会因 echo 连发。</p>
                 </div>
             </div>
         </div>
     </section>
 
 
-    <!-- 开发流程 -->
-    <section id="process" class="section">
+    <!-- AI 辅助开发流程复盘 -->
+    <section id="ai-flow" class="section">
         <div class="section-header">
-            <div class="section-tag">Process</div>
-            <h2 class="section-title">开发流程</h2>
-            <p class="section-desc">按 7 个阶段循序渐进，每一阶段都有明确的交付物与验证标准，适合跟随教程复现。</p>
+            <div class="section-tag">AI Workflow</div>
+            <h2 class="section-title">AI 辅助开发流程复盘</h2>
+            <p class="section-desc">本项目的立身之本：把 AI 当结对编程伙伴，配合"跑起来才算数"的三层验证，记录真实命中的 AI 易错点与修复策略。</p>
         </div>
 
-        <div class="timeline">
-            <div class="timeline-item completed">
-                <div class="timeline-dot"></div>
-                <div class="timeline-title">Phase 1：项目搭建与输入系统</div>
-                <div class="timeline-body">
-                    <p>创建空项目，配置 <code>project.godot</code>：窗口分辨率 480×720（竖屏）、拉伸模式 <code>canvas_items</code>、输入映射（WASD + 空格）。建立文件夹结构 <code>scenes/</code>、<code>scripts/</code>、<code>assets/</code>。</p>
-                    <ul class="feature-list">
-                        <li>设置渲染 → 纹理滤镜为 Nearest（像素风兼容）</li>
-                        <li>输入映射：<code>move_left/right/up/down</code>、<code>shoot</code></li>
-                        <li>版本控制初始化（Git + <code>.gitignore</code> 排除 <code>.godot/</code>）</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="timeline-item completed">
-                <div class="timeline-dot"></div>
-                <div class="timeline-title">Phase 2：玩家移动与射击</div>
-                <div class="timeline-body">
-                    <p>创建 <code>player.tscn</code>，使用 <code>CharacterBody2D</code> 作为根节点。实现 <code>Input.get_vector()</code> 移动、边界限制、按空格发射子弹。子弹使用 <code>Area2D</code> 向上飞行，越界自毁。</p>
-                    <ul class="feature-list">
-                        <li><code>@onready</code> 懒加载 <code>Marker2D</code> 作为发射口</li>
-                        <li>子弹容器统一挂在 <code>Main/BulletContainer</code> 下，避免场景树杂乱</li>
-                        <li>用 <code>Timer</code> 控制射击间隔，防止单帧连发</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="timeline-item completed">
-                <div class="timeline-dot"></div>
-                <div class="timeline-title">Phase 3：敌人基类与碰撞系统</div>
-                <div class="timeline-body">
-                    <p>设计 <code>enemy_base.gd</code> 抽象基类，定义 <code>health</code>、<code>speed</code>、<code>score_value</code> 与 <code>died</code> 信号。配置物理 Layer/Mask，建立 HurtBox/HitBox 双层碰撞架构。</p>
-                    <ul class="feature-list">
-                        <li>基类使用 <code>class_name EnemyBase</code> 注册全局类型</li>
-                        <li>HurtBox（Layer=3, Mask=2）接受玩家子弹</li>
-                        <li>HitBox（Layer=4, Mask=1）用于敌人子弹击中玩家</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="timeline-item completed">
-                <div class="timeline-dot"></div>
-                <div class="timeline-title">Phase 4：3 种敌人 AI 差异化</div>
-                <div class="timeline-body">
-                    <p>继承 <code>EnemyBase</code> 实现三种行为：基础敌人（正弦波 + 直线）、快速敌人（追踪 X 轴）、坦克敌人（慢速 + 3 连发散弹）。每种敌人使用独立的 <code>.tscn</code> 场景文件。</p>
-                    <ul class="feature-list">
-                        <li>基础敌人：<code>sin(Time.get_time_dict_from_system().second)</code> 做横向摆动</li>
-                        <li>快速敌人：通过 <code>get_tree().get_first_node_in_group("player")</code> 获取目标</li>
-                        <li>坦克敌人：每 2 秒发射 3 颗呈扇形分布的子弹，角度间隔 15°</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="timeline-item completed">
-                <div class="timeline-dot"></div>
-                <div class="timeline-title">Phase 5：波次管理系统</div>
-                <div class="timeline-body">
-                    <p>编写 <code>wave_manager.gd</code>，用 Dictionary 数组配置 10 波敌人数量。实现 <code>Path2D + PathFollow2D</code> 的随机生成位置，波次清空后自动进入下一波。</p>
-                    <ul class="feature-list">
-                        <li>打乱生成队列 <code>_spawn_queue.shuffle()</code>，避免固定模式</li>
-                        <li>信号：<code>wave_started</code>、<code>wave_cleared</code> 通知 UI 与粒子系统</li>
-                        <li>难度递增：敌人数量、生成间隔、种类混合度同步提升</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="timeline-item completed">
-                <div class="timeline-dot"></div>
-                <div class="timeline-title">Phase 6：UI 系统与状态机</div>
-                <div class="timeline-body">
-                    <p>构建三套 UI 场景：主菜单（开始/退出）、HUD（分数/生命/波次）、游戏结束（评级/重试）。使用 <code>CanvasLayer</code> 确保 UI 不受摄像机变换影响。</p>
-                    <ul class="feature-list">
-                        <li>HUD 通过监听 <code>GameManager.score_changed</code> 自动更新</li>
-                        <li>游戏状态机：<code>MENU → PLAYING → PAUSED → GAME_OVER</code></li>
-                        <li>评级算法根据最终分数映射 S/A/B/C/D 五档</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="timeline-item completed">
-                <div class="timeline-dot"></div>
-                <div class="timeline-title">Phase 7：特效与打磨</div>
-                <div class="timeline-body">
-                    <p>添加死亡爆炸粒子（<code>GPUParticles2D</code>）、摄像机震动（<code>Camera2D.offset</code> Tween）、玩家受伤无敌闪烁。调整手感参数（移速、射速、敌速），进行 30 分钟试玩测试。</p>
-                    <ul class="feature-list">
-                        <li>爆炸粒子：颜色从黄到红渐变，生命周期 0.4s，爆发 20 颗</li>
-                        <li>摄像机震动：随机偏移 <code>Vector2(randf_range(-shake, shake), ...)</code></li>
-                        <li>无敌闪烁：Tween 循环修改 <code>modulate:a</code>，结束后恢复碰撞</li>
-                    </ul>
-                </div>
+        <div class="tip-box info">
+            <i class="fas fa-handshake"></i>
+            <div class="tip-content">
+                <h4>定位：AI 是结对伙伴，不是甩手掌柜</h4>
+                <p>人负责定方向——选竖版 shmup 品类、拆分层目标、定验收标准、敲定架构与接口；AI 负责出架构草案、生成 GDScript、写数据驱动的波次配置、起草文档。但所有产物都要经过<strong>人工审阅 → 跑起来验证 → 调参</strong>三道关卡才算数。AI 提速的是"打字"，把不住的是"对错"，后者必须由人和运行结果来兜底。</p>
             </div>
         </div>
-    </section>
 
-    <!-- 开发规范详解 -->
-    <section id="standards" class="section">
-        <div class="section-header">
-            <div class="section-tag">Standards</div>
-            <h2 class="section-title">开发规范详解</h2>
-            <p class="section-desc">本项目遵循的 8 条 GDScript 开发规范，确保代码在团队协作与长期维护中的可读性。</p>
+        <div class="card-grid">
+            <div class="card">
+                <div class="card-icon"><i class="fas fa-file-import"></i></div>
+                <h3>第 ① 层：导入解析</h3>
+                <p><code>godot --headless --import</code>。先让引擎解析全部脚本与场景，揪出语法错误、类型不匹配、<code>preload</code> 路径失效等"连编译都过不了"的问题。最快、最便宜的一关。</p>
+            </div>
+            <div class="card">
+                <div class="card-icon warning"><i class="fas fa-terminal"></i></div>
+                <h3>第 ② 层：headless 跑帧</h3>
+                <p>headless 模式自动开局、跑数百帧，专抓<strong>运行时</strong>错误（空引用、信号重复连接、暂停态卡死）。关键经验：只在菜单静置发现不了 bug，必须真正进入战斗循环。</p>
+            </div>
+            <div class="card">
+                <div class="card-icon success"><i class="fas fa-eye"></i></div>
+                <h3>第 ③ 层：渲染截帧</h3>
+                <p>非 headless 真实渲染跑 + 截帧，肉眼确认画面、HUD、手感。代码"看起来对"≠"跑起来对"，最终还得人眼过一遍画面与体验。</p>
+            </div>
         </div>
 
-        <div class="table-wrap">
-            <table>
-                <thead>
-                    <tr>
-                        <th style="width: 140px;">规范项</th>
-                        <th style="width: 220px;">规则</th>
-                        <th>代码示例</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><strong>渐进式类型</strong></td>
-                        <td>关键变量显式标注类型，循环变量可推导</td>
-                        <td><code>var health: int = 3</code> ✓<br><code>var i := 0</code>（循环内）✓</td>
-                    </tr>
-                    <tr>
-                        <td><strong>@onready 懒加载</strong></td>
-                        <td>节点引用延迟到 _ready，避免空引用</td>
-                        <td><code>@onready var _sprite: Sprite2D = $"Sprite2D"</code></td>
-                    </tr>
-                    <tr>
-                        <td><strong>@export 配置</strong></td>
-                        <td>需要美术/策划调整的参数暴露到 Inspector</td>
-                        <td><code>@export var speed: float = 100.0</code></td>
-                    </tr>
-                    <tr>
-                        <td><strong>信号命名</strong></td>
-                        <td>使用过去式，表示"已发生的事件"</td>
-                        <td><code>health_changed</code>、<code>enemy_died</code>、<code>wave_cleared</code></td>
-                    </tr>
-                    <tr>
-                        <td><strong>命名规范</strong></td>
-                        <td>类名 PascalCase，变量 snake_case，常量 UPPER_SNAKE_CASE</td>
-                        <td><code>class_name EnemyBase</code> / <code>var move_speed</code> / <code>const MAX_HEALTH</code></td>
-                    </tr>
-                    <tr>
-                        <td><strong>中文注释</strong></td>
-                        <td>所有注释与文档字符串使用中文</td>
-                        <td><code>## 计算朝向玩家 X 方向的水平偏移</code></td>
-                    </tr>
-                    <tr>
-                        <td><strong>组合优于继承</strong></td>
-                        <td>功能拆分为独立场景，通过节点树组合</td>
-                        <td>HurtBox、HitBox、Muzzle 均为独立子节点</td>
-                    </tr>
-                    <tr>
-                        <td><strong>AutoLoad 单例</strong></td>
-                        <td>全局状态由单例管理，避免节点互相引用</td>
-                        <td><code>GameManager.score += 10</code>（任何场景可访问）</td>
-                    </tr>
-                </tbody>
-            </table>
+        <div class="tip-box warning" style="margin-top: 2rem;">
+            <i class="fas fa-bug"></i>
+            <div class="tip-content">
+                <h4>本项目实测命中的 AI 典型易错点（这正是验证的价值）</h4>
+                <p>这些都是 AI 生成的初版代码里真实出现、并被三层验证逐一抓出来的问题：</p>
+                <ul class="feature-list">
+                    <li><strong>信号双重连接</strong>：信号在 <code>.tscn</code> 里连一次、脚本 <code>_ready</code> 又 <code>connect</code> 一次 → 运行时 "Signal already connected" 报错刷屏。</li>
+                    <li><strong>承诺了却没实现的"死键"</strong>：README/控制说明写了"空格手动射击"，但初版代码根本没读取该输入。</li>
+                    <li><strong>伤害逻辑分散两处</strong>：敌人子弹自己扣血 + 玩家 HurtBox 也扣血 → 无敌帧被绕过、一次碰撞双重扣血。</li>
+                    <li><strong>暂停态计时器照跑</strong>：暂停用 <code>get_tree().paused</code>，但 <code>await get_tree().create_timer()</code> 默认不受暂停影响 → 暂停时仍生成敌人 / 重生（修复：计时器第二参数传 <code>false</code>）。</li>
+                    <li><strong>取错视口尺寸</strong>：用 <code>get_tree().root.size</code>（窗口像素）而非视口逻辑尺寸，导致竖屏拉伸后坐标范围对不上。</li>
+                    <li><strong>文档与代码脱节</strong>：架构图 / 信号 / 碰撞分层 / 代码全凭想象——本页的前一版正是典型反面教材。</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="tip-box success" style="margin-top: 1.5rem;">
+            <i class="fas fa-wrench"></i>
+            <div class="tip-content">
+                <h4>修复策略</h4>
+                <p>① <strong>单一职责 / 单一裁决者</strong>：伤害只由玩家 HurtBox 决定，敌人子弹只负责自毁；② <strong>信号统一在 <code>_ready</code> 代码里连接</strong>，杜绝场景与代码重复连；③ <strong>删死代码</strong>（如未启用的 BulletBase 基类）；④ <strong>补齐承诺特性</strong>（手动射击）；⑤ <strong>暂停感知计时器</strong>（<code>create_timer(t, false)</code>）。</p>
+            </div>
         </div>
 
         <div class="tip-box info" style="margin-top: 1.5rem;">
-            <i class="fas fa-file-code"></i>
+            <i class="fas fa-lightbulb"></i>
             <div class="tip-content">
-                <h4>project.godot 中的 AutoLoad 配置</h4>
-                <p>在 <strong>项目 → 项目设置 → 自动加载</strong> 中添加：<code>GameManager</code> → <code>res://scripts/game_manager.gd</code>。勾选"启用"后，该脚本会在任何场景加载前自动实例化，并保持在场景切换时不被销毁。</p>
+                <h4>给后续开发者的建议</h4>
+                <ul class="feature-list">
+                    <li>把 AI 当伙伴：人把关架构与验收标准，AI 负责高速产出。</li>
+                    <li>一定要"跑起来验证"，不要只读代码——很多 bug 只有进入战斗循环才会暴露。</li>
+                    <li>headless 自动化跑可放进 CI，作为每次改动后的快速回归。</li>
+                    <li>写文档 / 画架构图必须对照真实代码生成与校对，否则只会得到"看起来很美"的误导。</li>
+                </ul>
             </div>
         </div>
     </section>
-
-    <!-- 扩展指南 -->
-    <section id="extension" class="section">
-        <div class="section-header">
-            <div class="section-tag">Extension</div>
-            <h2 class="section-title">扩展指南</h2>
-            <p class="section-desc">基于本项目的代码结构，向更复杂的游戏演进的四个方向。</p>
-        </div>
-
-        <div class="card-grid">
-            <div class="card">
-                <div class="card-icon"><i class="fas fa-plus-circle"></i></div>
-                <h3>添加新敌人类型</h3>
-                <p>① 新建 <code>enemy_xxx.tscn</code>，根节点继承 <code>EnemyBase</code>；② 在 <code>wave_manager.gd</code> 中 <code>preload</code> 新场景；③ 在 <code>wave_data</code> 的 Dictionary 中加入新键（如 <code>"sniper"</code>）；④ 实现 <code>_physics_process()</code> 定义独特移动/攻击逻辑。无需修改现有敌人代码。</p>
-            </div>
-            <div class="card">
-                <div class="card-icon success"><i class="fas fa-bolt"></i></div>
-                <h3>添加道具 / 升级系统</h3>
-                <p>① 创建 <code>powerup.tscn</code>（Area2D），掉落时进入 <code>PowerUp</code> 物理层；② 玩家 HurtBox 同时监听 Layer 6（道具）；③ 定义 <code>PowerUpType</code> 枚举：SHIELD、RAPID_FIRE、MISSILE；④ 在 <code>player.gd</code> 中处理拾取效果，用 Timer 控制持续时间。</p>
-            </div>
-            <div class="card">
-                <div class="card-icon warning"><i class="fas fa-dragon"></i></div>
-                <h3>添加 Boss 战</h3>
-                <p>① 新建 <code>boss.tscn</code>，继承 <code>EnemyBase</code> 但使用 <code>CharacterBody2D</code> 获得更精确的移动控制；② 设计阶段转换：入场 → 攻击模式A → 血量 60% 转模式B → 血量 30% 狂暴；③ 使用 <code>AnimationPlayer</code> 控制入场动画与攻击前摇；④ 在 <code>wave_data</code> 第 10 波替换为单一 Boss。</p>
-            </div>
-            <div class="card">
-                <div class="card-icon danger"><i class="fas fa-globe"></i></div>
-                <h3>导出到 Web / 移动端</h3>
-                <p><strong>Web：</strong>导出模板选择"Web"，注意单线程模式兼容性，禁用部分渲染特效（如复杂 Shader）。<strong>移动端：</strong>启用多点触控，用 <code>TouchScreenButton</code> 替换键盘输入，虚拟摇杆控制移动，右侧区域点击射击。调整 UI 锚点适配不同屏幕比例。</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- 资源链接 -->
-    <section id="resources" class="section">
-        <div class="section-header">
-            <div class="section-tag">Resources</div>
-            <h2 class="section-title">资源链接</h2>
-            <p class="section-desc">从入门到进阶，覆盖官方文档、社区教程与 AI 辅助工具。</p>
-        </div>
-
-        <div class="card-grid">
-            <a class="resource-card" href="https://docs.godotengine.org/zh-cn/4.x/" target="_blank" rel="noopener">
-                <div class="resource-icon"><i class="fas fa-book"></i></div>
-                <div>
-                    <h4>Godot 4.x 官方中文文档</h4>
-                    <p>最权威的学习资料，涵盖节点系统、GDScript、渲染管线与导出设置。</p>
-                    <div class="url">docs.godotengine.org/zh-cn/4.x</div>
-                </div>
-            </a>
-            <a class="resource-card" href="https://gdscript.com/" target="_blank" rel="noopener">
-                <div class="resource-icon"><i class="fas fa-code"></i></div>
-                <div>
-                    <h4>GDScript 风格指南</h4>
-                    <p>Godot 官方推荐的代码规范，涵盖命名、注释、类型注解与项目结构。</p>
-                    <div class="url">docs.godotengine.org/zh-cn/4.x/tutorials/scripting/gdscript</div>
-                </div>
-            </a>
-            <a class="resource-card" href="https://docs.godotengine.org/zh-cn/4.x/getting_started/step_by_step/index.html" target="_blank" rel="noopener">
-                <div class="resource-icon"><i class="fas fa-graduation-cap"></i></div>
-                <div>
-                    <h4>Godot 分步教程</h4>
-                    <p>官方出品的"你的第一个 2D 游戏"（Dodge the Creeps），本项目即基于此扩展。</p>
-                    <div class="url">docs.godotengine.org/zh-cn/4.x/getting_started/step_by_step</div>
-                </div>
-            </a>
-            <a class="resource-card" href="https://github.com/godotengine/godot-demo-projects" target="_blank" rel="noopener">
-                <div class="resource-icon"><i class="fab fa-github"></i></div>
-                <div>
-                    <h4>Godot 官方 Demo 仓库</h4>
-                    <p>大量经过官方审核的示例项目，涵盖 2D/3D、网络、物理、着色器等。</p>
-                    <div class="url">github.com/godotengine/godot-demo-projects</div>
-                </div>
-            </a>
-            <a class="resource-card" href="https://kidscancode.org/godot_recipes/4.x/" target="_blank" rel="noopener">
-                <div class="resource-icon"><i class="fas fa-utensils"></i></div>
-                <div>
-                    <h4>KidsCanCode Godot Recipes</h4>
-                    <p>经典 Godot 代码片段集合：摄像机跟随、状态机、平台跳跃、血条 UI 等。</p>
-                    <div class="url">kidscancode.org/godot_recipes/4.x</div>
-                </div>
-            </a>
-            <a class="resource-card" href="https://github.com/hamletzhang/hamlet_tools/tree/master/tools/godot-guide" target="_blank" rel="noopener">
-                <div class="resource-icon"><i class="fas fa-robot"></i></div>
-                <div>
-                    <h4>Godot 引擎完全指南（本站）</h4>
-                    <p>涵盖引擎介绍、安装配置、GDScript/C#/C++ 开发、节点-场景架构与 AI 辅助开发生态。</p>
-                    <div class="url">hamletzhang.github.io/hamlet_tools/tools/godot-guide</div>
-                </div>
-            </a>
-        </div>
-    </section>
-
-    <!-- 页脚 -->
-    <footer>
-        <p><strong>星际守卫者 (Star Defender)</strong> — Godot 4.6.3 + GDScript 2.0 Demo</p>
-        <p>由 hamletzhang 维护 · AI 辅助开发流程验证项目 · 通过 GitHub Pages 静态部署</p>
-    </footer>
-
-    <!-- 交互脚本 -->
-    <script>
-        // ========================
-        // 标签页切换
-        // ========================
-        document.querySelectorAll('.tabs').forEach(tabContainer => {
-            const buttons = tabContainer.querySelectorAll('.tab-btn');
-            const container = tabContainer.closest('.section');
-            
-            buttons.forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const tabId = btn.dataset.tab;
-                    
-                    // 切换按钮状态
-                    buttons.forEach(b => b.classList.remove('active'));
-                    btn.classList.add('active');
-                    
-                    // 切换内容面板
-                    const contents = container.querySelectorAll('.tab-content');
-                    contents.forEach(c => c.classList.remove('active'));
-                    const target = container.querySelector('#' + tabId);
-                    if (target) target.classList.add('active');
-                });
-            });
-        });
-
-        // ========================
-        // 导航栏滚动高亮
-        // ========================
-        const sections = document.querySelectorAll('section[id]');
-        const navLinks = document.querySelectorAll('.navbar-links a');
-        const navbar = document.getElementById('navbar');
-
-        function onScroll() {
-            const scrollPos = window.scrollY + 100;
-            
-            sections.forEach(sec => {
-                const top = sec.offsetTop;
-                const height = sec.offsetHeight;
-                const id = sec.getAttribute('id');
-                
-                if (scrollPos >= top && scrollPos < top + height) {
-                    navLinks.forEach(link => {
-                        link.classList.remove('active');
-                        if (link.getAttribute('href') === '#' + id) {
-                            link.classList.add('active');
-                        }
-                    });
-                }
-            });
-
-            // 导航栏阴影
-            if (window.scrollY > 10) {
-                navbar.style.boxShadow = '0 4px 20px rgba(0,0,0,0.3)';
-            } else {
-                navbar.style.boxShadow = 'none';
-            }
-        }
-
-        window.addEventListener('scroll', onScroll);
-        onScroll();
-
-        // ========================
-        // 移动端导航切换
-        // ========================
-        const navbarToggle = document.getElementById('navbarToggle');
-        const navbarLinks = document.getElementById('navbarLinks');
-
-        navbarToggle.addEventListener('click', () => {
-            navbarLinks.classList.toggle('open');
-        });
-
-        // 点击导航链接后关闭移动端菜单
-        navbarLinks.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                navbarLinks.classList.remove('open');
-            });
-        });
-    </script>
-</body>
-</html>
-
     <!-- 开发流程 -->
     <section id="process" class="section section-alt">
         <div class="container">
@@ -1041,7 +818,7 @@
                     <div class="process-card">
                         <h4>玩家移动与射击</h4>
                         <p>创建 <code>Player</code> 场景：CharacterBody2D + Polygon2D（飞机图形）+ CollisionShape2D + Marker2D（枪口）。实现 <code>_physics_process</code> 中的输入读取、速度应用、屏幕边界限制。添加自动射击 Timer。</p>
-                        <div class="process-ai"><i class="fas fa-robot"></i> AI 辅助：生成玩家移动脚本、解释 move_and_slide() 与 move_and_collide() 的区别</div>
+                        <div class="process-ai"><i class="fas fa-robot"></i> AI 辅助：生成玩家移动脚本（CharacterBody2D + move_and_slide）、解释 Input.get_vector 与屏幕边界 clamp</div>
                     </div>
                 </div>
                 <div class="process-phase">
@@ -1056,7 +833,7 @@
                     <div class="process-marker">4</div>
                     <div class="process-card">
                         <h4>敌人基类与碰撞系统</h4>
-                        <p>创建 <code>EnemyBase</code> 抽象基类：Area2D + 通用行为（移动、受伤、死亡、分数奖励）。使用 <code>class_name</code> 注册全局类。设计 HurtBox/HitBox 分离架构。</p>
+                        <p>创建 <code>EnemyBase</code> 抽象基类：Area2D + 通用行为（移动、受伤、死亡、分数奖励）。使用 <code>class_name</code> 注册全局类型，子类覆盖 <code>_update_ai()</code>。配置碰撞层：敌人在 2 层、玩家子弹在 3 层，被击中由 player_bullet 调 <code>take_damage()</code>。</p>
                         <div class="process-ai"><i class="fas fa-robot"></i> AI 辅助：设计敌人基类接口、解释继承与组合的选择</div>
                     </div>
                 </div>
@@ -1137,8 +914,8 @@
                 </div>
                 <div class="standard-card">
                     <div class="standard-icon"><i class="fas fa-cubes"></i></div>
-                    <h4>组合优于继承</h4>
-                    <p>功能拆分为独立场景组件，通过信号通信。如敌人由 Sprite + Collision + AIController 组合而成，而非单一巨型脚本。</p>
+                    <h4>继承定义类型，组合拆分职责</h4>
+                    <p>本工程<strong>继承</strong>用于类型层次：<code>EnemyBase</code> → enemy_basic / fast / tank，子类覆盖 <code>_update_ai()</code> 做差异化 AI。<strong>组合</strong>用于职责拆分：玩家的 <code>HurtBox</code> / <code>Muzzle</code> / 各 <code>Timer</code> 都是独立子节点，各管一件事。两者按场景取舍，而非笼统"组合优于继承"。</p>
                 </div>
                 <div class="standard-card">
                     <div class="standard-icon"><i class="fas fa-globe"></i></div>

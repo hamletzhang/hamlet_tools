@@ -31,16 +31,17 @@ func set_direction(dir: Vector2) -> void:
 
 
 # ========== 碰撞处理 ==========
+# 命中玩家后只负责"自毁"。是否扣血由玩家的 HurtBox 单独裁决——
+# 它会检查无敌帧（_is_invincible）。这样伤害只有一个权威来源，
+# 避免无敌帧被绕过、以及一次碰撞被扣两次血的 bug。
 
 func _on_body_entered(body: Node2D) -> void:
 	if body.is_in_group("player"):
-		GameManager.player_take_damage(damage)
 		queue_free()
 
 
 func _on_area_entered(area: Area2D) -> void:
 	if area.is_in_group("player"):
-		GameManager.player_take_damage(damage)
 		queue_free()
 
 

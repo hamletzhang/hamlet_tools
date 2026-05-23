@@ -73,7 +73,8 @@ godot-shooter/
     ├── explosion.gd       # 爆炸特效
     ├── wave_manager.gd    # 波次管理器（数据驱动）
     ├── camera_shake.gd    # 摄像机震动
-    ├── hud.gd             # HUD 更新
+    ├── star_field.gd      # 程序化滚动星空背景
+    ├── hud.gd             # HUD 更新（分数/血量/波次/剩余敌人）
     ├── main_menu.gd       # 主菜单
     └── game_over.gd       # 游戏结束
 ```
@@ -85,11 +86,13 @@ godot-shooter/
 1. **GDScript 2.0 渐进式类型**：关键变量显式标注类型，提升性能和可读性
 2. **@onready 懒加载**：所有节点引用使用 `@onready` 延迟初始化
 3. **@export 暴露配置**：可调整参数使用 `@export` 暴露到 Inspector
-4. **信号命名规范**：使用过去式（如 `health_changed`, `enemy_died`）
-5. **命名规范**：类名 PascalCase，变量/函数 snake_case，常量 UPPER_SNAKE_CASE
+4. **信号命名规范**：使用过去式（如 `health_changed`, `wave_completed`）
+5. **命名规范**：类名 PascalCase，变量/函数 snake_case，常量 UPPER_SNAKE_CASE，私有成员前缀 `_`
 6. **中文注释**：所有注释使用中文，方便国内开发者阅读
-7. **组合优于继承**：功能拆分为独立场景组件，通过信号通信
-8. **全局状态单例**：使用 AutoLoad 单例管理游戏状态，避免节点间硬引用
+7. **继承定义类型 + 组合拆分职责**：继承用于类型层次（`EnemyBase` → enemy_basic/fast/tank，子类覆盖 `_update_ai()`）；组合用于职责拆分（玩家的 HurtBox / Muzzle / 各 Timer 都是独立子节点）。按场景取舍，而非笼统"组合优于继承"
+8. **信号统一在代码中连接**：碰撞等信号一律在脚本 `_ready()` 里 `connect`，不在 `.tscn` 中连，避免"场景连一次、代码再连一次"的双重连接
+9. **单一伤害裁决者**：玩家是否受伤只由 Player 的 HurtBox 判定（含无敌帧）；子弹只负责自毁，不自行扣血，避免无敌帧被绕过与双重扣血
+10. **全局状态单例**：使用 AutoLoad 单例（`GameManager`）管理游戏状态与信号总线，避免节点间硬引用
 
 ## 如何运行
 
@@ -112,8 +115,14 @@ Godot_v4.6.3-stable_win64_console.exe --path /path/to/godot-shooter --headless -
 2. 添加导出预设（Windows / macOS / Linux / Web）
 3. 点击"导出项目"
 
-> **已知修复记录**：`wave_manager.gd` 原使用 `get_viewport_rect()`（CanvasItem 方法），但 WaveManager 继承自 `Node` 而非 `CanvasItem`。已修复为 `get_tree().root.size`。
-> 修复 commit：`0fee577` → `修复 wave_manager.gd 视口获取方法`
+> **验证与修复记录（AI 辅助流程的"分层验证"环节）**：初版代码通过菜单静置检查，但真正进入战斗循环后用 headless 自动开局跑帧 + 渲染截帧验证，暴露并修复了以下问题：
+> - 信号双重连接（`.tscn` 连一次 + 脚本 `_ready` 又 connect 一次）→ "Signal already connected" 报错刷屏。统一改为只在代码连接。
+> - 空格手动射击在 `project.godot` 中定义了 `shoot` 动作，但 `player.gd` 从未读取 → 已在 `_input` 中补齐（与自动射击并存）。
+> - 敌人子弹绕过玩家无敌帧直接扣血、且与 HurtBox 重复扣血 → 改为子弹只自毁，伤害由 HurtBox 单一裁决。
+> - 暂停时 `await get_tree().create_timer()` 默认不受暂停影响 → 第二参数传 `false` 使其暂停感知，避免暂停态生成敌人/重生。
+> - `wave_manager.gd` 取视口尺寸改用 `get_viewport().get_visible_rect().size`（视口逻辑坐标），而非窗口像素尺寸。
+> - HUD 的"剩余敌人"标签此前为静态死值 → 接入 `GameManager.enemy_count_changed` 信号实时更新。
+> - 删除未被任何脚本继承的死代码 `bullet_base.gd`；新增程序化滚动星空 `star_field.gd`。
 
 ## 控制说明
 
