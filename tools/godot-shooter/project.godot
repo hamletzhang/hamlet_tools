@@ -1,27 +1,31 @@
-; Engine Configuration File
-; Godot version: 4.6.3-stable
-; Project: 星际守卫者 (Star Defender) - 2D飞机射击游戏Demo
-; 开发规范:
-;   - GDScript 2.0 渐进式类型系统，关键变量显式标注类型
-;   - 节点引用使用 @onready 懒加载
-;   - 配置参数使用 @export 暴露到编辑器Inspector
-;   - 信号命名使用过去式 (如 health_changed, enemy_died)
-;   - 类名 PascalCase, 变量/函数 snake_case, 常量 UPPER_SNAKE_CASE
-;   - 所有注释使用中文，代码不超过120字符/行
-;   - 组合优于继承：功能拆分为独立场景组件
-;   - 全局状态通过 AutoLoad 单例管理，避免节点间直接引用
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[animation]
+
+compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 
 [application]
+
 config/name="星际守卫者"
 config/description="2D俯视角飞机射击游戏Demo - 用于验证Godot引擎与AI辅助开发流程"
 run/main_scene="res://scenes/main.tscn"
-config/features=PackedStringArray("4.3", "Mobile")
+config/features=PackedStringArray("4.6", "Mobile")
 config/icon="res://icon.svg"
 
 [autoload]
+
 GameManager="*res://scripts/game_manager.gd"
 
 [display]
+
 window/size/viewport_width=480
 window/size/viewport_height=854
 window/size/resizable=false
@@ -30,6 +34,7 @@ window/stretch/aspect="expand"
 window/handheld/orientation=1
 
 [input]
+
 move_left={
 "deadzone": 0.5,
 "events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":65,"key_label":0,"unicode":97,"location":0,"echo":false,"script":null)
@@ -66,6 +71,7 @@ pause={
 }
 
 [layer_names]
+
 2d_physics/layer_1="玩家"
 2d_physics/layer_2="敌人"
 2d_physics/layer_3="玩家子弹"
@@ -73,5 +79,6 @@ pause={
 2d_physics/layer_5="场景边界"
 
 [rendering]
-renderer/rendering_method="mobile"
+
 textures/canvas_textures/default_texture_filter=0
+renderer/rendering_method="mobile"

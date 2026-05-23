@@ -113,7 +113,7 @@ func _spawn_next_enemy() -> void:
 
 
 func _get_spawn_position() -> Vector2:
-	var viewport_size := get_viewport_rect().size
+	var viewport_size := get_tree().root.size
 	var margin := 40.0
 	var x := randf_range(margin, viewport_size.x - margin)
 	return Vector2(x, -30.0)

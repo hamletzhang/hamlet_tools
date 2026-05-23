@@ -100,13 +100,20 @@ godot-shooter/
 
 ### 方法 2：命令行
 ```bash
-godot --path /path/to/godot-shooter
+# 运行项目
+Godot_v4.6.3-stable_win64_console.exe --path /path/to/godot-shooter
+
+# 仅验证脚本（无报错即成功）
+Godot_v4.6.3-stable_win64_console.exe --path /path/to/godot-shooter --headless --quit
 ```
 
 ### 方法 3：导出后运行
 1. 在 Godot 编辑器中：`项目 > 导出`
 2. 添加导出预设（Windows / macOS / Linux / Web）
 3. 点击"导出项目"
+
+> **已知修复记录**：`wave_manager.gd` 原使用 `get_viewport_rect()`（CanvasItem 方法），但 WaveManager 继承自 `Node` 而非 `CanvasItem`。已修复为 `get_tree().root.size`。
+> 修复 commit：`0fee577` → `修复 wave_manager.gd 视口获取方法`
 
 ## 控制说明
 

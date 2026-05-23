@@ -1,0 +1,18 @@
+# Godot 4 specific ignores
+.godot/
+*.tmp
+*.uid
+*.import
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Export builds
+export.cfg
+export_presets.cfg
+
+# Build artifacts
+*.exe
+*.apk
+*.pck
