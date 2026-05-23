@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>中国古代汉人王朝疆域互动地图 — hamlet_tools</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- 顶部标题栏与图例 -->
+    <header class="top-header">
+        <div class="header-left">
+            <h1>中国古代汉人王朝疆域互动地图</h1>
+            <p class="subtitle">探索秦、汉、唐、宋、明等核心王朝疆域变迁</p>
+        </div>
+        <div class="header-right">
+            <div class="legend">
+                <div class="legend-item">
+                    <span class="legend-color" style="background:rgba(200,50,50,0.5);border-color:#c83232;"></span>
+                    <span>汉人王朝疆域</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-color" style="background:rgba(100,100,100,0.35);border-color:#666666;"></span>
+                    <span>外敌/周边政权</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-color" style="background:#38bdf8;"></span>
+                    <span>行政州/郡治所</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 主体三栏布局 -->
+    <div class="main-layout">
+        <!-- 左侧：王朝选择面板 -->
+        <aside class="sidebar-left" id="dynasty-panel">
+            <h2>选择王朝</h2>
+            <nav class="dynasty-list" id="dynasty-list">
+                <!-- 由 JS 动态生成 -->
+            </nav>
+        </aside>
+
+        <!-- 中间：地图容器 -->
+        <main class="map-container">
+            <div id="map"></div>
+        </main>
+
+        <!-- 右侧：信息面板 -->
+        <aside class="sidebar-right" id="info-panel">
+            <div class="info-header">
+                <h2 id="dynasty-name">请选择王朝</h2>
+                <p id="dynasty-period" class="period">—</p>
+                <p id="dynasty-capital" class="capital">都城：—</p>
+            </div>
+            <div class="info-content">
+                <section class="info-section">
+                    <h3>疆域变化原因</h3>
+                    <div id="changes-content" class="text-block">点击左侧王朝以查看详情</div>
+                </section>
+                <section class="info-section">
+                    <h3>皇帝列表</h3>
+                    <div id="emperors-list" class="card-list"></div>
+                </section>
+                <section class="info-section">
+                    <h3>行政州 / 郡</h3>
+                    <div id="provinces-list" class="table-wrap">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>名称</th>
+                                    <th>类型</th>
+                                    <th>治所</th>
+                                </tr>
+                            </thead>
+                            <tbody id="provinces-tbody">
+                                <!-- 动态填充 -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+        </aside>
+    </div>
+
+    <!-- 底部 -->
+    <footer class="page-footer">
+        <p>数据来源：《中国历史地图集》（谭其骧主编）等公开历史地理资料 · 仅供学习参考</p>
+        <a href="../../index.html">← 返回导航中心</a>
+    </footer>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="js/data.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
